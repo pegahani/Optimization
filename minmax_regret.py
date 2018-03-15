@@ -10,6 +10,8 @@ sys.path.insert(0, '/export/home/alizadeh/Documents/Research/Aomar/Bruno+Emilian
 sys.stdout.flush()
 import classic_mdp
 
+sys.setrecursionlimit(1500)
+
 
 class minmax_regret:
 
@@ -21,7 +23,9 @@ class minmax_regret:
 
         #BB infos
         self.UB = cplex.infinity
+        self.ROOT_LB= -cplex.infinity
         self.best_f = []
+        self.ROOT_tot_cuts = 0
         self.BB_tot_nodes = 0
         self.BB_nodes_pruned = 0
         self.BB_current_level = 0
@@ -33,8 +37,11 @@ class minmax_regret:
 
         self.TIME_master = 0
         self.TIME_slave = 0
+        self.TIME_root = 0
 
-        self.verbosity = 3
+        self.verbosity = 1
+
+        self.output = ""
 
     def best_V(self, epsilon=0.001):
 
@@ -271,10 +278,11 @@ class minmax_regret:
 
         print "best sto policy: "
         print self.BEST_sto_policy
+        self.output += str(self.BEST_sto_policy) + ';'
 
         print "best det policy: "
         print self.BEST_det_policy
-
+        self.output += str(self.BEST_det_policy) + ';'
 
 
     def inner_bb(self, epsilon):
@@ -282,22 +290,31 @@ class minmax_regret:
         self.BB_tot_nodes += 1
         self.BB_current_level+=1
 
-
-
+        if self.BB_tot_nodes == 1:
+            start_t = time.time()
 
         #solve master with cuts
         results_master = self.solve_stochastic_opt(epsilon,alone = False,upper_bound = self.UB)
+
         if self.BB_tot_nodes == 1:
+            end_t = time.time()
+            self.TIME_root += (end_t - start_t)
             self.BEST_sto_policy = results_master
+            self.ROOT_LB = results_master[0]
+            self.ROOT_tot_cuts = self.MASTER_tot_cuts
         if __debug__:
             if self.verbosity == 1:
                 print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned,\
                     "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts , " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+                #self.output += "node "+ ","+ str(self.BB_tot_nodes) + ',' + " lv " + ',' + str(self.BB_current_level) + ',' + " nd prnd " + ',' + str(self.BB_nodes_pruned)+ ','\
+                #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
+                #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
             if self.verbosity >= 2:
                 print "new node - begin"
 
         #get f and delta from master
         f, delta = results_master[1:], results_master[0]
+
         if __debug__:
             if self.verbosity >= 2:
                 print "new node - lb : " , delta, " UB : ", self.UB
@@ -426,9 +443,13 @@ class minmax_regret:
                     if __debug__:
                         if self.verbosity >=2:
                             print "alone == TRUE"
-                    self.slave.parameters.reset()
-                    #self.slave.parameters.mip.tolerances.lowercutoff.set(-cplex.infinity)
-                    #self.slave.parameters.timelimit.set(36000.0)
+                    self.slave.parameters.mip.limits.solutions.reset()
+                    self.slave.parameters.mip.tolerances.lowercutoff.reset()
+                    self.slave.parameters.timelimit.reset()
+
+                    ns = self.mdp.nstates
+                    na = self.mdp.nactions
+                    self.slave.variables.set_lower_bounds(ns * na + 0, -cplex.infinity)
                     self.slave.solve()
                 else:
                     #print "alone == FALSE"
@@ -528,18 +549,20 @@ def load_mdp(state, action, gamma, _id):
     mdp = classic_mdp.general_random_mdp(state, action, gamma)
 
     # if not _id is None:
-    name = "param_" + str(_id) + ".dmp"
+    #name = "param_" + str(_id) + ".dmp"
+    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + ".dmp"
     pp = pickle.Pickler(open(name, 'w'))
     pp.dump(mdp)
 
     pass
 
-def reload_mdp(_id):
+def reload_mdp(state, action, gamma, _id):#(_id):
     """
     Reloads a saved mdp and initialize related global variables
     :type _id: string e.g. 80-1 to reload param80-1.dmp
     """
-    name = "param_" + str(_id) + ".dmp"
+    #name = "param_" + str(_id) + ".dmp"
+    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + ".dmp"
     pup = pickle.Unpickler(open(name, 'r'))
     mdp = pup.load()
 
@@ -547,8 +570,8 @@ def reload_mdp(_id):
 
 #load_mdp(4, 4, 0.9, 'test')
 #_mdp = reload_mdp('test_stochastic')
-_mdp = reload_mdp('test_4_4')
-print("stop generating mdp")
-minmax = minmax_regret(_mdp, [-1, 1])
-minmax.solve_stochastic_opt(0.01)
+#_mdp = reload_mdp('test_4_4')
+#print("stop generating mdp")
+# minmax = minmax_regret(_mdp, [-1, 1])
+#minmax.solve_stochastic_opt(0.01)
 #minmax.solve_deterministic_opt(0.01)
