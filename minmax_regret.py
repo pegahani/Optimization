@@ -20,6 +20,9 @@ class minmax_regret:
         """_reward_bounds is a |S|x|A| size vector with two dimensional vector elements [lb, ub] where lb <= r_sa <= ub """
         self.reward_bounds = [_reward_bounds]* (_mdp.nstates*_mdp.nactions)
 
+        self.EPSI_cutoff =0.001
+        self.EPSI_violation_slave =0.000001
+
 
         #BB infos
         self.UB = cplex.infinity
@@ -38,6 +41,8 @@ class minmax_regret:
         self.TIME_master = 0
         self.TIME_slave = 0
         self.TIME_root = 0
+        self.TIME_limit = 0
+        self.TIME_limit_reached = False
 
         self.verbosity = 1
 
@@ -238,7 +243,9 @@ class minmax_regret:
         for _s in range(self.mdp.nstates):
             for _a in range(self.mdp.nactions):
                 self.slave.objective.set_linear(ns*na + ns + ns*na + _s*na+_a, -1*result_master[1+_s*na+_a])
-        self.slave.write("slave_update.lp")
+
+        if self.verbosity >=2:
+            self.slave.write("slave_update.lp")
 
         pass
 
@@ -252,11 +259,12 @@ class minmax_regret:
         rhs_val = np.dot(self.mdp.alpha, V)
 
         self.master.linear_constraints.add(lin_expr=[cplex.SparsePair(ind=range(1+ns*na), val=[1.0]+r)], senses=["G"], rhs=[rhs_val])
-        self.master.write('master_update.lp')
+        if self.verbosity >=2:
+            self.master.write('master_update.lp')
 
         pass
 
-    def solve_deterministic_opt(self, epsilon):
+    def solve_deterministic_opt(self, TL, epsilon):
         self.make_slave()
         self.make_master()
 
@@ -274,18 +282,34 @@ class minmax_regret:
 
         self.TIME_slave = 0
         self.TIME_master = 0
+        self.TIME_limit = TL        
+        
         self.inner_bb(epsilon)
 
-        print "best sto policy: "
-        print self.BEST_sto_policy
-        self.output += str(self.BEST_sto_policy) + ';'
+        if self.verbosity >=2:
+            print "best sto policy: "
+            print self.BEST_sto_policy
 
-        print "best det policy: "
-        print self.BEST_det_policy
+            print "best det policy: "
+            print self.BEST_det_policy
+        
+        self.output += str(self.BEST_sto_policy) + ';'
         self.output += str(self.BEST_det_policy) + ';'
 
 
     def inner_bb(self, epsilon):
+        
+        if (self.TIME_limit< (self.TIME_master+self.TIME_slave)):
+            if self.TIME_limit_reached == False:
+                if __debug__:
+                    if self.verbosity >= 1:
+                        print "TIME LIMIT of ", self.TIME_limit, " seconds reached!!!"
+                self.TIME_limit_reached = True
+            return
+                
+            
+        
+        
         it_counter = 0
         self.BB_tot_nodes += 1
         self.BB_current_level+=1
@@ -311,6 +335,11 @@ class minmax_regret:
                 #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
             if self.verbosity >= 2:
                 print "new node - begin"
+
+                
+        #raw_input('PAUSA:')
+
+
 
         #get f and delta from master
         f, delta = results_master[1:], results_master[0]
@@ -401,6 +430,7 @@ class minmax_regret:
             start_t = time.time()
             self.master.solve()
             end_t = time.time()
+            
             self.TIME_master += (end_t - start_t)
             #print("************************")
             #print ("iteration ", it_counter)
@@ -422,15 +452,30 @@ class minmax_regret:
 
             # solve slave
             """add upper cutoff to slave program"""
-            upper_cutoff = max( 1.0, (1+epsilon)*(result_master[0]) )
+            if __debug__:
+                if self.verbosity >= 2:
+                    print ("add upper cutoff rm:", result_master[0], " rm with epsi : ",  (1+epsilon)*(result_master[0]))
+            
+            upper_cutoff = max( 1.0, (1+self.EPSI_cutoff)*(result_master[0]) )
             self.slave.parameters.mip.limits.solutions.set(1) #upperobj = 1.0 #+ (1+epsilon)*(result_master[0])
             self.slave.parameters.mip.tolerances.lowercutoff.set(upper_cutoff)
             self.slave.parameters.timelimit.set(10)
 
 
+            if self.verbosity >= 3:
+                print "********************************"
+                print "******** SLAVE BEGIN ***********"
+                print "********************************"
+
             start_t = time.time()
             self.slave.solve()
             end_t = time.time()
+            
+            if self.verbosity >= 3:
+                print "********************************"
+                print "********  SLAVE END  ***********"
+                print "********************************"
+
             self.TIME_slave += (end_t - start_t)
 
             status_slave = self.slave.solution.get_status()
@@ -439,7 +484,7 @@ class minmax_regret:
                 if self.verbosity >= 2:
                     print "status slave : " , status_slave
             if status_slave == 108 or status_slave == 119: #if it finds no soloution
-                if alone == True:
+                if True == True:
                     if __debug__:
                         if self.verbosity >=2:
                             print "alone == TRUE"
@@ -451,6 +496,7 @@ class minmax_regret:
                     na = self.mdp.nactions
                     self.slave.variables.set_lower_bounds(ns * na + 0, -cplex.infinity)
                     self.slave.solve()
+                    #raw_input('PAUSA:')
                 else:
                     #print "alone == FALSE"
                     break
@@ -460,9 +506,27 @@ class minmax_regret:
             objective_slave = self.slave.solution.get_objective_value()
             # print 'result slave', result_slave
             # print 'objective slave', objective_slave
-
-            if objective_slave >(0.000001+ result_master[0]):
-                # add cut alpha.V*-r*f* <= delta
+            found_new_cut = False
+            
+            if result_master[0] > self.EPSI_violation_slave: #result_master[0] is greater than zero
+                if (objective_slave/result_master[0]) > (1.0+self.EPSI_violation_slave):
+                    found_new_cut = True
+            else: 
+                if result_master[0] > -self.EPSI_violation_slave: #result_master[0] is equal to zero
+                    if (objective_slave) > (result_master[0]+self.EPSI_violation_slave):
+                        found_new_cut = True 
+                else: #result_master[0] is lower than to zero
+                    if (objective_slave/result_master[0]) < (1.0-self.EPSI_violation_slave):
+                        found_new_cut = True 
+                        
+                    
+                    
+                    
+                    
+                    
+            if found_new_cut == True:
+                if self.verbosity >= 2:
+                    print "add cut alpha.V*-r*f* <= delta"                
                 self.update_master(result_slave)
                 self.MASTER_tot_cuts += 1
             else:
@@ -477,9 +541,15 @@ class minmax_regret:
 
         ns = self.mdp.nstates
         na = self.mdp.nactions
-
+        
         stochastic_state_actions = []
-
+        for i in range(ns):
+            print "*****"
+            for j in range(na):
+                print f[i*na+j]
+                
+        raw_input('PAUSA')
+        
         for i in range(ns):
             sum_f = 0.0
             zero_counter = 0
@@ -492,6 +562,8 @@ class minmax_regret:
                     sum_f += f[i * na + j]
             if zero_counter < (na -1):
                 [stochastic_state_actions.append((i, j, f[i * na + j]/sum_f)) for j in action_holder]
+                print stochastic_state_actions                    
+                raw_input('PAUSA')
                 return (False, stochastic_state_actions)
 
         return (True, None)
@@ -574,4 +646,4 @@ def reload_mdp(state, action, gamma, _id):#(_id):
 #print("stop generating mdp")
 # minmax = minmax_regret(_mdp, [-1, 1])
 #minmax.solve_stochastic_opt(0.01)
-#minmax.solve_deterministic_opt(0.01)
+#minmax.solve_deterministic_opt(60, 0.01)
