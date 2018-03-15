@@ -22,7 +22,7 @@ class minmax_regret:
 
         self.EPSI_cutoff =0.001
         self.EPSI_violation_slave =0.000001
-
+        self.EPSI_integrality_check=0.00001
 
         #BB infos
         self.UB = cplex.infinity
@@ -126,9 +126,19 @@ class minmax_regret:
             constr.append( [which_coeff, E_transpose[i,:].tolist()[0] ] )
 
         self.master.linear_constraints.add(lin_expr= constr,
-                                           rhs=[-1*i for i in self.mdp.alpha])
+                                           rhs=[1*i for i in self.mdp.alpha])
+                                           #rhs=[-1*i for i in self.mdp.alpha])
+                                           # WARNING :  using -alpha instead of alpha
+
+        print "E_transpose  : ", E_transpose
+        print "self.mdp.gamma : ", self.mdp.gamma
+        print "self.mdp.alpha : ", self.mdp.alpha
 
         self.master.write("master.lp")
+        
+        
+
+
 
         return self.master
 
@@ -337,7 +347,6 @@ class minmax_regret:
                 print "new node - begin"
 
                 
-        #raw_input('PAUSA:')
 
 
 
@@ -496,7 +505,7 @@ class minmax_regret:
                     na = self.mdp.nactions
                     self.slave.variables.set_lower_bounds(ns * na + 0, -cplex.infinity)
                     self.slave.solve()
-                    #raw_input('PAUSA:')
+                    
                 else:
                     #print "alone == FALSE"
                     break
@@ -548,14 +557,15 @@ class minmax_regret:
             for j in range(na):
                 print f[i*na+j]
                 
-        raw_input('PAUSA')
+        #raw_input('PAUSA')
         
         for i in range(ns):
             sum_f = 0.0
             zero_counter = 0
             action_holder = []
             for j in range(na):
-                if f[i * na + j] == 0.0:
+                if ((f[i * na + j] > -self.EPSI_integrality_check) and (f[i * na + j] < self.EPSI_integrality_check)):
+                #if f[i * na + j] == 0.0:
                     zero_counter += 1
                 else:
                     action_holder.append(j)
@@ -563,7 +573,7 @@ class minmax_regret:
             if zero_counter < (na -1):
                 [stochastic_state_actions.append((i, j, f[i * na + j]/sum_f)) for j in action_holder]
                 print stochastic_state_actions                    
-                raw_input('PAUSA')
+                
                 return (False, stochastic_state_actions)
 
         return (True, None)
