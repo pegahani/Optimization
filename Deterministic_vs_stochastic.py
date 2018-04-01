@@ -5,9 +5,14 @@ from minmax_regret import reload_mdp, load_mdp, minmax_regret
 def main():
     text_file = open("./results/deterministic_vs_stochastic.txt", "w")
     _gamma = 0.9
-    for _state in range(4,5): #51
-        for _action in range(2,3): #11
-            for _seed in range(1,2):
+    for _state in range(4,10): #51
+        for _action in range(2,5): #11
+            for _seed in range(1,10):
+                print "**************************"
+                print "**************************"
+                print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed 
+                print "**************************"
+                print "**************************"
                 #load_mdp(_state, _action, _gamma, _seed)
                 _mdp = reload_mdp(_state, _action, _gamma, _seed)
                 minmax = minmax_regret(_mdp, [-1, 1])

@@ -126,13 +126,13 @@ class minmax_regret:
             constr.append( [which_coeff, E_transpose[i,:].tolist()[0] ] )
 
         self.master.linear_constraints.add(lin_expr= constr,
-                                           rhs=[1*i for i in self.mdp.alpha])
-                                           #rhs=[-1*i for i in self.mdp.alpha])
-                                           # WARNING :  using -alpha instead of alpha
-
-        print "E_transpose  : ", E_transpose
-        print "self.mdp.gamma : ", self.mdp.gamma
-        print "self.mdp.alpha : ", self.mdp.alpha
+                                           #rhs=[1*i for i in self.mdp.alpha]) # WARNING :  using -alpha instead of alpha
+                                           rhs=[-1*i for i in self.mdp.alpha])
+                                           
+        if self.verbosity >=2:
+            print "E_transpose  : ", E_transpose
+            print "self.mdp.gamma : ", self.mdp.gamma
+            print "self.mdp.alpha : ", self.mdp.alpha
 
         self.master.write("master.lp")
         
@@ -278,11 +278,6 @@ class minmax_regret:
         self.make_slave()
         self.make_master()
 
-        self.master.set_log_stream(None)
-        self.master.set_error_stream(None)
-        self.master.set_warning_stream(None)
-        self.master.set_results_stream(None)
-
         self.UB = cplex.infinity
 
         self.BB_nodes_pruned = 0
@@ -417,11 +412,12 @@ class minmax_regret:
             self.make_master()
             self.make_slave()
 
+
+        if self.verbosity <= 2:
             self.master.set_log_stream(None)
             self.master.set_error_stream(None)
             self.master.set_warning_stream(None)
             self.master.set_results_stream(None)
-        if self.verbosity <= 2:
             self.slave.set_log_stream(None)
             self.slave.set_error_stream(None)
             self.slave.set_warning_stream(None)
@@ -436,15 +432,48 @@ class minmax_regret:
             it_counter+=1
             # solve master
 
+            if self.verbosity >= 3:
+                print "********************************"
+                print "********* iteration ", it_counter
+                print "********************************"
+                print "********************************"
+                print "******** MASTER BEGIN **********"
+                print "********************************"
+
             start_t = time.time()
             self.master.solve()
             end_t = time.time()
+
+            if self.verbosity >= 3:
+                print "********************************"
+                print "******** MASTER END  ***********"
+                print "********************************"
+
             
             self.TIME_master += (end_t - start_t)
-            #print("************************")
-            #print ("iteration ", it_counter)
-            #print ("************************")
+            
+                
+            status_master = self.master.solution.get_status()
+            if __debug__:
+                if self.verbosity >= 2:
+                    print ("status master ", status_master)
+                    
+            
+            #checking if the master is infeasible
+            if (status_master== 3 or status_master== 103 ):
+                print ("master infeasible")
+                return  cplex.infinity
+            else:
+                if (status_master!= 1):
+                    print ("********************************")
+                    print ("********************************")
+                    print ("WARNING!!! unknown master status")
+                    print ("********************************")
+                    print ("********************************")
 
+                
+            
+            
             result_master = self.master.solution.get_values()
             objective_master = self.master.solution.get_objective_value()
 
@@ -552,10 +581,12 @@ class minmax_regret:
         na = self.mdp.nactions
         
         stochastic_state_actions = []
-        for i in range(ns):
-            print "*****"
-            for j in range(na):
-                print f[i*na+j]
+        if self.verbosity >= 5:        
+            print "selected policy"
+            for i in range(ns):
+                print "*****"
+                for j in range(na):
+                    print f[i*na+j]
                 
         #raw_input('PAUSA')
         
@@ -572,7 +603,8 @@ class minmax_regret:
                     sum_f += f[i * na + j]
             if zero_counter < (na -1):
                 [stochastic_state_actions.append((i, j, f[i * na + j]/sum_f)) for j in action_holder]
-                print stochastic_state_actions                    
+                if self.verbosity >= 5:
+                    print stochastic_state_actions                    
                 
                 return (False, stochastic_state_actions)
 
