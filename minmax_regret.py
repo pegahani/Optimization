@@ -43,6 +43,8 @@ class minmax_regret:
 
         self.MASTER_tot_cuts = 0
 
+        self.controesempio = False
+
         self.TIME_master = 0
         self.TIME_slave = 0
         self.TIME_root = 0
@@ -320,6 +322,9 @@ class minmax_regret:
             results_master = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
             f, delta = results_master[1:], results_master[0]
 
+            self.master.write('master_debug_stack.lp')
+
+
             if self.BB_tot_nodes == 1:
                 end_t = time.time()
                 self.TIME_root += (end_t - start_t)
@@ -401,6 +406,41 @@ class minmax_regret:
 
 
         print "RESULTS de MERDE ", self.UB, self.BEST_det_policy
+        BEST_sto_policy_binary = [0 if e<1e-8 else 1 for e in self.BEST_sto_policy[1:]]
+        BEST_det_policy_binary=[0  if e<1e-8 else 1 for e in self.BEST_det_policy[1:]]
+        
+        HEUR_det_policy_binary=[]
+        ns = self.mdp.nstates
+        na = self.mdp.nactions
+        
+        for i in range(ns):
+            best_val = 0.0
+            best_ind = -1
+            for j in range(na):
+                if self.BEST_sto_policy[1+ i*na+j] > best_val:
+                    best_val= self.BEST_sto_policy[1+ i*na+j]
+                    best_ind = j
+            for j in range(na):
+                if j == best_ind:
+                    HEUR_det_policy_binary.append(1)
+                else:
+                    HEUR_det_policy_binary.append(0)
+        
+#        print "BEST_sto_policy ", self.BEST_sto_policy[1:]
+#        print "BEST_det_policy ", self.BEST_det_policy[1:]
+#        print "HEUR_det", HEUR_det_policy_binary
+#        
+#        print 'BEST_sto', BEST_sto_policy_binary
+#        print 'BEST_det', BEST_det_policy_binary
+
+        self.controesempio = False        
+        for i in range(len(HEUR_det_policy_binary)):
+            if (HEUR_det_policy_binary[i] != BEST_det_policy_binary[i]):
+                self.controesempio = True
+                break
+#        print "controesempio ", self.controesempio
+                
+        
         pass
 
     def fix_stack(self, fixing):
