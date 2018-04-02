@@ -1,7 +1,5 @@
 import numpy as np
 
-from optimization_approach import general_random_mdp
-
 ftype = np.float32
 
 class Value_iteration:

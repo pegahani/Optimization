@@ -1,4 +1,5 @@
 from itertools import product
+from scipy.optimize.zeros import results_c
 
 import cplex
 import numpy as np
@@ -6,11 +7,14 @@ import pickle
 import time
 
 import sys
+
+from manage_stack import Stack
+
 sys.path.insert(0, '/export/home/alizadeh/Documents/Research/Aomar/Bruno+Emiliano/CODE/Optimization')
 sys.stdout.flush()
 import classic_mdp
 
-sys.setrecursionlimit(1500)
+sys.setrecursionlimit(1000000)
 
 
 class minmax_regret:
@@ -19,6 +23,7 @@ class minmax_regret:
         self.mdp = _mdp
         """_reward_bounds is a |S|x|A| size vector with two dimensional vector elements [lb, ub] where lb <= r_sa <= ub """
         self.reward_bounds = [_reward_bounds]* (_mdp.nstates*_mdp.nactions)
+        self.stack = Stack()
 
         self.EPSI_cutoff =0.001
         self.EPSI_violation_slave =0.000001
@@ -47,6 +52,7 @@ class minmax_regret:
         self.verbosity = 1
 
         self.output = ""
+
 
     def best_V(self, epsilon=0.001):
 
@@ -135,10 +141,6 @@ class minmax_regret:
             print "self.mdp.alpha : ", self.mdp.alpha
 
         self.master.write("master.lp")
-        
-        
-
-
 
         return self.master
 
@@ -274,6 +276,147 @@ class minmax_regret:
 
         pass
 
+    def solve_deterministic_opt_stack(self, TL, epsilon):
+
+        nstate, naction = self.mdp.nstates, self.mdp.nactions
+
+
+        self.make_slave()
+        self.make_master()
+
+        self.UB = cplex.infinity
+
+        self.BB_nodes_pruned = 0
+        self.BB_current_level = 0
+
+        self.MASTER_tot_cuts = 0
+
+        self.TIME_slave = 0
+        self.TIME_master = 0
+        self.TIME_limit = TL
+
+        new_item = {'id':1, 'level':1, 'LB': -cplex.infinity, 'fixing': (nstate*naction)*[-1]}
+        self.stack.push(new_item)
+
+        while not self.stack.isEmpty():
+            pop_item = self.stack.pop()
+            tempo_fixing = pop_item['fixing']
+            self.fix_stack(tempo_fixing)
+            if (self.TIME_limit < (self.TIME_master + self.TIME_slave)):
+                if self.TIME_limit_reached == False:
+                    if __debug__:
+                        if self.verbosity >= 1:
+                            print "TIME LIMIT of ", self.TIME_limit, " seconds reached!!!"
+                    self.TIME_limit_reached = True
+                break
+
+            it_counter = 0
+            self.BB_tot_nodes += 1
+            self.BB_current_level += 1
+
+            if self.BB_tot_nodes == 1:
+                start_t = time.time()
+
+            results_master = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
+            f, delta = results_master[1:], results_master[0]
+
+            if self.BB_tot_nodes == 1:
+                end_t = time.time()
+                self.TIME_root += (end_t - start_t)
+                self.BEST_sto_policy = results_master
+                self.ROOT_LB = results_master[0]
+                self.ROOT_tot_cuts = self.MASTER_tot_cuts
+            if __debug__:
+                if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
+                    print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
+                    results_master[
+                        0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+                    # self.output += "node "+ ","+ str(self.BB_tot_nodes) + ',' + " lv " + ',' + str(self.BB_current_level) + ',' + " nd prnd " + ',' + str(self.BB_nodes_pruned)+ ','\
+                    #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
+                    #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
+
+            print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
+                results_master[
+                    0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+
+            """check if LB > UB"""
+            if (delta >= self.UB):
+                if __debug__:
+                    if self.verbosity >= 2:
+                        print "cut because of the bound"
+                        print "new node - end"
+                self.BB_nodes_pruned += 1
+                self.BB_current_level -= 1
+            else:
+                result = self.f_is_deterministic(f)
+                (f_out, stochastic_state_actions) = result #self.f_is_deterministic(f)
+                """check if solution is integer"""
+                if f_out:
+                    self.UB = delta
+                    self.best_f = f
+                    self.BEST_det_policy = results_master
+                    if __debug__:
+                        if self.verbosity >= 2:
+                            print "deterministic policy - update UB"
+                            print "new node - end"
+                    self.BB_current_level -= 1
+
+                else:
+                    # fix state action in the master with the maximum \pi(s,a)
+                    assert stochastic_state_actions != None, \
+                        "this policy is not stochastic"
+
+                    """find new stocastic f"""
+                    best_probability_index = np.argmax([item[2] for item in stochastic_state_actions])
+                    best_state_action = stochastic_state_actions.pop(best_probability_index)[0:2]
+
+                    _state = best_state_action[0]
+                    _action = best_state_action[1]
+
+                    new_fixing = pop_item['fixing']
+
+                    # the right node
+                    right_fixing = np.copy(new_fixing)
+                    right_fixing[_state*naction+_action] = 0
+
+                    right_item = {'id':1, 'level':pop_item['level']+1, 'LB': delta, 'fixing': right_fixing}
+
+
+                    # the left node
+                    left_fixing = np.copy(new_fixing)
+                    for a in xrange(naction):
+                        if a != _action:
+                            left_fixing[_state*naction+a] = 0
+
+                    left_item = {'id':1, 'level':pop_item['level']+1, 'LB': delta, 'fixing': left_fixing}
+
+                    # add right_item
+                    self.stack.push(right_item)
+                    #add left_item
+                    self.stack.push(left_item)
+
+
+
+
+
+
+        print "RESULTS de MERDE ", self.UB, self.BEST_det_policy
+        pass
+
+    def fix_stack(self, fixing):
+        """
+        it updates the bound accordning to fixing value
+        :param fixing:
+        :return:
+        """
+        """fixing elemnets have threee options: -1: free 0: value equal to 0 """
+        for i in xrange(len(fixing)):
+            if int(fixing[i]) == 0:
+                self.master.variables.set_upper_bounds(1+ i, 0.0)
+            else:
+                self.master.variables.set_upper_bounds(1+ i, cplex.infinity)
+        pass
+
     def solve_deterministic_opt(self, TL, epsilon):
         self.make_slave()
         self.make_master()
@@ -303,6 +446,11 @@ class minmax_regret:
 
 
     def inner_bb(self, epsilon):
+        if __debug__:
+            if self.verbosity >= 2:
+                print "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_"
+                print "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_"
+                print "new node - begin"
         
         if (self.TIME_limit< (self.TIME_master+self.TIME_slave)):
             if self.TIME_limit_reached == False:
@@ -311,9 +459,7 @@ class minmax_regret:
                         print "TIME LIMIT of ", self.TIME_limit, " seconds reached!!!"
                 self.TIME_limit_reached = True
             return
-                
-            
-        
+
         
         it_counter = 0
         self.BB_tot_nodes += 1
@@ -325,6 +471,13 @@ class minmax_regret:
         #solve master with cuts
         results_master = self.solve_stochastic_opt(epsilon,alone = False,upper_bound = self.UB)
 
+        try:
+            results_master[0] < cplex.infinity-1
+        except ValueError:
+            sys.exit("Error message")
+            #print "WARNING -----> infeasible master"
+
+
         if self.BB_tot_nodes == 1:
             end_t = time.time()
             self.TIME_root += (end_t - start_t)
@@ -332,16 +485,18 @@ class minmax_regret:
             self.ROOT_LB = results_master[0]
             self.ROOT_tot_cuts = self.MASTER_tot_cuts
         if __debug__:
-            if self.verbosity == 1:
-                print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned,\
-                    "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts , " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+            if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
+                print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts , " T_M ", self.TIME_master, " T_S ", self.TIME_slave
                 #self.output += "node "+ ","+ str(self.BB_tot_nodes) + ',' + " lv " + ',' + str(self.BB_current_level) + ',' + " nd prnd " + ',' + str(self.BB_nodes_pruned)+ ','\
                 #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
                 #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
-            if self.verbosity >= 2:
-                print "new node - begin"
 
-                
+        print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
+        results_master[0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+        self.master.write('master_debug.lp')
+        print results_master
+        print "----"
+        raw_input('PAUSA')
 
 
 
@@ -388,6 +543,8 @@ class minmax_regret:
                 if __debug__:
                     if self.verbosity >= 2:
                         print "create child node left - fix (state,action) in solution : " , best_state_action
+                print "create child node left - fix (state,action) in solution : " , best_state_action
+                raw_input('PAUSA')
                 self.inner_bb(epsilon)
 
                 # free f_selected_s,selected_a bounds
@@ -397,6 +554,8 @@ class minmax_regret:
                 if __debug__:
                     if self.verbosity >= 2:
                         print "create child node righ - exclude (state,action) : " , best_state_action
+                print "create child node righ - exclude (state,action) : ", best_state_action
+                raw_input('PAUSA')
                 self.inner_bb(epsilon)
 
                 self.free_f_master(best_state_action)
@@ -449,6 +608,7 @@ class minmax_regret:
                 print "******** MASTER END  ***********"
                 print "********************************"
 
+
             
             self.TIME_master += (end_t - start_t)
             
@@ -460,9 +620,9 @@ class minmax_regret:
                     
             
             #checking if the master is infeasible
-            if (status_master== 3 or status_master== 103 ):
+            if (status_master== 3 or status_master==103):
                 print ("master infeasible")
-                return  cplex.infinity
+                return [cplex.infinity]
             else:
                 if (status_master!= 1):
                     print ("********************************")
@@ -556,12 +716,7 @@ class minmax_regret:
                 else: #result_master[0] is lower than to zero
                     if (objective_slave/result_master[0]) < (1.0-self.EPSI_violation_slave):
                         found_new_cut = True 
-                        
-                    
-                    
-                    
-                    
-                    
+
             if found_new_cut == True:
                 if self.verbosity >= 2:
                     print "add cut alpha.V*-r*f* <= delta"                
@@ -569,6 +724,8 @@ class minmax_regret:
                 self.MASTER_tot_cuts += 1
             else:
                 break
+
+
 
         if __debug__:
             if self.verbosity >= 2:
@@ -655,28 +812,28 @@ class minmax_regret:
         return
 
 
-def load_mdp(state, action, gamma, _id):
+def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up):
     """
     Creates a new mdp, initialize related global variables and saves what is needed for reuse
     :type _id: string e.g. 80-1 to save in param80-1.dmp"""
 
-    mdp = classic_mdp.general_random_mdp(state, action, gamma)
+    mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
 
     # if not _id is None:
     #name = "param_" + str(_id) + ".dmp"
-    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + ".dmp"
+    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
     pp = pickle.Pickler(open(name, 'w'))
     pp.dump(mdp)
 
     pass
 
-def reload_mdp(state, action, gamma, _id):#(_id):
+def reload_mdp(state, action, gamma, _id, _reward_lb, _reward_up):#(_id):
     """
     Reloads a saved mdp and initialize related global variables
     :type _id: string e.g. 80-1 to reload param80-1.dmp
     """
     #name = "param_" + str(_id) + ".dmp"
-    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + ".dmp"
+    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
     pup = pickle.Unpickler(open(name, 'r'))
     mdp = pup.load()
 

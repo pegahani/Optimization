@@ -5,8 +5,8 @@ import json
 import pickle
 import time
 
-from optimization_approach import handle_mdps, my_mdp
-from optimization_approach.classic_mdp import general_random_mdp
+import my_mdp
+from classic_mdp import general_random_mdp
 
 
 class Display_mdp:

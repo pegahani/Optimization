@@ -71,7 +71,7 @@ class MDP:
         self.E = E
         self.alpha = [np.float32(1.0/self.nstates)]*self.nstates
 
-def general_random_mdp(n_states, n_actions, _gamma):
+def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
     """ Builds a random MDP.
         Each state has ceil(log(nstates)) successors.
         Reward are random values between 0 and 1
@@ -86,7 +86,8 @@ def general_random_mdp(n_states, n_actions, _gamma):
         probas = np.fromiter(islice(ifilter(lambda x: 0 < x < 1 ,gauss_iter),nsuccessors), ftype)
 
         _t.update({(s,a,s2):p for s2,p in izip(next_states, probas/sum(probas))})
-        _r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
+        #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
+        _r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
 
     return MDP(
         _startingstate= set(range(n_states)),
