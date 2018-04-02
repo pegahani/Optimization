@@ -1,5 +1,3 @@
-from Cython.Compiler.FlowControl import GV
-
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 
 def main():
@@ -17,7 +15,9 @@ def main():
                 _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
                 minmax = minmax_regret(_mdp, [-1, 1])
                 minmax.solve_deterministic_opt_stack(60,0.01)
-                if (abs(minmax.UB-minmax.ROOT_LB)/minmax.UB) *100 >= 0.05 :
+                
+#                if (abs(minmax.UB-minmax.ROOT_LB)/minmax.UB) *100 >= 0.05 :
+                if (minmax.controesempio ==True):    
                     text_file.write(str(_state) + ';' + str(_action) + ';' + str(_seed) + ';')
                     text_file.write( str(minmax.UB) #optimal deterministic policy value
                          + ';' + str(minmax.ROOT_LB)  #optimal stochastic policy value
