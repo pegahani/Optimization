@@ -6,14 +6,14 @@ def main():
     text_file = open("./results/deterministic_vs_stochastic.txt", "w")
     _gamma = 0.9
     for _state in range(3,4): #51
-        for _action in range(4,5): #11
-            for _seed in range(561,562):
+        for _action in range(2,5): #11
+            for _seed in range(1,1000000):
                 print "**************************"
                 print "**************************"
                 print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed
                 print "**************************"
                 print "**************************"
-                #load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10 )
+                load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10 )
                 _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
                 minmax = minmax_regret(_mdp, [-1, 1])
                 minmax.solve_deterministic_opt_stack(60,0.01)

@@ -49,7 +49,7 @@ class minmax_regret:
         self.TIME_limit = 0
         self.TIME_limit_reached = False
 
-        self.verbosity = 1
+        self.verbosity = 2
 
         self.output = ""
 
@@ -136,7 +136,16 @@ class minmax_regret:
                                            rhs=[-1*i for i in self.mdp.alpha])
                                            
         if self.verbosity >=2:
-            print "E_transpose  : ", E_transpose
+            # print self.mdp.transitions.shape
+            # print self.mdp.transitions
+            # for s in range(self.mdp.nstates):
+            #     for a in range(self.mdp.nactions):
+            #         print [self.mdp.transitions[s,a][0,_s] for _s in range(self.mdp.nstates)]
+            #     print
+            #
+            # print "**********"
+            #
+            # print "E_transpose  : ", tempo
             print "self.mdp.gamma : ", self.mdp.gamma
             print "self.mdp.alpha : ", self.mdp.alpha
 
@@ -622,7 +631,9 @@ class minmax_regret:
             #checking if the master is infeasible
             if (status_master== 3 or status_master==103):
                 print ("master infeasible")
+                raw_input('PAUSA')
                 return [cplex.infinity]
+
             else:
                 if (status_master!= 1):
                     print ("********************************")
