@@ -1,13 +1,11 @@
-from Cython.Compiler.FlowControl import GV
-
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 
 def main():
     text_file = open("./results/deterministic_vs_stochastic.txt", "w")
     _gamma = 0.9
-    for _state in range(3,4): #51
-        for _action in range(4,5): #11
-            for _seed in range(561,562):
+    for _state in range(3,5): #51
+        for _action in range(2,5): #11
+            for _seed in range(4,5):
                 print "**************************"
                 print "**************************"
                 print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed
@@ -17,7 +15,9 @@ def main():
                 _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
                 minmax = minmax_regret(_mdp, [-1, 1])
                 minmax.solve_deterministic_opt_stack(60,0.01)
-                if (abs(minmax.UB-minmax.ROOT_LB)/minmax.UB) *100 >= 0.05 :
+                
+#                if (abs(minmax.UB-minmax.ROOT_LB)/minmax.UB) *100 >= 0.05 :
+                if (minmax.controesempio ==True):    
                     text_file.write(str(_state) + ';' + str(_action) + ';' + str(_seed) + ';')
                     text_file.write( str(minmax.UB) #optimal deterministic policy value
                          + ';' + str(minmax.ROOT_LB)  #optimal stochastic policy value
