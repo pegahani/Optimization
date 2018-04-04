@@ -51,7 +51,7 @@ class minmax_regret:
         self.TIME_limit = 0
         self.TIME_limit_reached = False
 
-        self.verbosity = 2
+        self.verbosity = 1
 
         self.output = ""
 
@@ -409,47 +409,43 @@ class minmax_regret:
                     #add left_item
                     self.stack.push(left_item)
 
-
-
-
-
-
         print "RESULTS de MERDE ", self.UB, self.BEST_det_policy
-        BEST_sto_policy_binary = [0 if e<1e-8 else 1 for e in self.BEST_sto_policy[1:]]
-        BEST_det_policy_binary=[0  if e<1e-8 else 1 for e in self.BEST_det_policy[1:]]
+        BEST_sto_policy_binary = [0 if e<1e-6 else 1 for e in self.BEST_sto_policy[1:]]
+        BEST_det_policy_binary=[0  if e<1e-6 else 1 for e in self.BEST_det_policy[1:]]
+
         
         HEUR_det_policy_binary=[]
         ns = self.mdp.nstates
         na = self.mdp.nactions
-        
-        for i in range(ns):
-            best_val = 0.0
-            best_ind = -1
-            for j in range(na):
-                if self.BEST_sto_policy[1+ i*na+j] > best_val:
-                    best_val= self.BEST_sto_policy[1+ i*na+j]
-                    best_ind = j
-            for j in range(na):
-                if j == best_ind:
-                    HEUR_det_policy_binary.append(1)
-                else:
-                    HEUR_det_policy_binary.append(0)
-        
-#        print "BEST_sto_policy ", self.BEST_sto_policy[1:]
-#        print "BEST_det_policy ", self.BEST_det_policy[1:]
-#        print "HEUR_det", HEUR_det_policy_binary
-#        
-#        print 'BEST_sto', BEST_sto_policy_binary
-#        print 'BEST_det', BEST_det_policy_binary
 
-        self.controesempio = False        
-        for i in range(len(HEUR_det_policy_binary)):
-            if (HEUR_det_policy_binary[i] != BEST_det_policy_binary[i]):
-                self.controesempio = True
-                break
-#        print "controesempio ", self.controesempio
-                
-        
+        if self.BEST_det_policy == []:
+            self.controesempio = False
+
+        else:
+            for i in range(ns):
+                best_val = 0.0
+                best_ind = -1
+                for j in range(na):
+                    if self.BEST_sto_policy[1+ i*na+j] > best_val:
+                        best_val= self.BEST_sto_policy[1+ i*na+j]
+                        best_ind = j
+                for j in range(na):
+                    if j == best_ind:
+                        HEUR_det_policy_binary.append(1)
+                    else:
+                        HEUR_det_policy_binary.append(0)
+
+            self.controesempio = False
+            for i in range(len(HEUR_det_policy_binary)):
+                if (HEUR_det_policy_binary[i] != BEST_det_policy_binary[i]):
+                    self.controesempio = True
+                    break
+
+            print "best det policy", self.BEST_det_policy[1:]
+            print 'best optimal stochastic ', self.BEST_sto_policy[1:]
+            print 'best heuristic deterministic', HEUR_det_policy_binary
+            print 'best optimal deterministic ', BEST_det_policy_binary
+
         pass
 
     def fix_stack(self, fixing):
@@ -671,7 +667,7 @@ class minmax_regret:
             #checking if the master is infeasible
             if (status_master== 3 or status_master==103):
                 print ("master infeasible")
-                raw_input('PAUSA')
+                #raw_input('PAUSA')
                 return [cplex.infinity]
 
             else:

@@ -71,6 +71,46 @@ class MDP:
         self.E = E
         self.alpha = [np.float32(1.0/self.nstates)]*self.nstates
 
+    def display_mdp(self):
+
+        print 'sates = ', self.states
+        print 'actions = ', self.actions
+        print 'gamma =', self.gamma
+        print 'rewards', self.rewards
+
+        for s in range(self.nstates):
+            for a in range(self.nactions):
+                print [ 'P('+ str(i) + '|'+ str(s) + ',' + str(a) +') ='+ str(self.transitions[s, a][0, i]) for i in range(self.nstates)]
+
+        pass
+
+    def modify_mdp(self):
+        for i in range(self.nstates):
+            self.alpha[i] = 0.0
+        self.alpha[0] = 1.0
+
+        # self.transitions[0, 0][0, 0] = 0.33
+        # self.transitions[0, 0][0, 1] = 0.66
+        # #******
+        # self.transitions[0, 1][0, 0] = 0.05
+        # self.transitions[0, 1][0, 2] = 0.95
+        # # # ******
+        # self.transitions[1, 0][0, 0] = 0.66
+        # self.transitions[1, 0][0, 1] = 0.33
+        # self.transitions[1, 0][0, 2] = 0.0
+        # # # ******
+        # self.transitions[1, 1][0, 1] = 0.9
+        # self.transitions[1, 1][0, 2] = 0.1
+        # # # ******
+        # # self.transitions[2, 0][0, 0] = 0.66
+        # # self.transitions[2, 0][0, 2] = 0.33
+        # # # ******
+        # self.transitions[2, 1][0, 1] = 0.66
+        # self.transitions[2, 1][0, 2] = 0.33
+
+
+        pass
+
 def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
     """ Builds a random MDP.
         Each state has ceil(log(nstates)) successors.

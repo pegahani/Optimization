@@ -6,41 +6,40 @@
 \begin{document}
 
 \section{Context}
-In several real world situation it can happen that a stochastic policy does not have a meaning easy to interpretate, this could maybe due to the nature of the problem or to the preferences of the user   (\textit{is it true?}). In these contexts, it is inevitable to provide to the user a deterministic policy. 
+In several real world situations happens that a stochastic policy is not easily interpretable, this might be due to the nature of the problem or to the system requirements. In these contexts, it is inevitable to provide a deterministic policy to the system's user. 
 
 Aim of this work is twofold:
 \begin{itemize}
-\item We would like to show that computing a deterministic policy requires a reasonable computational  overhead in  comparison to the time needed to compute the optimal stochastic policy.
-\item To better motivate the use of an exact procedure for finding a deterministic procedure, we show some example where the intuitive idea of using a deterministic policy obtained after ``rounding'' the an optimal stochastic policy leads to a deterministic policy far from the optimal.   
+\item We would like to show that computing a \textit{deterministic policy} requires a reasonable computational overhead in comparison to the required time for computing the \textit{optimal stochastic policy}.
+\item To better motivate the use of an exact procedure for finding a \textit{deterministic policy}, we show some examples where the intuitive idea of using a  \textit{deterministic policy} obtained after ``rounding'' the optimal  \textit{stochastic policy} leads to a deterministic policy far from the optimal.   
 \end{itemize}
 
-\section{branch-and-bound}
+\section{Branch-and-Bound}
 
-We incorporate the procedure based on benders cuts in a branch-and-bound framework. we branch on the branch-and-bound nodes by first select a couple $(s,a)$ of state and action and subsequently we imposethe following disjuncion:
+We incorporate the procedure based on benders cuts in a branch-and-bound framework. We branch on the branch-and-bound nodes by first select a couple $(s,a)$ of state and action and subsequently we impose the following disjunction:
 \begin{itemize}
 \item $f_{s,a'}=0, \forall a'\neq a$.
 \item $f_{s,a}=0$.
 \end{itemize} 
-Al the tests so fa showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
+All the tests so far showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we hope that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
 
 
 \section{The ``rounding'' heuristic}
 
-Let $\bar{f}$ be a vector of size  $nk$ representing an optimas stochastic policy. The corresponding ``rounded'' deterministic policy can be computed as follows:
+Let $\bar{f}$ be a vector of size  $nk$ (where $n$ is numbers of states and $k$ is number of actions) representing an optimal stochastic policy. The corresponding ``rounded'' deterministic policy can be computed as follows:
 \begin{itemize}
 \item for each $s'=1,\dots,n$:
 \begin{itemize}
 \item find the action $a' = argmax_{a}f_{s',a}$.
 \item fix the rest of the action to zero: $f_{s',a} =0, \forall a \neq a'$
 \end{itemize}
-\item compute the value of the deterministic policy obtained with the previous fixig.
+\item compute the value of the deterministic policy obtained with the previous fixing.
 \end{itemize}
  
-The heuristic searches, for each state, the action with the highest probability to be chosen and selects that action as part of the deterministic policy.
+The heuristic searches --for each state-- the action with the highest probability to be chosen. It selects that action as part of the deterministic policy.
 Despite being pretty simple, the proposed heuristic represents a plausible behaviour of a user that do not want to deduce a deterministic policy starting from a stochastic one.  
 
+For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimizes the max regrets).
 
-For the \textit{Tiny MDP} presented in the previous manuscript it is easy to check that reh rounding heuristic always gives the optimal deterministic polity (i.e., the one that minimizes the max regrets).
-
-What we would like to find is a class of instances where this is not the case or, even better, instances where the difference between the heuristic deterministic procedure and the optimal deterministic procedure can be arbitrarily bad. 	
+What we would like to find is a class of instances where this is not the case or, even better, instances where the difference between the heuristic deterministic policy and the optimal deterministic policy can be arbitrarily bad. 	
 \end{document}
