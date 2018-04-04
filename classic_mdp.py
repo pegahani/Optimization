@@ -56,7 +56,7 @@ class MDP:
 
         for s, a in product(range(self.nstates), range(self.nactions)):
             transitions[s,a] = transitions[s,a].tocsr()
-            assert 0.99 <= transitions[s,a].sum() <= 1.01, "probability transitions should sum up to 1"
+            assert 0.99 <= transitions[s,a].sum() <= 1.01, "probability transitions should sum up to 1"+ str(transitions[s,a])
 
         self.transitions = transitions
 
@@ -66,7 +66,8 @@ class MDP:
         for s in range(self.nstates):
             for a in range(self.nactions):
                 E[s*self.nactions+a, :] = [self.transitions[s,a][0,i] for i in range(self.nstates) ]
-                E[s * self.nactions + a, s] -= 1
+                #E[s * self.nactions + a, s] -= 1
+                E[s * self.nactions + a, s] -= 1.0/self.gamma
 
         self.E = E
         self.alpha = [np.float32(1.0/self.nstates)]*self.nstates
@@ -129,6 +130,38 @@ def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
         #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
         _r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
 
+    return MDP(
+        _startingstate= set(range(n_states)),
+        _transitions= _t,
+        _rewards= _r ,
+        _gamma = 0.95)
+
+    pass
+
+
+def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_up):
+    """ Builds a random MDP.
+        Each state has ceil(log(nstates)) successors.
+        Reward are random values between 0 and 1
+    """
+    nsuccessors = int(math.ceil(math.log1p(n_states)))
+    _t = {}
+    _r = {}
+
+    for s, a in product(range(n_states), range(n_actions)):
+        next_states = random.sample(range(n_states), nsuccessors)
+
+        while True:
+            t = random.sample([0.0, 0.33, 0.5, 0.66, 1.0], nsuccessors)
+            if sum(t) < 1.01 and sum(t) > 0.99:
+                probas =  t
+                break
+
+        _t.update({(s,a,s2):p for s2,p in izip(next_states, probas)})
+        #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
+        _r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+
+    print '_t', _t
     return MDP(
         _startingstate= set(range(n_states)),
         _transitions= _t,

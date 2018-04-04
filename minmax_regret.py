@@ -667,7 +667,7 @@ class minmax_regret:
             #checking if the master is infeasible
             if (status_master== 3 or status_master==103):
                 print ("master infeasible")
-                #raw_input('PAUSA')
+                raw_input('PAUSA')
                 return [cplex.infinity]
 
             else:
@@ -864,11 +864,14 @@ def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up):
     Creates a new mdp, initialize related global variables and saves what is needed for reuse
     :type _id: string e.g. 80-1 to save in param80-1.dmp"""
 
-    mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
+    #mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
+    mdp = classic_mdp.general_random_mdp_rounded(state, action, gamma, _reward_lb=_reward_lb, _reward_up=_reward_up)
 
     # if not _id is None:
     #name = "param_" + str(_id) + ".dmp"
-    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    #name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    name = './Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+
     pp = pickle.Pickler(open(name, 'w'))
     pp.dump(mdp)
 
@@ -880,7 +883,9 @@ def reload_mdp(state, action, gamma, _id, _reward_lb, _reward_up):#(_id):
     :type _id: string e.g. 80-1 to reload param80-1.dmp
     """
     #name = "param_" + str(_id) + ".dmp"
-    name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    #name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    name = './Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+
     pup = pickle.Unpickler(open(name, 'r'))
     mdp = pup.load()
 
