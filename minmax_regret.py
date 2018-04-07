@@ -6,6 +6,8 @@ import numpy as np
 import pickle
 import time
 
+from numpy import random
+
 import sys
 
 from manage_stack import Stack
@@ -22,7 +24,24 @@ class minmax_regret:
     def __init__(self, _mdp, _reward_bounds):
         self.mdp = _mdp
         """_reward_bounds is a |S|x|A| size vector with two dimensional vector elements [lb, ub] where lb <= r_sa <= ub """
-        self.reward_bounds = [_reward_bounds]* (_mdp.nstates*_mdp.nactions)
+
+
+	self.reward_bounds = []
+	for i in range((_mdp.nstates*_mdp.nactions)):
+		random_a = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)
+		random_b = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)	
+		if (random_a < random_b):
+			self.reward_bounds.append([random_a, random_b])
+		else:
+			self.reward_bounds.append([random_b, random_a])
+	# print "nuova"
+	print self.reward_bounds 
+	# print "vecchia"
+        # self.reward_bounds = [_reward_bounds]* (_mdp.nstates*_mdp.nactions)
+	# print self.reward_bounds 
+	# raw_input('PAUSA')
+
+
         self.stack = Stack()
 
         self.EPSI_cutoff =0.001
@@ -32,6 +51,7 @@ class minmax_regret:
         #BB infos
         self.UB = cplex.infinity
         self.ROOT_LB= -cplex.infinity
+        self.UB_HEUR = cplex.infinity
         self.best_f = []
         self.ROOT_tot_cuts = 0
         self.BB_tot_nodes = 0
@@ -51,7 +71,7 @@ class minmax_regret:
         self.TIME_limit = 0
         self.TIME_limit_reached = False
 
-        self.verbosity = 1
+        self.verbosity = 0
 
         self.output = ""
 
@@ -151,7 +171,7 @@ class minmax_regret:
             print "self.mdp.gamma : ", self.mdp.gamma
             print "self.mdp.alpha : ", self.mdp.alpha
 
-        self.master.write("master.lp")
+        #self.master.write("master.lp")
 
         return self.master
 
@@ -211,8 +231,11 @@ class minmax_regret:
 
 
         # V <= (1-I_a)M_a + Q_a
-        big_M = [1e8]*ns*na
-        #big_M = self.get_bigM() #of size ns*na
+        
+
+
+	#big_M = [1e8]*ns*na
+        big_M = self.get_bigM() #of size ns*na
         for _a in range(na):
             for _s in range(ns):
                 coeff, index = [], []
@@ -254,7 +277,7 @@ class minmax_regret:
                 self.slave.variables.set_lower_bounds(index,-cplex.infinity)
 
 
-        self.slave.write("slave.lp")
+        #self.slave.write("slave.lp")
 
         pass
 
@@ -331,7 +354,7 @@ class minmax_regret:
             results_master = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
             f, delta = results_master[1:], results_master[0]
 
-            self.master.write('master_debug_stack.lp')
+            #self.master.write('master_debug_stack.lp')
 
 
             if self.BB_tot_nodes == 1:
@@ -341,7 +364,8 @@ class minmax_regret:
                 self.ROOT_LB = results_master[0]
                 self.ROOT_tot_cuts = self.MASTER_tot_cuts
             if __debug__:
-                if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
+#                if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
+                if self.verbosity >= 1:
                     print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
                     results_master[
                         0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
@@ -349,9 +373,9 @@ class minmax_regret:
                     #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
                     #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
 
-            print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
-                results_master[
-                    0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+#            print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
+#                results_master[
+#                    0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
 
             """check if LB > UB"""
             if (delta >= self.UB):
@@ -409,7 +433,7 @@ class minmax_regret:
                     #add left_item
                     self.stack.push(left_item)
 
-        print "RESULTS de MERDE ", self.UB, self.BEST_det_policy
+#        print "RESULTS de MERDE ", self.UB, self.BEST_det_policy
         BEST_sto_policy_binary = [0 if e<1e-6 else 1 for e in self.BEST_sto_policy[1:]]
         BEST_det_policy_binary=[0  if e<1e-6 else 1 for e in self.BEST_det_policy[1:]]
 
@@ -441,10 +465,26 @@ class minmax_regret:
                     self.controesempio = True
                     break
 
-            print "best det policy", self.BEST_det_policy[1:]
-            print 'best optimal stochastic ', self.BEST_sto_policy[1:]
-            print 'best heuristic deterministic', HEUR_det_policy_binary
-            print 'best optimal deterministic ', BEST_det_policy_binary
+            
+            #compute the value of the  heuristic policy
+            
+            heur_fixing =(nstate*naction)*[-1]
+            for i in range(ns):
+                for j in range(na):
+                    if HEUR_det_policy_binary[i*na+j] == 0:
+                        heur_fixing[i*na+j]= 0 
+                        
+            self.fix_stack(heur_fixing)
+            results_master_heur = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
+            self.UB_HEUR = results_master_heur[0] 
+            
+                        
+#            print "best det policy", self.BEST_det_policy[1:]
+#            print 'best optimal stochastic ', self.BEST_sto_policy[1:]
+#            print 'best optimal deterministic ', BEST_det_policy_binary
+#            print 'heur_fixing ', heur_fixing
+            
+            
 
         pass
 
@@ -536,12 +576,11 @@ class minmax_regret:
                 #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
                 #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
 
-        print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
-        results_master[0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
-        self.master.write('master_debug.lp')
-        print results_master
-        print "----"
-        raw_input('PAUSA')
+        #print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+        #self.master.write('master_debug.lp')
+        #print results_master
+        #print "----"
+        #raw_input('PAUSA')
 
 
 
@@ -849,7 +888,7 @@ class minmax_regret:
                 self.master.variables.set_upper_bounds(1 + _state * na + _a, cplex.infinity)
         if not is_fix:
             self.master.variables.set_upper_bounds(1 + _state * na + _action, 0.0)
-        self.master.write('master_fix_f.lp')
+        #self.master.write('master_fix_f.lp')
         return
 
     def free_f_master(self, best_state_action):
@@ -864,8 +903,8 @@ def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up):
     Creates a new mdp, initialize related global variables and saves what is needed for reuse
     :type _id: string e.g. 80-1 to save in param80-1.dmp"""
 
-    #mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
-    mdp = classic_mdp.general_random_mdp_rounded(state, action, gamma, _reward_lb=_reward_lb, _reward_up=_reward_up)
+    mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
+    #mdp = classic_mdp.general_random_mdp_rounded(state, action, gamma, _reward_lb=_reward_lb, _reward_up=_reward_up)
 
     # if not _id is None:
     #name = "param_" + str(_id) + ".dmp"
