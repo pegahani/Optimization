@@ -1,15 +1,17 @@
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 import sys
 
-def main(max_states, max_actions,max_seeds):
-    text_file = open("./results/deterministic_vs_stochastic_"+ str(max_states)+"_"+str(max_actions)+"_"+str(max_seeds)+".txt", "w")
+def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds):
+    text_file = open("./results/deterministic_vs_stochastic_"
+    + str(min_states)+"_"+ str(max_states)+"_"+ str(step_states)
+    + str(min_actions)+"_"+str(max_actions)+"_"+str(max_seeds)+".txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic_fango_07_04_2018.txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic.txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic_clear.txt", "w")
     _gamma = 0.9
-    for _action in range(2,max_actions+1): #11
+    for _action in range(min_actions,max_actions+1): #11
         #for _state in range(3,20): #51
-        for _state in range(5,max_states+5,5): #51
+        for _state in range(min_states,max_states+step_states,step_states): #51
             for _seed in range(1,max_seeds+1):
 #                print "**************************"
 #                print "**************************"
@@ -22,7 +24,7 @@ def main(max_states, max_actions,max_seeds):
                 minmax = minmax_regret(_mdp, [-1, 1])
                 
                 for cut_every_node in {True, False}:
-                    minmax.solve_deterministic_opt_stack(3600,0.01,cut_every_node)
+                    minmax.solve_deterministic_opt_stack(36000,0.01,cut_every_node)
                 
                     #if (minmax.controesempio ==True and ( ( minmax.UB_HEUR - minmax.UB ) / minmax.UB ) > 0.01 ):    
                     text_file.write(str(_state) + ';' + str(_action) + ';' + str(_seed) + ';')
@@ -58,7 +60,10 @@ if __name__ == '__main__':
     a = int(sys.argv[1])
     b = int(sys.argv[2])
     c = int(sys.argv[3])
-    main(a,b,c)
+    d = int(sys.argv[4])
+    e = int(sys.argv[5])
+    f = int(sys.argv[6])
+    main(a,b,c,d,e,f)
     
 #    _state, _action, _gamma, _seed = 10, 2, 0.9, 2
 #    #load_mdp(_state, _action, _gamma, _seed)
