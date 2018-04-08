@@ -1,16 +1,16 @@
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 import sys
 
-def main():
-    text_file = open("./results/deterministic_vs_stochastic_controesempio.txt", "w")
+def main(max_states, max_actions,max_seeds):
+    text_file = open("./results/deterministic_vs_stochastic_"+ str(max_states)+"_"+str(max_actions)+"_"+str(max_seeds)+".txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic_fango_07_04_2018.txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic.txt", "w")
     #text_file = open("./results/deterministic_vs_stochastic_clear.txt", "w")
     _gamma = 0.9
-    for _action in range(20,55,5): #11
+    for _action in range(2,max_actions+1): #11
         #for _state in range(3,20): #51
-        for _state in range(3,5): #51
-            for _seed in range(1,11):
+        for _state in range(5,max_states+5,5): #51
+            for _seed in range(1,max_seeds+1):
 #                print "**************************"
 #                print "**************************"
                 print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed
@@ -54,7 +54,11 @@ def main():
 if __name__ == '__main__':
 
 
-    main()
+    #main(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])
+    a = int(sys.argv[1])
+    b = int(sys.argv[2])
+    c = int(sys.argv[3])
+    main(a,b,c)
     
 #    _state, _action, _gamma, _seed = 10, 2, 0.9, 2
 #    #load_mdp(_state, _action, _gamma, _seed)
@@ -77,4 +81,5 @@ if __name__ == '__main__':
 #    text_file.write('\n')
 #
 #    text_file.close()
+
 
