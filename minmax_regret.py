@@ -35,7 +35,10 @@ class minmax_regret:
 		else:
 			self.reward_bounds.append([random_b, random_a])
 	# print "nuova"
-	print self.reward_bounds 
+	#self.reward_bounds  =[[-0.74, 0.28], [-0.77, 0.19], [-0.89, -0.72], [0.33, 0.44]]
+	#self.reward_bounds  =[[-0.7, 0.2], [-0.8, 0.1], [10, 10], [0.0001, 0.0001]]
+	#print self.reward_bounds 
+    
 	# print "vecchia"
         # self.reward_bounds = [_reward_bounds]* (_mdp.nstates*_mdp.nactions)
 	# print self.reward_bounds 
@@ -62,6 +65,8 @@ class minmax_regret:
         self.BEST_det_policy = []
 
         self.MASTER_tot_cuts = 0
+
+        self.cut_every_node = True
 
         self.controesempio = False
 
@@ -310,8 +315,10 @@ class minmax_regret:
 
         pass
 
-    def solve_deterministic_opt_stack(self, TL, epsilon):
-
+    def solve_deterministic_opt_stack(self, TL, epsilon, cut_every_node = True):
+        
+        self.cut_every_node = cut_every_node
+        
         nstate, naction = self.mdp.nstates, self.mdp.nactions
 
 
@@ -333,9 +340,19 @@ class minmax_regret:
         self.stack.push(new_item)
 
         while not self.stack.isEmpty():
+            
             pop_item = self.stack.pop()
+
+            if __debug__:
+                if self.verbosity >= 2:
+                    print " pop new item"
+                    print pop_item
+
+
             tempo_fixing = pop_item['fixing']
+
             self.fix_stack(tempo_fixing)
+
             if (self.TIME_limit < (self.TIME_master + self.TIME_slave)):
                 if self.TIME_limit_reached == False:
                     if __debug__:
@@ -343,19 +360,17 @@ class minmax_regret:
                             print "TIME LIMIT of ", self.TIME_limit, " seconds reached!!!"
                     self.TIME_limit_reached = True
                 break
-
-            it_counter = 0
+            
             self.BB_tot_nodes += 1
             self.BB_current_level += 1
 
             if self.BB_tot_nodes == 1:
                 start_t = time.time()
 
+
             results_master = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
+            
             f, delta = results_master[1:], results_master[0]
-
-            #self.master.write('master_debug_stack.lp')
-
 
             if self.BB_tot_nodes == 1:
                 end_t = time.time()
@@ -363,25 +378,19 @@ class minmax_regret:
                 self.BEST_sto_policy = results_master
                 self.ROOT_LB = results_master[0]
                 self.ROOT_tot_cuts = self.MASTER_tot_cuts
-            if __debug__:
-#                if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
-                if self.verbosity >= 1:
-                    print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
-                    results_master[
-                        0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
-                    # self.output += "node "+ ","+ str(self.BB_tot_nodes) + ',' + " lv " + ',' + str(self.BB_current_level) + ',' + " nd prnd " + ',' + str(self.BB_nodes_pruned)+ ','\
-                    #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
-                    #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
 
-#            print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", \
-#                results_master[
-#                    0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+            if __debug__:
+                if self.verbosity >= 1:
+                    print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts, " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+
+            #raw_input('PAUSA')
+
 
             """check if LB > UB"""
-            if (delta >= self.UB):
+            if (delta >= self.UB * 1.0001):
                 if __debug__:
                     if self.verbosity >= 2:
-                        print "cut because of the bound"
+                        print "cut because of the bound : ", delta , " >= ", self.UB 
                         print "new node - end"
                 self.BB_nodes_pruned += 1
                 self.BB_current_level -= 1
@@ -395,7 +404,7 @@ class minmax_regret:
                     self.BEST_det_policy = results_master
                     if __debug__:
                         if self.verbosity >= 2:
-                            print "deterministic policy - update UB"
+                            print "deterministic policy - update UB = " , delta
                             print "new node - end"
                     self.BB_current_level -= 1
 
@@ -427,6 +436,13 @@ class minmax_regret:
                             left_fixing[_state*naction+a] = 0
 
                     left_item = {'id':1, 'level':pop_item['level']+1, 'LB': delta, 'fixing': left_fixing}
+
+
+                    if __debug__:
+                        if self.verbosity >= 2:
+                            print " right fixing ", right_fixing
+                            print " left fixing ", left_fixing
+
 
                     # add right_item
                     self.stack.push(right_item)
@@ -475,14 +491,19 @@ class minmax_regret:
                         heur_fixing[i*na+j]= 0 
                         
             self.fix_stack(heur_fixing)
+            
+            
+            if self.verbosity>=1:
+                print "************************************"                
+                print "find value of the heuristic solution"
             results_master_heur = self.solve_stochastic_opt(epsilon, alone=False, upper_bound=self.UB)
             self.UB_HEUR = results_master_heur[0] 
             
                         
-#            print "best det policy", self.BEST_det_policy[1:]
-#            print 'best optimal stochastic ', self.BEST_sto_policy[1:]
-#            print 'best optimal deterministic ', BEST_det_policy_binary
-#            print 'heur_fixing ', heur_fixing
+            print "best det policy", self.BEST_det_policy[1:]
+            print 'best optimal stochastic ', self.BEST_sto_policy[1:]
+            print 'best optimal deterministic ', BEST_det_policy_binary
+            print '        heur deterministic ', HEUR_det_policy_binary
             
             
 
@@ -627,8 +648,8 @@ class minmax_regret:
                 if __debug__:
                     if self.verbosity >= 2:
                         print "create child node left - fix (state,action) in solution : " , best_state_action
-                print "create child node left - fix (state,action) in solution : " , best_state_action
-                raw_input('PAUSA')
+                #print "create child node left - fix (state,action) in solution : " , best_state_action
+                #raw_input('PAUSA')
                 self.inner_bb(epsilon)
 
                 # free f_selected_s,selected_a bounds
@@ -638,8 +659,8 @@ class minmax_regret:
                 if __debug__:
                     if self.verbosity >= 2:
                         print "create child node righ - exclude (state,action) : " , best_state_action
-                print "create child node righ - exclude (state,action) : ", best_state_action
-                raw_input('PAUSA')
+                #print "create child node righ - exclude (state,action) : ", best_state_action
+                #raw_input('PAUSA')
                 self.inner_bb(epsilon)
 
                 self.free_f_master(best_state_action)
@@ -656,7 +677,7 @@ class minmax_regret:
             self.make_slave()
 
 
-        if self.verbosity <= 2:
+        if self.verbosity <= 4:
             self.master.set_log_stream(None)
             self.master.set_error_stream(None)
             self.master.set_warning_stream(None)
@@ -683,6 +704,7 @@ class minmax_regret:
                 print "******** MASTER BEGIN **********"
                 print "********************************"
 
+
             start_t = time.time()
             self.master.solve()
             end_t = time.time()
@@ -692,6 +714,12 @@ class minmax_regret:
                 print "******** MASTER END  ***********"
                 print "********************************"
 
+
+            if self.verbosity >= 2:
+                print "print", 'master_solve_'+str(self.BB_tot_nodes)+'_'+str(it_counter)+'.lp'
+                self.master.write('master_solve_'+str(self.BB_tot_nodes)+'_'+str(it_counter)+'.lp')
+            #self.master.write('master_after_after_fix.lp')
+            #raw_input('PAUSA')
 
             
             self.TIME_master += (end_t - start_t)
@@ -737,7 +765,7 @@ class minmax_regret:
             # solve slave
             """add upper cutoff to slave program"""
             if __debug__:
-                if self.verbosity >= 2:
+                if self.verbosity >= 3:
                     print ("add upper cutoff rm:", result_master[0], " rm with epsi : ",  (1+epsilon)*(result_master[0]))
             
             upper_cutoff = max( 1.0, (1+self.EPSI_cutoff)*(result_master[0]) )
@@ -767,8 +795,17 @@ class minmax_regret:
             if __debug__:
                 if self.verbosity >= 2:
                     print "status slave : " , status_slave
-            if status_slave == 108 or status_slave == 119: #if it finds no soloution
-                if True == True:
+            if (status_slave == 108 or status_slave == 119): #if it finds no soloution
+                int_solution = False
+                if not self.cut_every_node:
+                    f_test= result_master[1:]
+                    out_f_is_det = self.f_is_deterministic(f_test)
+                    (f_out, stochastic_state_actions) = out_f_is_det 
+                    if f_out:
+                        #the solution is integer
+                        int_solution = True
+                
+                if self.cut_every_node or int_solution:
                     if __debug__:
                         if self.verbosity >=2:
                             print "alone == TRUE"
@@ -804,10 +841,14 @@ class minmax_regret:
                         found_new_cut = True 
 
             if found_new_cut == True:
-                if self.verbosity >= 2:
-                    print "add cut alpha.V*-r*f* <= delta"                
                 self.update_master(result_slave)
                 self.MASTER_tot_cuts += 1
+                if self.verbosity >= 2:
+                    print "add cut alpha.V*-r*f* <= delta"
+                    print result_slave
+                    print "print", 'master_fix_'+str(self.MASTER_tot_cuts)+'.lp'
+                    self.master.write('master_fix_'+str(self.MASTER_tot_cuts)+'.lp')    
+
             else:
                 break
 
