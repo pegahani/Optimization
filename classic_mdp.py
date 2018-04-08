@@ -169,3 +169,41 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
         _gamma = 0.95)
 
     pass
+
+def grid_MDP(rows, columns, start=None, goal=None):
+
+    actions = {0:'w', 1:'nw', 2: 'n', 3: 'ne', 4: 'e', 5: 'se', 6: 's', 7: 'sw', 8: 'stay'}
+    actions_grid = {'w':[-1, 0], 'nw':[-1,1], 'n':(0, 1), 'ne':(1,1), 'e': (1,0), 'se':(1,-1), 's':(0,-1), 'sw':(-1,-1), 'stay':(0,0)}
+    state_grid = np.zeros((rows, columns))
+
+    n_states = rows*columns
+    _t = {}
+    _r = {}
+
+
+    x, y, x_, y_ = None, None, None, None
+    if start is None:
+        x = random.choice(range(rows))
+        y = random.choice(range(columns))
+        start = [x, y]
+
+    if goal is None:
+        while True:
+            x_ = random.choice(range(rows))
+            y_ = random.choice(range(columns))
+            if x_ != x and y != y_:
+                goal = (x_, y_)
+                break
+
+
+    for i in range(rows):
+        for j in range(columns):
+            s = i*rows+columns
+            _t.update({(s, a, s2) for a in actions.iterkeys()})
+
+            pass
+
+    pass
+
+grid_MDP(3,3)
+
