@@ -1,0 +1,28 @@
+\begin{figure}[h!]
+\noindent
+\fbox{\hspace{\mylengthleft}\parbox[t]{\mylength}{\vspace*{0.5ex}
+%
+{\bf Algorithm } {\em } branch-and-bound search for an optimal deterministic policy:\\*[1ex]
+%{\footnotesize // initialization}\\
+$BestVal := +\infty$ {\em {\footnotesize /* initialization of the best value so far */}}\\
+$\mathcal{N} = \{\{\emptyset\}\}$ {\em {\footnotesize /* the collection of open nodes is initialized with the empty set */}}\\
+%{\bf for} $s := 0$ {\bf to} $C$ {\bf do}\\ 
+%\hspace*{3ex} $f[s]=1$; $g[s]=1$\\*[1ex]
+%{\em {\footnotesize consider one item at a time}}\\
+{\bf while} $\mathcal{N}$ is not empty {\bf do}\\ 
+\hspace*{3ex} extract node $N$ from $\mathcal{N}$\\
+\hspace*{3ex} {\bf for each} $f$ {\bf in} $N$ {\bf do}:\\ 
+\hspace*{3ex} \hspace*{3ex} fix $f=0$ in the master problem\\
+\hspace*{3ex} \hspace*{3ex} solve the master problem with Benders decomposition\\
+\hspace*{3ex} \hspace*{3ex} $(\delta^*,f^*) :=$ the optimal solution of the master problem\\
+\hspace*{3ex} \hspace*{3ex} {\bf if} $\delta^* < Best Val$ {\bf then}:\\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} {\bf if} $f^*$  is deterministic {\bf then}:\\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $BestVal = \delta^*$\\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} {\bf else}:\\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} find $f^*_{s,a}$ that correspond to a state that is not deterministic  \\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_L := N \cup_{s' \neq s} f_{s',a}$  \\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_R := N \cup f_{s,a}$  \\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $\mathcal{N} := \mathcal{N} \cup N_L \cup N_R$\\
+}}
+\caption{Algorithm to find an optimal deterministic policy.} \label{fig:basic_bb}
+\end{figure}
