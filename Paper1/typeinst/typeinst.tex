@@ -38,6 +38,11 @@
 \newcommand{\NMF}{\emph{NMF}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\mylengthleft}
+\setlength{\mylengthleft}{1ex}
+\newlength{\mylength}
+\setlength{\mylength}{\textwidth}
+\addtolength{\mylength}{-\mylengthleft}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,7 +104,7 @@
 
 
 \begin{abstract}
-In several real world situations a stochastic policy is not easily interpretable for system users, this might be due to the nature of the problem or to the system requirements. In these contexts, it is inevitable to provide a deterministic policy to the user. In this paper, we propose an exact method for computing a deterministic policy in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``rounding" the optimal stochastic policy leads to a deterministic policy far from the optimal.
+In several real world situations a stochastic policy is not easily interpretable for system users, this might be due to the nature of the problem or to the system requirements. In these contexts, it is inevitable to provide a deterministic policy to the user. In this paper, we propose an exact method for computing a deterministic policy in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``rounding" the optimal stochastic policy leads to a deterministic policy different from the optimal.
 \keywords{Markov Decision Process, Minimax Regret, Unknown Rewards, Deterministic Policy}
 \end{abstract}
 
@@ -117,29 +122,30 @@ In several real world situations a stochastic policy is not easily interpretable
 \section{Preliminaries}\label{sec:Preliminaries}
 \textit{Markov Decision Process (MDP)} \citep{Puterman1994} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where: $S$ is a finite set of states; $A$ is finite set of actions, $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$, and choosing action $a$; $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$; $\gamma \in [0, 1[$ is the discount factor; and $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function} indicating probability of initiating in state $s$ by $\beta(s)$.
 
-A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$. A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$. A policy $\pi$ induces a \textit{visitation frequency function} $f^{\tilde{\pi}}$ where $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$ \cite{Puterman1994} (section$6.9$):
+A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$. A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$. A policy $\pi$ induces a \textit{visitation frequency function} $f^{\tilde{\pi}}$ where $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$ (see Section $6.9$ in \cite{Puterman1994}):
 \begin{align*}
 f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}(S_t = s', A_t = a | S_1 = s)
 \end{align*}
 where the sum is taken over trajectories defined by $S_0 \sim \beta, A_t \sim \tilde{\pi}(S_t)$ and $S_{t+1} \sim P(.|S_t,A_t)$. The policy is computable from $f^{\tilde{\pi}}$, via 
 \begin{align}\label{pi_f}
-\tilde{\pi}(s,a) = \frac{f^{\tilde{\pi}}(s, a)}{\sum_{a'} f^{\tilde{\pi}} (s,a')}
+\tilde{\pi}(s,a) = \frac{f^{\tilde{\pi}}(s, a)}{\sum_{a'} f^{\tilde{\pi}} (s,a')}\;.
 \end{align}
-For deterministic policies $\forall a \neq \pi(s) \; f^{\pi}(s,a)= 0$.\\
-Policies are evaluated by expectation of discounted sum of rewards w.r.t to the infinite horizon discounted criterion namely \textit{value function} $V: S \longrightarrow \mathbb{R}$: 
+For a deterministic policies we have that $f^{\pi}(s,a)= 0$, $\forall a \neq \pi(s)$.\\
+Policies are evaluated by expectation of discounted sum of rewards w.r.t to the infinite horizon discounted criterion, namely \textit{value function} $V: S \longrightarrow \mathbb{R}$: 
 $V^{\tilde{\pi}}(s) = \mathbb{E}(\sum_{t=0}^{\infty} \gamma^{t}$ $r(s_t, \tilde{\pi}(s_t))$. %Taking into account the initial distribution $\beta$, each policy has an expected value function equal:
 %\begin{align*}
 %\mathbb{E}_{\sim \beta}[V^{\tilde{\pi}}(s)]=  \sum_{s \in S} \beta(s)V^{\tilde{\pi}}(s) = \beta \cdot V^{\tilde{\pi}}
 %\end{align*}
-Another way for defining quality of policies is the \textit{Q-value function}   $Q: S \times A \longrightarrow \mathbb{R}$ given by:
+Another way for defining the quality of policies is the \textit{Q-value function}   $Q: S \times A \longrightarrow \mathbb{R}$ given by:
 \begin{align}\label{q-v}
-Q^{\tilde{\pi}}(s, a) = r(s, a) + \gamma \sum_{s' \in S} P(s'|s,a)V^{\tilde{\pi}}(s')
+Q^{\tilde{\pi}}(s, a) = r(s, a) + \gamma \sum_{s' \in S} P(s'|s,a)V^{\tilde{\pi}}(s')\;.
 \end{align}
 
-The visitation frequency function and value function can be exchanged to each other:
+For a give intial state $\beta$, the value of the optimal policy is $\beta \cdot V^{\tilde{\pi}}$, this quantity can be expressed in terms of the visitation frequency function (see \cite{Puterman1994}): 
+%The visitation frequency function and value function can be exchanged to each other:
 \begin{align}\label{f-v}
 %(\sum_{s \in S} \beta(s)V^{\tilde{\pi}}(s)) \;\; \;\;  
-\beta \cdot V^{\tilde{\pi}} = r \cdot f^{\tilde{\pi}}
+\beta \cdot V^{\tilde{\pi}} = r \cdot f^{\tilde{\pi}}\;.
 %\;\;\;\;  (\sum_{s \in S} \sum_{a \in A} r(s,a) f^{\tilde{\pi}}(s,a) )
 \end{align}
 An MDP always has an optimal policy $\pi^*$ such that; $\pi^* = \text{argmax}_{\pi} \beta \cdot V^{\pi}$ or $f^{*} = \text{argmax}_{f} r \cdot f$ where the optimal policy can be recovered from $f^*$ using Equation \ref{pi_f}. 
@@ -169,7 +175,7 @@ In other words, when we should select the $f$ policy, what is the worst case los
 \textbf{minimax regret} of feasible reward set $\mathcal{R}$ is defined as:\\ $MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)$
 \end{definition}
 
-Any policy $f^*$ (its equivalent $\pi^*$) that maximises the minimum regret is the \textit{minmax-regret optimal policy} for the $\tilde{M}$. There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. In this paper we use the approach presented by Regan and Boutilier \citep{Regan2009} namely \textit{Benders Decomposition} \cite{Benders1962} to approximate the optimal minimimax regret policy. The idea is to formulate the problem as series of linear programmings (LPs) and Mixed Integer Linear Programmings (MILPs):
+Any policy $f^*$ (its equivalent $\pi^*$) that maximises the minimum regret is the \textit{minmax-regret optimal policy} for the $\tilde{M}$. There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. In this paper we use the approach presented by Regan and Boutilier \citep{Regan2009} namely \textit{Benders Decomposition} \cite{Benders1962} to approximate the optimal minimimax regret policy. The idea is to formulate the problem as series of linear programs (LPs) and Mixed Integer Linear Programs (MILPs):
 
 %----------------- minmax regret model --------------------
 
@@ -179,7 +185,7 @@ Any policy $f^*$ (its equivalent $\pi^*$) that maximises the minimum regret is t
 %%%%%%
 \begin{alignat}{3}
 &\text{minimize}_{\delta, f} && \delta & \\
-&\text{subject to:} &\quad& r\cdot g - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}\\
+&\text{subject to:}&\quad& r\cdot g - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}\label{delta_cut}\\
 && \quad& \gamma E^{\top} f + \beta = 0 
 \end{alignat}
 %%%%%%%
@@ -194,15 +200,18 @@ Any policy $f^*$ (its equivalent $\pi^*$) that maximises the minimum regret is t
 && \quad& V \geq Q_a  &\quad \forall a \in A\\
 && \quad& V \leq (1-I_a)M_a + Q_a  &\quad \forall a \in A\\
 && \quad& Cr \leq d \\
-&& \quad& \sum_{a \in A} I_a = 1  \\
-&& \quad& I_a(s) \in \{0, 1 \} &\quad \forall s \in S, \; a \in A\\
-&& \quad& M_a = M^{\top} - M_a^{\perp} &\quad \forall a \in A \\
+&& \quad& \sum_{a \in A} I_a = 1  \label{eq:sum_I}\\
+&& \quad& I_a(s) \in \{0, 1 \} &\quad \forall s \in S, \; a \in A \label{eq:bin_I}\\
+&& \quad& M_a = M^{\top} - M_a^{\perp} &\quad \forall a \in A
 \end{alignat}
 %%%%%%
 \end{center}
 %----------------- minmax regret model --------------------
 
-The master program is a linear program computing the minimum regret w.r.t the given set of adversaries namely \textit{generated constraints} $\langle g_r, r \rangle \in \text{GEN}$ \citep{Regan2009}. These are pairs $\langle$ policy, reward $\rangle$s wining against policy $f$. The second constraint of the master problem, $\gamma E ^{\top}f+ \beta = 0$ guaranties that $f$ is a valid visitation frequency function. For the sake of abbreviation, $E$ matrix is generated according to the transition function $P$; $E$ is a $|S||A| \times |S|$-matrix with a row for each state action, and one column for each state:
+The master program is a linear program computing the minimum regret with respect to all the possible combinations of rewards and adversary policies. We call GEN the set containg all the combinations of rewards and adversary policies. 
+In the first set of constraints, one constraints for each element of GEN $\langle g_r, r \rangle \in \text{GEN}$ is considered. 
+%These are pairs $\langle$ policy, reward $\rangle$s wining against policy $f$. 
+The second set of constraints of the master problem, $\gamma E ^{\top}f+ \beta = 0$ guaranties that $f$ is a valid visitation frequency function. For the sake of abbreviation, $E$ matrix is generated according to the transition function $P$; $E$ is a $|S||A| \times |S|$-matrix with a row for each state action, and one column for each state:
 \[   
 E_{sa,s'} = 
      \begin{cases}
@@ -211,20 +220,30 @@ E_{sa,s'} =
      \end{cases}
 \] 
 
-The intuition behind this constraint is related to the dual linear program of the Bellman Equation \cite{Sutton1998} chapter $4$ (For more details see \citep{Puterman1994} section $6.9$). 
+The intuition behind this constraint is related to the dual linear program of the Bellman Equation (see for example \cite{Sutton1998}, Chapter $4$ or \citep{Puterman1994}, Section $6.9$). 
 
-The slave program receives an optimal policy and a minimax regret value; then it computes a policy and reward value with the max regret regarding to the given policy $f$. The formula can be considered as a game between two players: master and slave programs. The master programs finds an optimal policy minimising regrets w.r.t the given adversaries by the slave program, while the slave program searches for an adversary with the maximum gain against the master policy proposition $f$. This game continues until the slave problem can not find neither a policy as $g$ nor a reward as $r$ to generate a higher regret for the given $f$ by the master program.  
+From a practical point of view, it is uncovenient to enumerate a priori all the constraints~\eqref{delta_cut}. Benders decomposition is base on the idea of starting with a small (maybe empty) subset of constraints~\eqref{delta_cut} and interact with the slave problem to have either a certificate of optimality of the master problem or a new inequality that ca potentially change the value of the master.
+
+The slave program receives a feasible policy $f^*$ and a minimax regret value $\delta^*$; then it searches for a policy and a reward value with the max regret regarding to the given policy $f$, in other words, it finds a $\bar{r}$ and $\bar{g}$ such that $\bar{r} \cdot \bar{g}  - \bar{r}  \cdot f^* > \delta^*$. If such a $(\bar{r},\bar{g})$ is found, it is added to GEN and the master problem is solved again. If this is not the case, the procedure stops and $f^*$ is the (stochastic) policy that minimizes the maximum regret. 
+
+The interaction between master and slave programs can be viewed as a game between two players. The master programs finds an optimal policy minimising regrets w.r.t the given adversaries found so far by the slave program, while the slave program searches for an adversary with the maximum gain against the master policy proposition $f$. This game continues until the slave problem can not find neither a policy as $g$ nor a reward as $r$ to generate a higher regret for the given $f$ by the master program.  
 
 The slave problem is a reformulation of the MR($f, \mathcal{R}$) for the received policy $f$ from the master program. According to Equation \ref{f-v}, $r \cdot g - r \cdot f$ can be rewritten as $\beta \cdot V - r \cdot f$. Thus instead of finding the visitation frequency function as $g$, the value function $V$ related to the adversary policy should be computed. Among the presented constraints for the slave program, constraint $(5)$ ensures that $\forall s \quad Q(s, a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a)V(s')$ (see Equation \ref{q-v}). On the other hand constraints $8$ and $9$ guaranty that $\forall s \quad Q(s, a) = V(s)$ and only one action $a$; $\forall a \quad M_a$ is sufficiently large to tight an upper bound for this equality. $M^{\top}$ is value of the optimal policy for maximum reward values i.e. in our case we compute the optimal policy for $\tilde{M}(S, A, P, r_{\text{max}}, \gamma, \beta)$ where $r_{\text{max}}(s, a) = r_l \quad \text{if} \; r_l \leq r(s, a) \leq r_u$; this can be found using the classical methods such as value iteration or policy iteration \cite{Sutton1998}. Similarly $M^{\perp}$ is the Q-value for the optimal policy with the worst rewards on $\mathcal{R}$. 
 
-Regarding to constraints $(12)$ and $(13)$ $I$ is a $|S|\times|A|$-matrix defining the policy related to $V$. This policy is a deterministic policy with one and only one selected action $a$ per state $s$. Notice that the slave program proposes a deterministic adversary to the master program while the master program always approximate a stochastic policy. Since the adversary policy proposes an extreme policy w.r.t the given $f$, a MILP model for the slave program is sufficient.   
+Regarding to constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} $I$ is a $|S|\times|A|$-matrix defining the policy related to $V$. This policy is a deterministic policy with one and only one selected action $a$ per state $s$. Notice that the slave program proposes a deterministic adversary to the master program while the master program always approximate a stochastic policy. Since the adversary policy proposes an extreme policy w.r.t the given $f$, a MILP model for the slave program is sufficient.   
 
 %%================================================================
-\section{An exact Enumerative scheme} 
+\section{An exact Enumerative scheme to find the optimal deterministic solution} 
+
+
  
 %%================================================================
 \section{Conclusions and Perspectives}
 		
+
+
+\input{basic_bb.tex}
+
 
 \section*{Acknowledgement}
 
