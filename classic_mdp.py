@@ -2,6 +2,7 @@ from scipy.sparse import dok_matrix
 
 import numpy as np
 import random
+from operator import add
 from itertools import starmap, repeat, product, islice, ifilter, izip
 
 ftype = np.float32
@@ -136,7 +137,6 @@ def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
         _rewards= _r ,
         _gamma = 0.95)
 
-    pass
 
 
 def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_up):
@@ -173,7 +173,7 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
 def grid_MDP(rows, columns, start=None, goal=None):
 
     actions = {0:'w', 1:'nw', 2: 'n', 3: 'ne', 4: 'e', 5: 'se', 6: 's', 7: 'sw', 8: 'stay'}
-    actions_grid = {'w':[-1, 0], 'nw':[-1,1], 'n':(0, 1), 'ne':(1,1), 'e': (1,0), 'se':(1,-1), 's':(0,-1), 'sw':(-1,-1), 'stay':(0,0)}
+    actions_grid = {'w':[-1, 0], 'nw':[-1,1], 'n':[0, 1], 'ne':[1,1], 'e': [1,0], 'se':[1,-1], 's':[0,-1], 'sw':[-1,-1], 'stay':[0,0]}
     state_grid = np.zeros((rows, columns))
 
     n_states = rows*columns
@@ -192,18 +192,134 @@ def grid_MDP(rows, columns, start=None, goal=None):
             x_ = random.choice(range(rows))
             y_ = random.choice(range(columns))
             if x_ != x and y != y_:
-                goal = (x_, y_)
+                goal = [x_, y_]
                 break
 
-
+    #random.uniform(0.0, 0.2)
     for i in range(rows):
         for j in range(columns):
-            s = i*rows+columns
-            _t.update({(s, a, s2) for a in actions.iterkeys()})
+            s = i*rows+j
+            next_states = {}
 
-            pass
+            p_ = {}
+            for a in actions.iterkeys():
+                dir = actions_grid[actions[a]]
+                res = [i+dir[0], j+dir[1]]
+
+                check = False
+                if (0 <= res[0] <= rows-1) and (0<= res[1] <= columns-1):
+                    check = True
+                    next_states[a] = res
+
+                if check is True:
+                    p_[a] = random.uniform(0.0, 0.2)
+                    _t.update({(s, a, next_states[a][0]*rows+next_states[a][1]): 1-p_[a]})
+
+            for a in p_.iterkeys():
+                next = random.choice([k for k in next_states.iterkeys() if k != a ])
+                next_s = next_states[next]
+                _t.update({(s, a, next_s[0]*rows+next_s[1]): p_[a]})
+
+    unknow_rewards = []
+
+    grid_size = rows*columns
+    print grid_size
+
+    # number of states with unknown rewards
+    num_states_ur = random.randint(int(40.0*grid_size/100.0), int(60*grid_size/100.0))
+    while len(unknow_rewards)< num_states_ur:
+        elem = random.randint(0,grid_size-1)
+        if elem not in unknow_rewards:
+            unknow_rewards.append(elem)
+
+    # rewards for states with unknown rewards
+    for s in unknow_rewards:
+        for a in range(9):
+            _r.update({(s, a): r for r in np.random.uniform(35, 50, 1)})
+
+    #reward for the goal state
+    for a in range(9):
+        _r.update({(goal[0]*rows+goal[1], a): np.random.uniform(80, 1000, 1)})
+
+    #the rest of states
+    rest_states = [x for x in range(rows*columns) if x not in unknow_rewards+[goal[0]*rows+goal[1]] ]
+
+    for s in rest_states:
+        for a in range(9):
+            _r.update({(s, a): 50.0})
+
+    return MDP(
+        _startingstate= set(range(grid_size)),
+        _transitions= _t,
+        _rewards= _r ,
+        _gamma = 0.95)
+
+def index_level_to_state(level, index, half_level):
+
+     if level <= half_level:
+        return sum(pow(2, i) for i in range(level))+ index
+     else:
+         return  sum(pow(2, i) for i in range(half_level+1)) + sum(pow(2, i) for i in range(half_level-1, 2*half_level-level, -1))+ index
+
+def state_to_index_level(state):
 
     pass
 
-grid_MDP(3,3)
+def to_left_child(state, half_level):
 
+
+
+    pass
+
+def to_right_child(state, half_level):
+    pass
+
+def get_father(state, half_level):
+    pass
+
+def diamond_mdp(half_level):
+
+    n_states = sum(pow(2, i) for i in range(half_level+1)) + sum(pow(2, i) for i in range(half_level))
+    state_level_index = {}
+    pass
+
+#%%%%%%%%%%%%%%%%%%%
+def create_diamond_MDP(half_level):
+    if half_level == 2:
+        return diamond_mdp_2()
+
+def diamond_mdp_2():
+
+    n_states= 9
+    n_actions = 3
+
+    _t = {}
+    _r = {}
+
+    state_dict = {0:(0, 0), 1: (1,0), 2: (1,1), 3: (2,0), 4: (2,1), 5: (2,2), 6:(2,3), 7: (3,0), 8: (3,1), 9: (4,0)}
+    actions = {0: 'a0', 1: 'a1', 2: 'a2'}
+
+    # action a0
+    _t.update({(0, 0, 1):0.5, (0,0,2): 0.5})
+    _t.update({(1,0,3): 0.5, (1, 0, 4):0.5, (2, 0, 5): 0.5, (2, 0, 6): 0.5})
+    _t.update({(3,0,7):0.5, (3, 0,8): 0.5, (4,0,7):0.5, (4, 0,8): 0.5, (5,0,7):0.5, (5, 0,8): 0.5, (6,0,7):0.5, (6, 0,8): 0.5 })
+    _t.update({(7, 0, 9):1.0, (8, 0, 9): 1.0})
+
+    # action a1
+    _t.update({(0, 1, 1):0.3, (0,1,0): 0.7, (1,1 ,3 ):0.3, (1,1 ,0 ):0.7, (2, 1, 5):0.3, (2, 1,0 ):0.7})
+    _t.update({(3,1 ,8 ):0.3, (3, 1, 1):0.7, (4, 1,7 ):0.3, (4,1 ,1 ):0.7, (5,1 ,7 ):0.3, (5,1 ,2 ):0.7, (6,1 ,8 ):0.3, (6, 1,2 ):0.7})
+    _t.update({(7,1 ,9 ):0.3, (7,1 ,3 ):0.7, (8, 1, 9):0.3, (8,1 ,5 ):0.7})
+
+    # action a2
+    _t.update({(0, 2, 2):0.7, (0,2,0): 0.3, (1,2 ,4 ):0.7, (1,2 ,0 ):0.3, (2, 2, 6):0.7, (2, 2,0 ):0.3})
+    _t.update({(3,2 ,7 ):0.7, (3, 2, 1):0.3, (4, 2,8 ):0.7, (4,2 ,1 ):0.3, (5,2 ,8 ):0.7, (5,2 ,2 ):0.3, (6,2 ,7 ):0.7, (6, 2,2 ):0.3})
+    _t.update({(7,2 ,9 ):0.7, (7,2 ,4 ):0.3, (8, 2, 9):0.7, (8,2 ,6 ):0.3})
+
+    
+
+    pass
+
+
+
+#grid_MDP(3,3)
+create_diamond_MDP(2)
