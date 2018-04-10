@@ -82,7 +82,7 @@ class minmax_regret:
         self.TIME_limit = 0
         self.TIME_limit_reached = False
 
-        self.verbosity = 0
+        self.verbosity = 2
 
         self.output = ""
 
@@ -800,8 +800,9 @@ class minmax_regret:
 
             if __debug__:
                 if self.verbosity >= 2:
+
                     print "status slave : " , status_slave
-            if (status_slave == 108 or status_slave == 119): #if it finds no soloution
+            if (status_slave == 103 or status_slave == 108 or status_slave == 119): #if it finds no soloution
                 int_solution = False
                 if not self.cut_every_node:
                     f_test= result_master[1:]

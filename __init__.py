@@ -86,14 +86,9 @@ def main():
                     minmax = minmax_regret(mdp)
                     minmax.solve_deterministic_opt_stack(36000, 0.01, False)
 
-                    print minmax.BEST_det_policy
-                    print minmax.BB_tot_nodes
-
                     print "minimax regert deterministic optimal   ", minmax.UB
                     print "minimax regert stochastic optimal      ", minmax.ROOT_LB
                     print "minimax regert heuristic deterministic ", minmax.UB_HEUR
-
-                    minmax.solve_deterministic_opt_stack(36000, 0.01, False)
 
                     # if (minmax.controesempio ==True and ( ( minmax.UB_HEUR - minmax.UB ) / minmax.UB ) > 0.01 ):
                     text_file.write(str(reward_type) + ';' + str(prob_low) + ';' + str(seed) + ';')

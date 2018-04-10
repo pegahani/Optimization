@@ -157,6 +157,7 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
 
     pass
 
+######### GRID MDP ###############
 def grid_MDP(rows, columns, start=None, goal=None):
 
     actions = {0:'w', 1:'nw', 2: 'n', 3: 'ne', 4: 'e', 5: 'se', 6: 's', 7: 'sw', 8: 'stay'}
@@ -268,7 +269,7 @@ def diamond_mdp(half_level):
     state_level_index = {}
     pass
 
-#%%%%%%%%%%%%%%%%%%%
+#%%%%%%%DIAMOND%%%%%%%%%%%%
 def create_diamond_MDP(half_level,probab_low , probab_high,  reward_type):
     if half_level == 2:
         return diamond_mdp_2(probab_low , probab_high,  reward_type)
@@ -394,8 +395,6 @@ def diamond_mdp_2(probab_low , probab_high,  reward_type):
         _r_bounds.update({(9, 0): [600, 1000], (9, 1): [600, 1000], (9, 2): [600, 1000]})
 
 
-
-
     _r_bounds.update({(7,0):[0.0,0.0],(7,1): [0.0,0.0], (7,2): [0.0,0.0]})
     _r_bounds.update({(8,0):[0.0,0.0],(8,1): [0.0,0.0], (8,2): [0.0,0.0]})
 
@@ -406,6 +405,26 @@ def diamond_mdp_2(probab_low , probab_high,  reward_type):
         _rewards_bounds= _r_bounds,
         _gamma = 0.95, _alpha= [1]+9*[0.0])
 
+#%%%%%%%%%%%%% counter example %%%%%%%%%%%%%
+def mdp_counter_example(T0, T1, A, B, C):
 
+    n_states= 4
+    n_actions = 3
 
+    _t = {}
+    _r = {}
+
+    _t.update({(2,0,0):1.0, (2, 1, 1): 1.0, (2,2,0):T0, (2,2,1):T1, (0,0,3):1.0, (1,0,3):1.0})
+    _r.update({(2,0):[0.0, 0.0],(2, 1): [0.0, 0.0], (2,2): [C, C],
+               (0,0):[-A,A],(0,1): [0.0, 0.0],(0,2): [0.0, 0.0],
+               (1,0):[-A+B, A+B], (1,1): [0.0, 0.0],(1,2): [0.0, 0.0],
+               (3, 0): [0.0, 0.0], (3, 1): [0.0, 0.0], (3, 2): [0.0, 0.0]
+               })
+    _alpha = [0.0, 0.0, 1.0, 0.0]
+
+    return MDP(
+        _startingstate= set(range(n_states)),
+        _transitions= _t,
+        _rewards_bounds= _r,
+        _gamma = 0.99, _alpha= _alpha)
 
