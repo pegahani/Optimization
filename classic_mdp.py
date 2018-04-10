@@ -10,7 +10,7 @@ ftype = np.float32
 import math
 
 class MDP:
-    def __init__(self, _startingstate, _transitions, _rewards, _gamma):
+    def __init__(self, _startingstate, _transitions, _rewards_bounds, _gamma, _alpha = None):
 
         try:
             states = sorted(
@@ -28,8 +28,11 @@ class MDP:
 
             self.startingStateInd = [stateInd[x] for x in _startingstate]
 
-            assert set(_rewards.keys()).issubset(list(product(states, actions))),\
+            assert set(_rewards_bounds.keys()).issubset(list(product(states, actions))), \
                 "states appearing in rewards should also appear in transitions"
+
+            # assert set(_rewards.keys()).issubset(list(product(states, actions))),\
+            #     "states appearing in rewards should also appear in transitions"
 
         except ValueError, TypeError:
 
@@ -44,7 +47,8 @@ class MDP:
 
         self.stateInd = stateInd
         self.actionInd = actionInd
-        self.rewards = _rewards
+        #self.rewards = _rewards
+        self.rewards_bounds = _rewards_bounds
         self.gamma = _gamma
 
         """for generating the transition function as a |S||A|x|S|"""
@@ -55,9 +59,9 @@ class MDP:
             si, ai, si2 = self.stateInd[s], self.actionInd[a], self.stateInd[s2]
             transitions[si, ai][0, si2] = p
 
-        for s, a in product(range(self.nstates), range(self.nactions)):
-            transitions[s,a] = transitions[s,a].tocsr()
-            assert 0.99 <= transitions[s,a].sum() <= 1.01, "probability transitions should sum up to 1"+ str(transitions[s,a])
+        #for s, a in product(range(self.nstates), range(self.nactions)):
+        #    transitions[s,a] = transitions[s,a].tocsr()
+        #    assert 0.99 <= transitions[s,a].sum() <= 1.01, "probability transitions should sum up to 1"+ str(transitions[s,a])
 
         self.transitions = transitions
 
@@ -71,14 +75,17 @@ class MDP:
                 E[s * self.nactions + a, s] -= 1.0/self.gamma
 
         self.E = E
-        self.alpha = [np.float32(1.0/self.nstates)]*self.nstates
+        if _alpha is None:
+            self.alpha = [np.float32(1.0/self.nstates)]*self.nstates
+        else:
+            self.alpha = _alpha
 
     def display_mdp(self):
 
         print 'sates = ', self.states
         print 'actions = ', self.actions
         print 'gamma =', self.gamma
-        print 'rewards', self.rewards
+        print 'rewards', self.rewards_bounds
 
         for s in range(self.nstates):
             for a in range(self.nactions):
@@ -90,27 +97,6 @@ class MDP:
         for i in range(self.nstates):
             self.alpha[i] = 0.0
         self.alpha[0] = 1.0
-
-        # self.transitions[0, 0][0, 0] = 0.33
-        # self.transitions[0, 0][0, 1] = 0.66
-        # #******
-        # self.transitions[0, 1][0, 0] = 0.05
-        # self.transitions[0, 1][0, 2] = 0.95
-        # # # ******
-        # self.transitions[1, 0][0, 0] = 0.66
-        # self.transitions[1, 0][0, 1] = 0.33
-        # self.transitions[1, 0][0, 2] = 0.0
-        # # # ******
-        # self.transitions[1, 1][0, 1] = 0.9
-        # self.transitions[1, 1][0, 2] = 0.1
-        # # # ******
-        # # self.transitions[2, 0][0, 0] = 0.66
-        # # self.transitions[2, 0][0, 2] = 0.33
-        # # # ******
-        # self.transitions[2, 1][0, 1] = 0.66
-        # self.transitions[2, 1][0, 2] = 0.33
-
-
         pass
 
 def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
@@ -129,14 +115,15 @@ def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
 
         _t.update({(s,a,s2):p for s2,p in izip(next_states, probas/sum(probas))})
         #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
-        _r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+        #_r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+
+        _r.update({(s, a): [_reward_lb, _reward_up]})
 
     return MDP(
         _startingstate= set(range(n_states)),
         _transitions= _t,
-        _rewards= _r ,
+        _rewards_bounds= _r ,
         _gamma = 0.95)
-
 
 
 def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_up):
@@ -159,13 +146,13 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
 
         _t.update({(s,a,s2):p for s2,p in izip(next_states, probas)})
         #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
-        _r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+        _r.update({(s, a): [_reward_lb, _reward_up]})
 
     print '_t', _t
     return MDP(
         _startingstate= set(range(n_states)),
         _transitions= _t,
-        _rewards= _r ,
+        _rewards_bounds= _r ,
         _gamma = 0.95)
 
     pass
@@ -267,8 +254,6 @@ def state_to_index_level(state):
 
 def to_left_child(state, half_level):
 
-
-
     pass
 
 def to_right_child(state, half_level):
@@ -284,17 +269,17 @@ def diamond_mdp(half_level):
     pass
 
 #%%%%%%%%%%%%%%%%%%%
-def create_diamond_MDP(half_level):
+def create_diamond_MDP(half_level,probab_low , probab_high,  reward_type):
     if half_level == 2:
-        return diamond_mdp_2()
+        return diamond_mdp_2(probab_low , probab_high,  reward_type)
 
-def diamond_mdp_2():
+def diamond_mdp_2(probab_low , probab_high,  reward_type):
 
     n_states= 9
     n_actions = 3
 
     _t = {}
-    _r = {}
+
 
     state_dict = {0:(0, 0), 1: (1,0), 2: (1,1), 3: (2,0), 4: (2,1), 5: (2,2), 6:(2,3), 7: (3,0), 8: (3,1), 9: (4,0)}
     actions = {0: 'a0', 1: 'a1', 2: 'a2'}
@@ -306,20 +291,121 @@ def diamond_mdp_2():
     _t.update({(7, 0, 9):1.0, (8, 0, 9): 1.0})
 
     # action a1
-    _t.update({(0, 1, 1):0.3, (0,1,0): 0.7, (1,1 ,3 ):0.3, (1,1 ,0 ):0.7, (2, 1, 5):0.3, (2, 1,0 ):0.7})
-    _t.update({(3,1 ,8 ):0.3, (3, 1, 1):0.7, (4, 1,7 ):0.3, (4,1 ,1 ):0.7, (5,1 ,7 ):0.3, (5,1 ,2 ):0.7, (6,1 ,8 ):0.3, (6, 1,2 ):0.7})
-    _t.update({(7,1 ,9 ):0.3, (7,1 ,3 ):0.7, (8, 1, 9):0.3, (8,1 ,5 ):0.7})
+    _t.update({(0, 1, 1):probab_low, (0,1,0): probab_high, (1,1 ,3 ):probab_low, (1,1 ,0 ):probab_high, (2, 1, 5):probab_low, (2, 1,0 ):probab_high})
+    _t.update({(3,1 ,8 ):probab_low, (3, 1, 1):probab_high, (4, 1,7 ):probab_low, (4,1 ,1 ):probab_high, (5,1 ,7 ):probab_low, (5,1 ,2 ):probab_high, (6,1 ,8 ):probab_low, (6, 1,2 ):probab_high})
+    _t.update({(7,1 ,9 ):probab_low, (7,1 ,3 ):probab_high, (8, 1, 9):probab_low, (8,1 ,5 ):probab_high})
 
     # action a2
-    _t.update({(0, 2, 2):0.7, (0,2,0): 0.3, (1,2 ,4 ):0.7, (1,2 ,0 ):0.3, (2, 2, 6):0.7, (2, 2,0 ):0.3})
-    _t.update({(3,2 ,7 ):0.7, (3, 2, 1):0.3, (4, 2,8 ):0.7, (4,2 ,1 ):0.3, (5,2 ,8 ):0.7, (5,2 ,2 ):0.3, (6,2 ,7 ):0.7, (6, 2,2 ):0.3})
-    _t.update({(7,2 ,9 ):0.7, (7,2 ,4 ):0.3, (8, 2, 9):0.7, (8,2 ,6 ):0.3})
+    _t.update({(0, 2, 2):probab_high, (0,2,0): probab_low, (1,2 ,4 ):probab_high, (1,2 ,0 ):probab_low, (2, 2, 6):probab_high, (2, 2,0 ):probab_low})
+    _t.update({(3,2 ,7 ):probab_high, (3, 2, 1):probab_low, (4, 2,8 ):probab_high, (4,2 ,1 ):probab_low, (5,2 ,8 ):probab_high, (5,2 ,2 ):probab_low, (6,2 ,7 ):probab_high, (6, 2,2 ):probab_low})
+    _t.update({(7,2 ,9 ):probab_high, (7,2 ,4 ):probab_low, (8, 2, 9):probab_high, (8,2 ,6 ):probab_low})
 
-    
+    _r_bounds = {}
+    _r_bounds.update({(0,0):[0.0,0.0],(0,1): [0.0,0.0], (0,2): [0.0,0.0]})
+    _r_bounds.update({(1,0):[0.0,0.0],(1,1): [0.0,0.0], (1,2): [0.0,0.0]})
+    _r_bounds.update({(2,0):[0.0,0.0],(2,1): [0.0,0.0], (2,2): [0.0,0.0]})
 
-    pass
+    if reward_type == 0:
+
+        # # U states
+
+        _r_bounds.update({(3,0):  [-600, 600], (3, 1): [-600, 600], (3, 2): [-600, 600]} )
+        _r_bounds.update({(4, 0): [-600, 600], (4, 1): [-600, 600], (4, 2): [-600, 600]})
+        _r_bounds.update({(5, 0): [-600, 600], (5, 1): [-600, 600], (5, 2): [-600, 600]})
+        _r_bounds.update({(6, 0): [-600, 600], (6, 1): [-600, 600], (6, 2): [-600, 600]})
+
+        # goal
+
+        _r_bounds.update({(9, 0): [600, 1000], (9, 1): [600, 1000], (9, 2): [600, 1000]})
+
+    if reward_type == 1:
+
+        # U states
+
+        _r_bounds.update({(3, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (3, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (3, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(4, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (4, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (4, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(5, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (5, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (5, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(6, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (6, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (6, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+
+        #goal
+
+        _r_bounds.update({(9, 0): [random.uniform(600, 800), random.uniform(800, 10000)],
+                          (9, 1): [random.uniform(600, 800), random.uniform(800, 10000)],
+                          (9, 2): [random.uniform(600, 800), random.uniform(800, 10000)]})
+
+    if reward_type == 2:
+
+        # U states
+        rew_bound = [random.uniform(-600, 0), random.uniform(0, 600)]
+        _r_bounds.update({(3, 0): rew_bound,
+                          (3, 1): rew_bound,
+                          (3, 2): rew_bound})
+
+        rew_bound = [random.uniform(-600, 0), random.uniform(0, 600)]
+        _r_bounds.update({(4, 0): rew_bound,
+                          (4, 1): rew_bound,
+                          (4, 2): rew_bound})
+
+        rew_bound = [random.uniform(-600, 0), random.uniform(0, 600)]
+        _r_bounds.update({(5, 0): rew_bound,
+                         (5, 1): rew_bound,
+                         (5, 2): rew_bound})
+
+        rew_bound = [random.uniform(-600, 0), random.uniform(0, 600)]
+
+        _r_bounds.update({(6, 0): rew_bound ,
+                          (6, 1): rew_bound ,
+                          (6, 2): rew_bound })
+
+        #goal
+
+        goal_bound = [random.uniform(600, 800), random.uniform(800, 10000)]
+        _r_bounds.update({(9, 0): goal_bound,
+                          (9, 1): goal_bound,
+                          (9, 2): goal_bound})
+
+    if reward_type == 3:
+
+        # U states
+
+        _r_bounds.update({(3, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (3, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (3, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(4, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (4, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (4, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(5, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (5, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (5, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+        _r_bounds.update({(6, 0): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (6, 1): [random.uniform(-600, 0), random.uniform(0, 600)],
+                          (6, 2): [random.uniform(-600, 0), random.uniform(0, 600)]})
+
+        #goal
+
+        _r_bounds.update({(9, 0): [600, 1000], (9, 1): [600, 1000], (9, 2): [600, 1000]})
 
 
 
-#grid_MDP(3,3)
-create_diamond_MDP(2)
+
+    _r_bounds.update({(7,0):[0.0,0.0],(7,1): [0.0,0.0], (7,2): [0.0,0.0]})
+    _r_bounds.update({(8,0):[0.0,0.0],(8,1): [0.0,0.0], (8,2): [0.0,0.0]})
+
+
+    return MDP(
+        _startingstate= set(range(n_states)),
+        _transitions= _t,
+        _rewards_bounds= _r_bounds,
+        _gamma = 0.95, _alpha= [1]+9*[0.0])
+
+
+
+

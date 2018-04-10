@@ -21,7 +21,7 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
                 load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10 )
                 _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
                 #_mdp.modify_mdp()
-                minmax = minmax_regret(_mdp, [-1, 1])
+                minmax = minmax_regret(_mdp)
                 
                 for cut_every_node in {True, False}:
                     minmax.solve_deterministic_opt_stack(36000,0.01,cut_every_node)
@@ -55,36 +55,16 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
 
 if __name__ == '__main__':
 
-
-    #main(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])
     a = int(sys.argv[1])
     b = int(sys.argv[2])
     c = int(sys.argv[3])
     d = int(sys.argv[4])
     e = int(sys.argv[5])
     f = int(sys.argv[6])
+
+
+    #def main(min_states, max_states, step_states, min_actions, max_actions, max_seeds):
     main(a,b,c,d,e,f)
-    
-#    _state, _action, _gamma, _seed = 10, 2, 0.9, 2
-#    #load_mdp(_state, _action, _gamma, _seed)
-#    _mdp = reload_mdp(_state, _action, _gamma, _seed)
-#    minmax = minmax_regret(_mdp, [-1, 1])
-#    text_file.write(str(_state) + ';' + str(_action) + ';' + str(_seed) + ';')
-#    minmax.solve_deterministic_opt(0.04,0.01)
-#    text_file.write(str(minmax.UB)  # optimal stochastic policy value
-#                    + ';' + str(minmax.ROOT_LB)  # optimal deterministic policy value
-#                    + ';' + str(minmax.BB_tot_nodes)  # total number of BB nodes
-#                    + ';' + str(minmax.BB_nodes_pruned)  # total nodes pruned for BB
-#                    + ';' + str(minmax.MASTER_tot_cuts)  # total cuts on BB nodes
-#                    + ';' + str(minmax.ROOT_tot_cuts)  # total number of constraints <g,r> added to solve master program
-#                    + ';' + str(minmax.TIME_master)  # total computing time for master
-#                    + ";" + str(minmax.TIME_slave)  # total computing time for slave
-#                    + ';' + str(minmax.TIME_root)  # total computing time for benders decomposition
-#                    + ';' + str(minmax.TIME_limit_reached) # flag equal to true if time limit is reached
-#                    )
-#    text_file.write(minmax.output)
-#    text_file.write('\n')
-#
-#    text_file.close()
+
 
 
