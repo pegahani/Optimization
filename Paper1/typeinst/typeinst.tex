@@ -265,7 +265,7 @@ The total number of choices (i.e., the number of state-action pairs) is finite, 
 
 As already mentioned, to avoid exploring the whole tree, we need a lower bounding procedure to \textit{prune} some of the nodes that do not contain the optimal policy. In our application, we use the optimal stochastic policy as underestimator of the optimal deterministic policy for a given branch of the tree. In this way, if a node has a stochastic policy higher than the best deterministic policy found so far it not necesssary to continue explore in that branch and the node ca be pruned.
 
-The final ingredient of a branch-and-bound is a procedure to find feasible. deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic we can update the value of the best known deterministic solution to its value.
+The final ingredient of a branch-and-bound is a procedure to find feasible deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic we can update the value of the best known deterministic solution to its value.
 
 
 \input{basic_bb.tex}
@@ -273,59 +273,8 @@ The final ingredient of a branch-and-bound is a procedure to find feasible. dete
 In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplred nodes to the root node (i.e., the one with no constraints on the $f$ variables).
 The while loop extract one unexplored node from the list, fix the $f$ corresponding to its subregion of feasible deterministic policies and compute a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. if the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more thant one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is selected to be next disjunction used the create the two child nodes.
 
-arily bad. 	
 
-
-\section{Theoretical analysis of the optimal deterministic}
-
-In this section we first introduce the intuitve concept of rounding heuristic, a way to obtain a feasible determinsitci policy starting from a stochastic (maybe optimal) policy. Subsequently we analize the situations where such rounding heuristic could provide maximum regrets far from the one gived by the optimal deterministic policy.
-
-\subsection{The ``rounding'' heuristic}
-
-Let $\bar{f}$ be a given stochastic optimal policy. The corresponding ``rounded'' deterministic policy can be computed as follows:
-\begin{itemize}
-\item for each $s'\in S$:
-\begin{itemize}
-\item find the action $a' = argmax_{a \in A}f_{s',a}$.
-\item fix the rest of the action to zero: $f_{s',a} =0, \forall a \neq a'$
-\end{itemize}
-\item compute the value of the deterministic policy obtained with the given fixing.
-\end{itemize}
- 
-The heuristic searches --for each state-- the action with the highest probability to be chosen. It selects that action as part of the deterministic policy.
-Despite being pretty simple, the proposed heuristic represents a plausible behaviour of a user that want to deduce a deterministic policy starting from a stochastic one.  
-%
-%For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimizes the max regrets).
-%
-%What we would like to find is a class of instances where this is not the case or, even better, instances where the difference between the heuristic deterministic policy and the optimal deterministic policy can be arbitr
-%
-%For a given node of the branch and 
-%As bounding procedure   
-%
-%All the tests so far showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we hope that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
-%
-\subsection{A small counterexample}
-
-\subsubsection{Tiny MDP}
-We call \textit{Tiny MDP} the MDP defined to have:
-\begin{itemize}
-\item Three states: $q, s_0, s_1$; and three actions $a_0, a_1, a_2$.
-\item Two deterministic transiction functions (associated to $a_0$ and $a_1$): $T(q,a_0,s_0)=1$ and $T(q,a_1,s_1)=1$; and one stochastic transiction function with $T(q,a_2,s_0)=T_0$ and $T(q,a_2,s_1)=T_1$. 	 
-\item Two unknow rewards associated to $s_0$ and $s_1$: $r_{a_0}= r_0\in[-A,+A]$ and $r_{a_1}= r_1\in[-A+B,+A+B]$ with $A,B \in \mathbb{R}_+$ and $A \gg B$.
-\end{itemize} 
-
-\begin{proposition}
-If $T_1\geq T_0$, The optimal deterministic policy is $\pi_{a_2}=1$, $\pi_{a_0}=\pi_{a_1}=0$. 
-\end{proposition}
-\begin{proof}
-We proof the statement by explicitly computing the maximum regret of the three possible deterministico policy: $\pi_{a_0}=1$, $\pi_{a_1}=1$ and $\pi_{a_2}=1$.\\
-Maximum regret of $\pi_{a_0}=1$: to compute the maximum regret associated to $\pi_{a_0}=1$, we considere the   
-Maximum regret of $\pi_{a_1}=1$.
-Maximum regret of $\pi_{a_2}=1$.
-\end{proof}
-
-
-
+\input{comparison.tex}
 \section{}
  
 %%================================================================
