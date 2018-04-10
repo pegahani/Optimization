@@ -21,19 +21,25 @@ sys.setrecursionlimit(1000000)
 
 class minmax_regret:
 
-    def __init__(self, _mdp, _reward_bounds):
+    def __init__(self, _mdp):
         self.mdp = _mdp
         """_reward_bounds is a |S|x|A| size vector with two dimensional vector elements [lb, ub] where lb <= r_sa <= ub """
 
+        self.reward_bounds = []
+        for s in xrange(len(self.mdp.states)):
+            for a in xrange(len(self.mdp.actions)):
+                self.reward_bounds.append(self.mdp.rewards_bounds[(s, a)])
 
-	self.reward_bounds = []
-	for i in range((_mdp.nstates*_mdp.nactions)):
-		random_a = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)
-		random_b = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)	
-		if (random_a < random_b):
-			self.reward_bounds.append([random_a, random_b])
-		else:
-			self.reward_bounds.append([random_b, random_a])
+	# self.reward_bounds = []
+	# for i in range((_mdp.nstates*_mdp.nactions)):
+	# 	random_a = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)
+	# 	random_b = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)
+	# 	if (random_a < random_b):
+	# 		self.reward_bounds.append([random_a, random_b])
+	# 	else:
+	# 		self.reward_bounds.append([random_b, random_a])
+
+
 	# print "nuova"
 	#self.reward_bounds  =[[-0.74, 0.28], [-0.77, 0.19], [-0.89, -0.72], [0.33, 0.44]]
 	#self.reward_bounds  =[[-0.7, 0.2], [-0.8, 0.1], [10, 10], [0.0001, 0.0001]]
@@ -86,7 +92,7 @@ class minmax_regret:
         ns = self.mdp.nstates
         na = self.mdp.nactions
 
-        rewards, transition, gamma = self.mdp.rewards, self.mdp.transitions, self.mdp.gamma
+        transition, gamma = self.mdp.transitions, self.mdp.gamma
         V1 = np.zeros(ns)
 
         while True:
@@ -106,7 +112,7 @@ class minmax_regret:
 
         Q1 = np.zeros(ns*na)
         V1 = np.zeros(ns)
-        rewards, transition, gamma = self.mdp.rewards, self.mdp.transitions, self.mdp.gamma
+        transition, gamma = self.mdp.transitions, self.mdp.gamma
 
         while True:
             Q = Q1.copy()
@@ -945,7 +951,6 @@ def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up):
     :type _id: string e.g. 80-1 to save in param80-1.dmp"""
 
     mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
-    #mdp = classic_mdp.general_random_mdp_rounded(state, action, gamma, _reward_lb=_reward_lb, _reward_up=_reward_up)
 
     # if not _id is None:
     #name = "param_" + str(_id) + ".dmp"
