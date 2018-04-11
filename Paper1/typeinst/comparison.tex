@@ -1,4 +1,4 @@
-
+xœ
 \section{Theoretical analysis of the optimal deterministic policy}
 
 In this section we first introduce the intuitve concept of rounding heuristic, a way to obtain a feasible determinsitci policy starting from a stochastic (maybe optimal) policy. Subsequently we analize the situations where such rounding heuristic could provide maximum regrets far from the one gived by the optimal deterministic policy.
@@ -29,26 +29,109 @@ Despite being pretty simple, the proposed heuristic represents a plausible behav
 %
 \subsection{A small counterexample}
 
-We call \textit{Tiny MDP} the MDP defined to have:
+We call \textit{Trident MDP} the MDP defined to have:
 \begin{itemize}
-\item Three states: $q, s_0, s_1$; and three actions $a_0, a_1, a_2$.
+\item Three states: $q, s_0, s_1$, three actions $a_0, a_1, a_2$ and a discout factor $\gamma=1$.
 \item Two deterministic transiction functions (associated to $a_0$ and $a_1$): $T(q,a_0,s_0)=1$ and $T(q,a_1,s_1)=1$; and one stochastic transiction function with $T(q,a_2,s_0)=T_0$ and $T(q,a_2,s_1)=T_1$. 	 
-\item Two unknow rewards associated to $s_0$ and $s_1$: $r_{a_0}= r_0\in[-A,+A]$ and $r_{a_1}= r_1\in[-A+B,+A+B]$ with $A,B \in \mathbb{R}_+$ and $A \gg B$.
+\item Two unknow rewards associated to $s_0$ and $s_1$: $r_{a_0}= r_0\in[-A,+A]$ and $r_{a_1}= r_1\in[-A+B,+A+B]$ with $A,B > 0$ and $A \gg B$.
+\item an initial distribution $\beta_{s_0}= \beta_{s_1}=0$ and $\beta_{s_2}=1$.
 \end{itemize} 
-The following propositions give a complete characterization of the optimal deterministic policy for the MDP.
-\begin{proposition}
+
+
+
+The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the pedix $a$ instead of using $s_2,s_a$, this is due to the fact that the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi_{s_2, a_1}$). For the same reason, we use $r_{0}$ in place of $r_{s_0, a_0}$ and $r_{1}$ in place of $r_{s_1, a_0}$.
+
+\begin{proposition}\label{theorem:opt_stoc}
+An optimal stochastic policy  for the Trident MDP is the following:
+$$\pi_{0}=\dfrac{2A - B}{4A},~~~\pi_{1}=\dfrac{2A + B}{4A}, ~~~\pi_2 = 0$$
+(regardless of the values of $T_1$ and $T_2$).
+\end{proposition}
+\begin{proof}
+We first show that alway have an optimal policy with $\pi_2 = 0$. We do this by observing that for every policy $(\pi'_0, \pi'_1, \pi'_2)$ with $\pi'_2 > 0$, it is possible to obtain a policy policy $(\pi''_0, \pi''_1, \pi''_2)$ with $\pi''_2 = 0$ in the following way:
+
+$$\pi''_0 = \pi'_0 + \pi'_2 T_0, ~~~ \pi''_1 = \pi'_1 + \pi'_2 T_1\;.$$
+
+If we compute the value of the first policy we notice that:
+\begin{align*}
+\beta \cdot V^{\pi'} = V^{\pi'}(s_2) =
+r_{_0} \pi'_0 + r_{_1}\pi'_1 + r_{_0} T_0 \pi'_2 + r_{_1} T_1 \pi'_2 \\
+= r_{_0} (\pi'_0 + T_0 \pi'_2) + r_{_1} (\pi'_1 + T_1 \pi'_2)
+= r_{_0} \pi''_0 + r_{_1}\pi''_1 = V^{\pi''}(s_2) =\beta \cdot V^{\pi''}\;.
+\end{align*}
+Showing that both policy has same value. We can hence supposte that $\pi_2 =0$ in an optimal stochastic solution.
+
+As second part of the proof, we compute the value of an optimal policy with $\pi_0, \pi_1 \geq 0$.
+Let $\pi_0,\pi_1$ be a generic policy. We notice that the adversary policy $g$ giving a maximum regret  is always deterministic (see~\ref{benavent2018}). For this reason, the maximum regret is the maximum among two choices for the adversary policy: we can have either $g_0=g_2=0$ and $g_1 > 0$ or the opposite, $g_0>0$ and $g_1=g_2 = 0$. (We notice that, with arguments analogous to the ones used in the first part of the proof, we can always rule out the case where $g_2 \geq 0$.)
+
+The maximum regret associated to the policy $g_0=g_2=0$ and $g_1 > 0$  (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following
+\begin{align}
+r \cdot g - r \cdot f = A + B +A \pi_0 -(A+B)\pi_1 \label{eq:best_stoc_1}
+\end{align}   
+and the maximum regret associated to the policy $g_1=g_2=0$ and $g_0 > 0$ is obtained by fixing $r_0 = A$ and $r_1 = -A+B$, leading to a value of
+\begin{align}
+r \cdot g - r \cdot f = A - A \pi_0 -(B-A)\pi_1 \label{eq:best_stoc_2}\;.
+\end{align}   
+We are interested in minmizing the max regret, this measn that we want to find the values of $\pi_0$ and $\pi_1$ that minimize $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations 
+\begin{align*}
+A + B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
+\pi_0+\pi_1 &= 1
+\end{align*} 
+That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1}=\dfrac{2A + B}{4A}$, concluding the proof.$\square$
+\end{proof}
+Proposition~\ref{theorem:opt_stoc} implies the following Lemma:
+\begin{lemma}
+The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$.
+\end{lemma}
+\begin{proof}
+It is a direct consequence of the fact that in the optimal stochastic solution we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
+\end{proof}
+\begin{proposition}\label{theorem:opt_det}
 If $T_1\geq T_0$, The optimal deterministic policy is $\pi_{a_2}=1$, $\pi_{a_0}=\pi_{a_1}=0$. 
 \end{proposition}
 \begin{proof}
-We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_{a_0}=1$, $\pi_{a_1}=1$ and $\pi_{a_2}=1$.\\
-\textit{Maximum regret of $\pi_{a_0}=1$}. we  
-We first consider t
+We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_0=1$, $\pi_1=1$ and $\pi_2=1$.\\
+\textit{Maximum regret of $\pi_0=1$}.\\
+We want to find the adversary policy that maximize the regret for the policy $\pi_{a_0}=1$. We do that by computing al possible combinations of adversay policy and reward:
+\begin{itemize}
+\item If the adversary policy is $g_1> 0$, the reward maximizing the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
+\begin{align}
+A+B-(-A)=2A+B \label{eq:regret0}
+\end{align}
+\item If the adversary policy is $g_2>0$, we need to check all four combination of extreme rewards:
+\begin{itemize}
+\item $r_0 = -A$ and $r_1= A+B$. Maximum regret of
+\begin{align}
+-A T_0 + (A+B)T_1 + A = (1-T_0 + T_1)A + T_1 B \label{eq:regret1}
+\end{align}
+\item $r_0 = A$ and $r_1= A+B$. Maximum regret of
+\begin{align}
+A T_0 + (A+B)T_1 - A = (-1+T_0 + T_1)A + T_1 B  \label{eq:regret2}
+\end{align}
+\item $r_0 = A$ and $r_1= -A+B$. Maximum regret of
+\begin{align} 
+A T_0 + (-A+B)T_1 - A =  (-1+T_0 - T_1)A + T_1 B \label{eq:regret3}
+\end{align}
+\item $r_0 = -A$ and $r_1= -A+B$. Maximum regret of
+\begin{align}
+-A T_0 + (-A+B)T_1 + A =  (1 - T_0 - T_1)A - T_1 B \label{eq:regret4}
+\end{align}
+\end{itemize} 
+We observe that $A\gg B$ and $T_0+T_1= 1$, this imply that  $\eqref{eq:regret0} \geq \max\{\eqref{eq:regret1}-\eqref{eq:regret4} \}$. Therefore, the maximum regret if $g_2>0$ is $2A+B$.
+\end{itemize} 
 
-We want to findthe adversary policy that maximize the quantity $r \cdot g - r \cdot f= $ to compute the maximum regret associated to $\pi_{a_0}=1$, we considere the   
+\textit{Maximum regret of $\pi_1=1$}.\\
+Also in this case, we can use calculations analogous to the one used to compute the regret of $\pi_0=1$ to show that the maximum regret is equal to $2A-B$.
 
+\textit{Maximum regret of $\pi_2=1$}.\\
+Also in this case, we need to consider the two cases of $g_0 > 0$ and $g_1 > 0$. If $g_0 > 0$ we fix $r_0 = A$ and $r_1 = -A+B$, obtaining a regret equal to 
+\begin{align}
+A- A T_0 +(A-B) T_1 \label{eq:regret2_1}
+\end{align}
+And if $g_1 > 0$ we fix $r_0 = -A$ and $r_1 = A+B$, obtaining a regret equal to 
+\begin{align}
+A+B+A T_0 -(A+B) T_1\;. \label{eq:regret2_2}
+\end{align}
+The maximum between~\eqref{eq:regret2_1} and~\eqref{eq:regret2_2} depends on the values of $T_0$ and $T_1$.
 
-
-Maximum regret of $\pi_{a_1}=1$.
-Maximum regret of $\pi_{a_2}=1$.
 \end{proof}
 
