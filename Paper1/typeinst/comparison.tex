@@ -1,9 +1,9 @@
 xœ
-\section{Theoretical analysis of the optimal deterministic policy}
+\section{Theoretical analysis of the optimal deterministic policy}\label{sec:comparison}
 
 In this section we first introduce the intuitve concept of rounding heuristic, a way to obtain a feasible determinsitci policy starting from a stochastic (maybe optimal) policy. Subsequently we analize the situations where such rounding heuristic could provide maximum regrets far from the one gived by the optimal deterministic policy.
 
-\subsection{The ``rounding'' heuristic}
+\subsection{The ``rounding'' heuristic}\label{sec:rounding}
 
 Let $\bar{f}$ be a given stochastic optimal policy. The corresponding ``rounded'' deterministic policy can be computed as follows:
 \begin{itemize}
@@ -27,7 +27,7 @@ Despite being pretty simple, the proposed heuristic represents a plausible behav
 %
 %All the tests so far showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we hope that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
 %
-\subsection{A small counterexample}
+\subsection{A small counterexample}\label{sec:counter}
 
 We call \textit{Trident MDP} the MDP defined to have:
 \begin{itemize}
