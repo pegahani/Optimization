@@ -8,8 +8,6 @@ based on two classes of test instances. More precisely, we test our approach on 
 \item Grid MDPs (\texttt{Grid}).
 \end{itemize}
 
-For each class of MDP, we provide a brief description and the parameters used to generate the testbed.\\
-
 As already mentioned in the introduction, the aim of this section is two-fold:
 
 (i) First of all, we would like to motivate the use of deterministic over stochastic policies. To do this, we show the ratio between the maximum regret of the rounding policy explained in Section~\ref{sec:rounding}. 
@@ -17,10 +15,70 @@ As already mentioned in the introduction, the aim of this section is two-fold:
 %The TUP uses the concept of sparsity presented in this paper to generalize the methodology proposed in~\cite{Buchheim18} to solve efficiently combinatorial problems with a quadratic objective function.
 %In Section~\ref{sec:TUP} we show how the application of TUD allows to improve the dual bounds obtained in the approach presented in~\cite{Buchheim18}.  
 
-(ii) Secondly, in the tests concerning the CCKP and the MVO, we show that our heuristic procedure is able to provide almost-optimal solutions within a short amount of time.
-%[riflettere se paralre di piu'].
+(ii) Secondly, we would like to assess the additional computational effort of computing the optimal deterministic policy in comparison to the one needed to compute the optimal stochastic policy. 	 
 
-For assessing the performance of our algorithm, we use CPLEX~12.6~\cite{cplex126} with an optimality tolerance of~$10^{-6}$. For CCKP and MVO, we also use CPLEX in order to solve Problem~\eqref{prob:basicsparsefixedt} -- in the former case, we call the LP solver, while in the second case we need the SOCP solver of CPLEX. In both cases, dual solutions are also provided by CPLEX. For TUP, we use the SDP solver CSDP~\cite{csdp}.
+In the following section we use the notion of Time ratio (TR) and Value Ratio (VR).
 
-%CPLEX tolerance: $10^{-6}$ (EPGAP)
+TODO: definition of time ratio and value ratio!
+
+For each class of MDP, we first provide a brief description and the parameters used to generate the testbed.
+
+\subsection{Random MDPs}
+blablabla
+\paragraph{Description}
+blablabla
+\paragraph{Analysis of the results}
+blablabla
+
+
+\subsection{Diamond MDPs}
+\paragraph{Description}
+This class of MDPs has been introduced for the first time in~\cite{benavent2018}. 
+In this family of problems the reward of a few states suffices to generate a lot of uncertainty about the optimal policy. This class of instances is an interesting set of instancess to test our proposed algorithm.
+This class of MDPs has a diamond structure, with one top and one bottom state (playing the role of source and sink of the  MDP), one intermediate layer of states, containing all the uncertainty in the reward, plus two intermediate layer between the extrem states and the intermediate layer.
+In Figure~\ref{fig:diamond}, the structure of the diamond MDPs is presented.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=8cm]{diamond.png}
+\end{center}
+\caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right).}
+\label{fig:diamond}
+\end{figure}
+
+From a point of viex of the parameters, the authors proposed to have that action $a_0$ would reach each child with a probability of $0.5$. ON the other hand $a_1$ (resp. $a_2$) a probability of $p= 0.3$ (resp. $1-0.3$) to reach the left (resp. right) child node and to reach its parent otherwise.
+The imprecise values of the rewards for the middle layer are $[-600,600]$, while the one of the bottom node is $[600,1000]$.
+
+We propose a generalization of this family of MDP in two senses: we test a range of parameters for the probability $p \in \{5,10,\dots,40,45\}$ and we introduce also an additional intermediate layer, between the extreme states and the middle layer. In this way we have, in addition to $10$-states MDPs (callend one-level diamond MDPs) also  22-states MDPs (called two-level diamond MDPs). 
+
+\paragraph{Analysis of the results}
+In Table~\ref{tab:diamond} We show
+
+
+\begin{table}[h]																	
+ \centering
+ \small
+ \setlength{\tabcolsep}{4.0pt}
+ \renewcommand \arraystretch{1.8}
+\begin{tabular}{ccccccccccc}																						
+p	&	5	&	10	&	15	&	20	&	25	&	30	&	35	&	40	&	45	&	Avg.	\\	
+\cmidrule(lr){1-1} \cmidrule(lr){2-10} \cmidrule(lr){11-11}
+Value Ratio	&	1.66	&	1.24	&	1.16	&	1.13	&	1.15	&	1.15	&	1.15	&	1.14	&	1.16	&	\textbf{1.22}	\\	
+Time Ratio	&	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8.44}	\\	\\
+\end{tabular}
+\caption{Time Ratio and Value Ratio for \texttt{Diamond}.}														\label{tab:diamond}								
+\end{table}																						
+
+
+
+\subsection{Grid MDPs}
+blablabla
+\paragraph{Description}
+blablabla
+\paragraph{Analysis of the results}
+blablabla
+
+
+
+\paragraph{Analysis of the Diamond MDPs}
 
