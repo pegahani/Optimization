@@ -115,6 +115,33 @@ In several real world situations a stochastic policy is not easily interpretable
 
 \section{Introduction}
 
+%outline for introduction
+%\begin{itemize}
+%\item MDP are important to model many things
+%\item examples of MDP (special attention to MDP that can would prefer to have a deterministic policy)
+%\item introduce concept of unknown reward
+%\item mention several ways to deal with unknown reward, among them minimax regret.
+%\item but the majority of the approaches proposes a stochastic policy
+%\item det policy are preferable in several situation
+%-- ethic \\
+%-- finance \\
+%\end{itemize}
+
+Markov Decision Processes (MDPs) have proven to be effective models for representing and solving sequential decision problems under uncertainty. It is natural to model a decision making problems in stochastic environments as an MDPs such as navigation, robotics or service composition problems. In navigation context such as assistant autonomous vehicles, at each stage, the agent executes an action with probabilistic effects and this state conducts her to a next state and yields a reward (punishment). The goal is to maximise (minimise) the expected sum of rewards. The environment dynamic (traffics and roads) are modelled as an state and actions with probability affections. Despite of knowing the final goal, specifying rewards or punishments for choosing actions in states is not obvious all the time for several reasons
+%Specifying exact rewards (punishments) is not obvious 
+for multiple reasons:
+\begin{itemize}
+\item insufficient data to estimate rewards,
+\item parts of models are too complex to detail: in assistant vehicle example defining exact rewards for all actions is time consuming or complicated and can variate during the driving process. For this reason, we consider them bounded in real valued intervals.
+\item in communication with system's users: The model is designed for different drivers with various preferences,even after limited number of communications with drivers and diminishing the unknown rewards to smaller sets, the MDP is still partially know. 
+\end{itemize}
+
+%In MDPs with unknown rewards, the system have all information about the dynamics (road and traffics) and final goal but it lacks some information about the user preferences inside the system
+In order to find the best \textit{policy} (strategy) regarding the imprecise information on rewards, there are some optimization approaches in state of the art\cite{Ahmed2017,Iyengar2005,Xu2009,Nilim2003}. In this work, we focus on minimax regret method \cite{Regan2009} where proposes the optimal strategy with the minimum lost in comparison with other possible strategies. To the best of our knowledge, majority of methods for computing the optimal policy including the exact or approximate ones propose a stochastic policy for the system (see related work). That causes some problems for some real environments such as ethic cases, financial applications (Bitcoin and Crypto-currency) or any applications that can not be executed or trained more that once. As an example in assistant autonomous vehicle case, 
+
+
+In this paper we introduce a first in depth study of deterministic policy for minimax regret approach. Our method finds the best deterministic policy close enough to the stochastic solution calculated by the minimax regret approach. In section .... 
+
 
 %%================================================================
 \section{Related Work}
