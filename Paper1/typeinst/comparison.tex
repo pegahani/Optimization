@@ -42,7 +42,7 @@ We call \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) the IRMDP defined 
 	\begin{center}
     \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
 	\end{center}
-	\caption{Trindent MDP with $3$ states and $3$ actions.}
+	\caption{Trident IRMDP with $3$ states and $3$ actions.}
 	\label{fig:trident} 
 \end{figure}
 %%%%%%%%%%%%%%%%%
@@ -52,7 +52,7 @@ The following propositions give a complete characterization of the optimal stoch
 \begin{proposition}\label{theorem:opt_stoc}
 An optimal stochastic policy that minimises the maximum regret (see subsection~\ref{sec:minimax-regret}) for the Trident MDP is policy $\tilde{\pi} = (\pi_0, \pi_1, \pi_2)$ such that:
 $$\pi_{0}=\dfrac{2A - B}{4A},~~~\pi_{1}=\dfrac{2A + B}{4A}, ~~~\pi_2 = 0$$
-(regardless of the values of $T_1$ and $T_2$). \footnote{Recall that $\pi_0$ means $\pi(s_2, a_0)$ and so on.}
+(regardless of the values of $T_1$ and $T_2$). \footnote{We recall that $\pi_0$ means $\pi(s_2, a_0)$ and so on.}
 \end{proposition}
 \begin{proof}
 We first show that there exists always an optimal stochastic policy with $\pi_2 = 0$. We do this by observing that for every policy $\pi' = (\pi'_0, \pi'_1, \pi'_2)$ with $\pi'_2 > 0$, it exists a policy $\pi'' = (\pi''_0, \pi''_1, \pi''_2)$ with $\pi''_2 = 0$ with the same value in the following way:
@@ -98,25 +98,20 @@ and its maximum regret is $MR(\hat{f}, \mathcal{R}) = 2A-B$.
 It is a direct consequence of the fact that in the optimal stochastic policy we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
 \end{proof}
 
-
-
 \begin{proposition}\label{theorem:opt_det}
-If $T_1 > T_0$, The optimal deterministic policy is $\pi_{2}=1$, $\pi_{0}=\pi_{1}=0$ 
-and its maximum regret is $A- A T_0 +(A-B) T_1$. 
+If $T_1 > T_0$, the optimal deterministic policy is $\pi^* = (0, 0, 1)$ and its maximum regret is $MR(f^*, \mathcal{R}) = A- A T_0 +(A-B) T_1$. 
 \end{proposition}
 \begin{proof}
-We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_0=1$, $\pi_1=1$ and $\pi_2=1$.
+We prove the statement by explicitly computing the maximum regret of the three possible deterministic policies:$\pi = (1, 0, 0), \pi' =(0, 1, 0), \pi''= (0, 0, 1)$ $\pi_0=1$.
 
-
-
-\textit{Maximum regret of $\pi_0=1$}.\\
-We want to find the adversary policy that maximizes the regret for the policy $\pi_0=1$. We do that by computing al possible combinations of adversay policy and reward:
+\textit{Maximum regret of $\pi = (1, 0, 0)$}.\\
+We want to find the adversary policy that maximises the regret for the policy $\pi$. We do that by computing all possible combinations of adversary policies and rewards:
 \begin{itemize}
-\item If the adversary policy is $g_1> 0$, the reward maximizing the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
+\item If a visitation frequency for adversary policy is $g = (0, g_1, 0)$ where $g_1> 0$, the reward maximising the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
 \begin{align}
 A+B-(-A)=2A+B \label{eq:regret0}
 \end{align}
-\item If the adversary policy is $g_2>0$, we need to check all four combination of extreme rewards:
+\item If the adversary policy is $g' = (0, 0, g_2)$ where $g_2>0$, we need to check all four combinations of extreme rewards:
 \begin{itemize}
 \item $r_0 = -A$ and $r_1= A+B$. Maximum regret of
 \begin{align}
@@ -135,24 +130,19 @@ A T_0 + (-A+B)T_1 - A =  (-1+T_0 - T_1)A + T_1 B \label{eq:regret3}
 -A T_0 + (-A+B)T_1 + A =  (1 - T_0 - T_1)A - T_1 B \label{eq:regret4}
 \end{align}
 \end{itemize} 
-We observe that $A\gg B$ and $T_0+T_1= 1$, this imply that  $\eqref{eq:regret0} \geq \max\{\eqref{eq:regret1}-\eqref{eq:regret4} \}$. Therefore, the maximum regret if $g_2>0$ is $2A+B$.
+By hypothesis we have that $A\gg B$ and $T_0+T_1= 1$, this implies that $\eqref{eq:regret0} \geq \max\{\eqref{eq:regret1}, \eqref{eq:regret2}, \eqref{eq:regret3}, \eqref{eq:regret4} \}$. Therefore, the maximum regret if $g_2>0$ is $MR(f^{\pi}, \mathcal{R}) = 2A+B$.
 \end{itemize} 
 
+\textit{Maximum regret of $\pi' = (0, 1, 0)$}.\\
+It is trivial to check, with calculations analogous to the one used above to compute the regret of $\pi$, that the maximum regret in this case is equal to $MR(f^{\pi'}, \mathcal{R}) = 2A-B$.\\
 
 
-
-\textit{Maximum regret of $\pi_1=1$}.\\
-It is trivial to check, with calculations analogous to the one used to compute the regret of $\pi_0=1$, that the maximum regret in this case is equal to $2A-B$.\\
-
-
-
-
-\textit{Maximum regret of $\pi_2=1$}.\\
-Also in this case, we need to consider the two cases of $g_0 > 0$ and $g_1 > 0$. If $g_0 > 0$ we fix $r_0 = A$ and $r_1 = -A+B$, obtaining a regret equal to 
+\textit{Maximum regret of $\pi'' = (0, 0, 1)$}.\\
+Also in this case, we need to consider the two cases of $g =(g_0, 0 ,0)$ where $g_0 > 0$ and $g' = (0, g_1, 0)$ with $g_1 > 0$. For $g$, we fix $r_0 = A$ and $r_1 = -A+B$, obtaining a regret equal to 
 \begin{align}
 A- A T_0 +(A-B) T_1 \label{eq:regret2_1}
 \end{align}
-And if $g_1 > 0$ we fix $r_0 = -A$ and $r_1 = A+B$, obtaining a regret equal to 
+And for $g'$ we fix $r_0 = -A$ and $r_1 = A+B$, obtaining a regret equal to 
 \begin{align}
 A+B+A T_0 -(A+B) T_1\;. \label{eq:regret2_2}
 \end{align}
@@ -160,21 +150,22 @@ The maximum between~\eqref{eq:regret2_1} and~\eqref{eq:regret2_2} depends on the
 By imposing  $A- A T_0 +(A-B) T_1 \geq A+B+A T_0 -(A+B) T_1$ we obtain:
 $$ 2A T_1 \geq 2 A T_0 + B\;. $$
 We recall that by construction we have $A \gg B$, this implies that if $T_1> T_0$ (resp. $T_1\leq T_0$)  we have that the maximum regret is equal to~\eqref{eq:regret2_1} (resp.~\eqref{eq:regret2_2}).
-The minimum maximum regret found so far is the one obtained for $\pi_1=1$, and it is equal to $2A-B$. It remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
+The minimum maximum regret found so far is the one obtained for $\pi = \pi' = (0, 1, 0)$, and it is equal to $MR(f^{\pi'}, \mathcal{R}) = 2A-B$. Therefore, it remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
 \begin{align*}
-A- A T_0 +(A-B) T_1 \leq 2A - B \Leftrightarrow_{T_0 = 1-T_1} A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
+A- A T_0 +(A-B) T_1 \leq 2A - B \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
   \Leftrightarrow (2A-B)T_1 \leq 2A-B  \Leftrightarrow T1 \leq 1\;.
 \end{align*}
- Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is obtained when $\pi_{2}=1$ and $\pi_{0}=\pi_{1}=0$ and its maximum regret is equal to $A- A T_0 +(A-B) T_1$. $\square$
+ Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is $\piç* = \pi''= (0, 0,1)$ and its maximum regret is equal to $MR(f^{\pi''}, \mathcal{R})A- A T_0 +(A-B) T_1$. $\square$
 \end{proof}
 
-
-Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that for any Trident MDP we have that the optimal deterministic policy and the rounded deterministic policy are always different. In the following Lemma we estimate the value of each policy:
-
+\begin{remark}
+Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that \textbf{for any Trident MDP we have that the optimal deterministic policy and the rounded deterministic policy are always different}. 
+\end{remark}
+In the following Lemma we estimate the value of each policy:
 
 \begin{lemma}
-the ratio between the maximum regret of the rounding deterministic policy and the optimal deterministic policy goes to zero with the increase of the value of $A$ with respect to $B$ and the increase of $T_1$. In other words:  
+The ratio between the maximum regret of the rounding deterministic policy and the optimal deterministic policy goes to zero with the increase of the value of $A$ with respect to $B$ and the increase of $T_1$. In other words:  
 \begin{align*}
-\lim_{A/B \rightarrow \infty, T_1 \rightarrow 1} \dfrac{2A-B}{A- A T_0 +(A-B) T_1} = 2
+\lim_{A/B \rightarrow \infty, T_1 \rightarrow \frac{1}{2}} \dfrac{2A-B}{A- A T_0 +(A-B) T_1} = 2
 \end{align*}
 \end{lemma}
