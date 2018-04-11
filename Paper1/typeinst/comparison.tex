@@ -78,6 +78,8 @@ A + B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
 \end{align*} 
 That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1}=\dfrac{2A + B}{4A}$, concluding the proof.$\square$
 \end{proof}
+
+
 Proposition~\ref{theorem:opt_stoc} implies the following Lemma:
 \begin{lemma}
 The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$.
@@ -85,13 +87,19 @@ The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $
 \begin{proof}
 It is a direct consequence of the fact that in the optimal stochastic solution we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
 \end{proof}
+
+
+
 \begin{proposition}\label{theorem:opt_det}
 If $T_1\geq T_0$, The optimal deterministic policy is $\pi_{a_2}=1$, $\pi_{a_0}=\pi_{a_1}=0$. 
 \end{proposition}
 \begin{proof}
-We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_0=1$, $\pi_1=1$ and $\pi_2=1$.\\
+We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_0=1$, $\pi_1=1$ and $\pi_2=1$.
+
+
+
 \textit{Maximum regret of $\pi_0=1$}.\\
-We want to find the adversary policy that maximize the regret for the policy $\pi_{a_0}=1$. We do that by computing al possible combinations of adversay policy and reward:
+We want to find the adversary policy that maximizes the regret for the policy $\pi_0=1$. We do that by computing al possible combinations of adversay policy and reward:
 \begin{itemize}
 \item If the adversary policy is $g_1> 0$, the reward maximizing the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
 \begin{align}
@@ -119,8 +127,14 @@ A T_0 + (-A+B)T_1 - A =  (-1+T_0 - T_1)A + T_1 B \label{eq:regret3}
 We observe that $A\gg B$ and $T_0+T_1= 1$, this imply that  $\eqref{eq:regret0} \geq \max\{\eqref{eq:regret1}-\eqref{eq:regret4} \}$. Therefore, the maximum regret if $g_2>0$ is $2A+B$.
 \end{itemize} 
 
+
+
+
 \textit{Maximum regret of $\pi_1=1$}.\\
-Also in this case, we can use calculations analogous to the one used to compute the regret of $\pi_0=1$ to show that the maximum regret is equal to $2A-B$.
+It is trivial to chech, with calculations analogous to the one used to compute the regret of $\pi_0=1$, that the maximum regret in this case is equal to $2A-B$.\\
+
+
+
 
 \textit{Maximum regret of $\pi_2=1$}.\\
 Also in this case, we need to consider the two cases of $g_0 > 0$ and $g_1 > 0$. If $g_0 > 0$ we fix $r_0 = A$ and $r_1 = -A+B$, obtaining a regret equal to 
@@ -132,6 +146,14 @@ And if $g_1 > 0$ we fix $r_0 = -A$ and $r_1 = A+B$, obtaining a regret equal to
 A+B+A T_0 -(A+B) T_1\;. \label{eq:regret2_2}
 \end{align}
 The maximum between~\eqref{eq:regret2_1} and~\eqref{eq:regret2_2} depends on the values of $T_0$ and $T_1$.
+By imposing  $A- A T_0 +(A-B) T_1 \geq A+B+A T_0 -(A+B) T_1$ we obtain:
+$$ 2A T_1 \geq 2 A T_0 + B\;. $$
+We recall that by construction we have $A \gg B$, this implies that if $T_1> T_0$ (resp. $T_1\leq T_0$)  we have that the maximum regret is equal to~\eqref{eq:regret2_1} (resp.~\eqref{eq:regret2_2}).
+The minimum maximum regret found so far is the one obtained for $\pi_1=1$, and it is equal to $2A-B$. It remains to check for which values of $T_0$ and $T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
+\begin{align*}
+sqdf
+\end{align*}
+ 
 
 \end{proof}
 
