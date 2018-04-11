@@ -59,7 +59,6 @@
 
 \urldef{\mailsa}\path|pegah.alizadeh@unicaen.fr|
 \urldef{\mailsb}\path|{emiliano.traversi, ao}@lipn.univ-paris13.fr|
-\urldef{\mailsc}\path|peggy.cellier@irisa.fr|
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 \newcommand{\ea}[1]{#1 \emph{et al.}}
@@ -110,8 +109,9 @@
 
 
 \begin{abstract}
-In several real world situations a stochastic policy is not easily interpretable for system users, this might be due to the nature of the problem or to the system requirements. In these contexts, it is inevitable to provide a deterministic policy to the user. In this paper, we propose an exact method for computing a deterministic policy in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``rounding" the optimal stochastic policy leads to a deterministic policy different from the optimal.
-\keywords{Markov Decision Process, Minimax Regret, Unknown Rewards, Deterministic Policy}
+In several real world situations a stochastic policy is not easily interpretable for system users, this might be due to the nature of the problem or to the system requirements. In these contexts, it is inevitable to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
+
+\keywords{Markov Decision Process, Minimax Regret, Unknown Rewards, Deterministic optimal Policy, Stochastic Optimal Policy}
 \end{abstract}
 
 
@@ -148,6 +148,7 @@ In this paper we introduce a first in depth study of deterministic policy for mi
 %%================================================================
 \section{Related Work}
 
+
 %%================================================================
 
 %This section concerns the required components of MDPs and minimax regret criterion for MDPs with imprecise rewards.
@@ -174,7 +175,7 @@ Another way for defining the quality of policies is the \textit{Q-value function
 Q^{\tilde{\pi}}(s, a) = r(s, a) + \gamma \sum_{s' \in S} P(s'|s,a)V^{\tilde{\pi}}(s')\;.
 \end{align}
 
-For a give intial state $\beta$, the value of the optimal policy is $\beta \cdot V^{\tilde{\pi}}$, this quantity can be expressed in terms of the visitation frequency function (see \cite{Puterman1994}): 
+For a give initial state $\beta$, the value of the optimal policy is $\beta \cdot V^{\tilde{\pi}}$, this quantity can be expressed in terms of the visitation frequency function (see \cite{Puterman1994}): 
 %The visitation frequency function and value function can be exchanged to each other:
 \begin{align}\label{f-v}
 %(\sum_{s \in S} \beta(s)V^{\tilde{\pi}}(s)) \;\; \;\;  
@@ -191,7 +192,7 @@ tackle this complexity, we use an MDP with \textit{imprecise reward values (IRMD
 Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that $\tilde{r}$ is given as a polytope. For each $r(s,a) \in \tilde{r}$, the reward uncertainty is restricted in an interval. Thus $\tilde{R}$ is modelled as polytope $C \cdot \overrightarrow{r} \leq \overrightarrow{d}$ where $C$ is $k \times |S||A|$ dimension matrix, $\overrightarrow{d}$ is a $k$ dimensional column vector and $\overrightarrow{r} = (r(s_0,a_0), r(s_0,a_1), \cdots, r(s_0,a_{|A|}), \cdots, r( s_{|S|},a_0), r(s_{|S|},a_1), \cdots, r(s_{|S|},a_{|A|}) )$
  
 
-\subsection{Minimax Regret}
+\subsection{Minimax Regret}\label{sec:minimax-regret}
 In order to solve the IRMDP $\tilde{M}$ with imprecise rewards bounded in the $\mathcal{R}$ polytope, we use the \textit{minimax regret criterion} method applied in some sequential-decision problems \cite{Regan2009,Xu2009}. Minimax regret is a robust optimization method in presence of uncertain data for approximating optimal policies. 
 
 \begin{definition}

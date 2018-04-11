@@ -1,22 +1,21 @@
-xœ
 \section{Theoretical analysis of the optimal deterministic policy}\label{sec:comparison}
 
-In this section we first introduce the intuitve concept of rounding heuristic, a way to obtain a feasible determinsitci policy starting from a stochastic (maybe optimal) policy. Subsequently we analize the situations where such rounding heuristic could provide maximum regrets far from the one gived by the optimal deterministic policy.
+In this section we first introduce the intuitive concept of rounding heuristic, a way to obtain a feasible deterministic policy starting from a stochastic (maybe optimal) policy. Subsequently, we analyse the situations where such rounding heuristic could provide maximum regrets far from the one given by the optimal deterministic policy.
 
 \subsection{The ``rounding'' heuristic}\label{sec:rounding}
 
-Let $\bar{f}$ be a given stochastic optimal policy. The corresponding ``rounded'' deterministic policy can be computed as follows:
+Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounded'' deterministic policy $\pi$ can be computed as follows:
+
 \begin{itemize}
 \item for each $s'\in S$:
 \begin{itemize}
-\item find the action $a' = argmax_{a \in A}f_{s',a}$.
+\item find the action $a' = \text{argmax}_{a \in A}f_{s',a}$.
 \item fix the rest of the action to zero: $f_{s',a} =0, \forall a \neq a'$
 \end{itemize}
-\item compute the value of the deterministic policy obtained with the given fixing.
+\item recover the deterministic policy $\pi$ obtained from the above fixing.
 \end{itemize}
  
-The heuristic searches --for each state-- the action with the highest probability to be chosen. It selects that action as part of the deterministic policy.
-Despite being pretty simple, the proposed heuristic represents a plausible behaviour of a user that want to deduce a deterministic policy starting from a stochastic one.  
+In fact, the heuristic approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behaviour of a user that want to deduce a deterministic policy starting from a stochastic one. \imp{$<--$ not clear} 
 %
 %For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimizes the max regrets).
 %
@@ -29,25 +28,34 @@ Despite being pretty simple, the proposed heuristic represents a plausible behav
 %
 \subsection{A small counterexample}\label{sec:counter}
 
-We call \textit{Trident MDP} the MDP defined to have:
+We call \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) the IRMDP defined to have:
 \begin{itemize}
-\item Three states: $q, s_0, s_1$, three actions $a_0, a_1, a_2$ and a discout factor $\gamma=1$.
-\item Two deterministic transiction functions (associated to $a_0$ and $a_1$): $T(q,a_0,s_0)=1$ and $T(q,a_1,s_1)=1$; and one stochastic transiction function with $T(q,a_2,s_0)=T_0$ and $T(q,a_2,s_1)=T_1$. 	 
-\item Two unknow rewards associated to $s_0$ and $s_1$: $r_{a_0}= r_0\in[-A,+A]$ and $r_{a_1}= r_1\in[-A+B,+A+B]$ with $A,B > 0$ and $A \gg B$.
-\item an initial distribution $\beta_{s_0}= \beta_{s_1}=0$ and $\beta_{s_2}=1$.
+\item Three states: $s_2, s_0, s_1$, three actions $a_0, a_1, a_2$ and a discout factor $\gamma=1$.
+\item A transition function (associated to $a_0$ and $a_1$): $P(s_0 | s_2,a_0)=1$, $P(s_1 |s_2 ,a_1)=1$, $P(s_0 | s_2, a_2) = T_0$ and $P(s_1 | s_0, a_2) = T_1$.\footnote{in this formulation rewards are dependent on states. They can be easily modified to the reward function notation given in this paper ($r(s, a)$)} 	 
+\item Two unknown rewards associated to $s_0$ and $s_1$: $r(a_0)= r_0 \in [-A,+A]$ and $r(a_1)= r_1 \in [-A+B,+A+B]$ with $A,B > 0$ and $A \gg B$. Thus, $\mathcal{R} = [-A, +A]\times[-A+B, A+B]$
+\item An initial distribution on states $\beta(s_0)= \beta(s_1) = 0$ and $\beta(s_2)=1$.
+
 \end{itemize} 
 
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
+	\end{center}
+	\caption{Trindent MDP with $3$ states and $3$ actions.}
+	\label{fig:trident} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
 
-
-The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the pedix $a$ instead of using $s_2,s_a$, this is due to the fact that the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi_{s_2, a_1}$). For the same reason, we use $r_{0}$ in place of $r_{s_0, a_0}$ and $r_{1}$ in place of $r_{s_1, a_0}$.
+The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the pedix $a$ instead of using $s_2,s_a$, i.e. instead of writing $\pi(s_2, s_a)$ we use $\pi_a$. According to Figure~\ref{fig:trident}, this is due to the fact that two states $s_0$ and $s_1$ are terminal states and the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi(s_2, a_1)$). For the same reason, we use $r_{0}$ in place of $r(s_0)$ and $r_{1}$ in place of $r(s_1)$. Thus each stochastic policy on the trident MDP can be demonstrated as tuple $\pi = (\pi_0, \pi_1, \pi_2)$ where each element indicates the probability of choosing action $a_i$ in state $s_i$. Similarly the visitation frequency functions are presented as $f = (f_0, f_1, f_2)$.
 
 \begin{proposition}\label{theorem:opt_stoc}
-An optimal stochastic policy  for the Trident MDP is the following:
+An optimal stochastic policy that minimises the maximum regret (see subsection~\ref{sec:minimax-regret}) for the Trident MDP is policy $\tilde{\pi} = (\pi_0, \pi_1, \pi_2)$ such that:
 $$\pi_{0}=\dfrac{2A - B}{4A},~~~\pi_{1}=\dfrac{2A + B}{4A}, ~~~\pi_2 = 0$$
-(regardless of the values of $T_1$ and $T_2$).
+(regardless of the values of $T_1$ and $T_2$). \footnote{Recall that $\pi_0$ means $\pi(s_2, a_0)$ and so on.}
 \end{proposition}
 \begin{proof}
-We first show that alway have an optimal policy with $\pi_2 = 0$. We do this by observing that for every policy $(\pi'_0, \pi'_1, \pi'_2)$ with $\pi'_2 > 0$, it is possible to obtain a policy policy $(\pi''_0, \pi''_1, \pi''_2)$ with $\pi''_2 = 0$ in the following way:
+We first show that there exists always an optimal stochastic policy with $\pi_2 = 0$. We do this by observing that for every policy $\pi' = (\pi'_0, \pi'_1, \pi'_2)$ with $\pi'_2 > 0$, it exists a policy $\pi'' = (\pi''_0, \pi''_1, \pi''_2)$ with $\pi''_2 = 0$ with the same value in the following way:
 
 $$\pi''_0 = \pi'_0 + \pi'_2 T_0, ~~~ \pi''_1 = \pi'_1 + \pi'_2 T_1\;.$$
 
@@ -58,20 +66,21 @@ r_{_0} \pi'_0 + r_{_1}\pi'_1 + r_{_0} T_0 \pi'_2 + r_{_1} T_1 \pi'_2 \\
 = r_{_0} (\pi'_0 + T_0 \pi'_2) + r_{_1} (\pi'_1 + T_1 \pi'_2)
 = r_{_0} \pi''_0 + r_{_1}\pi''_1 = V^{\pi''}(s_2) =\beta \cdot V^{\pi''}\;.
 \end{align*}
-Showing that both policy has same value. We can hence supposte that $\pi_2 =0$ in an optimal stochastic solution.
+Showing that both policies have the same value indicates that for each stochastic policy there exists a stochastic policy with the same value but with $\pi_2 = 0$. We can hence suppose that there exists an optimal stochastic policy with $\pi_2 =0$ as a solution for minimax regret. 
 
-As second part of the proof, we compute the value of an optimal policy with $\pi_0, \pi_1 \geq 0$.
-Let $\pi_0,\pi_1$ be a generic policy. We notice that the adversary policy $g$ giving a maximum regret  is always deterministic (see~\ref{benavent2018}). For this reason, the maximum regret is the maximum among two choices for the adversary policy: we can have either $g_0=g_2=0$ and $g_1 > 0$ or the opposite, $g_0>0$ and $g_1=g_2 = 0$. (We notice that, with arguments analogous to the ones used in the first part of the proof, we can always rule out the case where $g_2 \geq 0$.)
+As second part of the proof, we compute the value of the optimal policy considering $\tilde{\pi} = (\pi_0, \pi_1, 0)$ where $\pi_0, \pi_1 \geq 0$ similarly its equivalent visitation frequency is $\tilde{f} = (f_0, f_1, 0) =$. 
+%Let $\pi_0,\pi_1$ be a generic policy. 
+We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see~\ref{sec:minimax-regret}). For this reason and regarding the Trident MDP entity, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (We notice that, with arguments analogous to the ones used in the first part of the proof, we can always rule out the case where $g_2 \geq 0$.)
 
-The maximum regret associated to the policy $g_0=g_2=0$ and $g_1 > 0$  (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following
+Knowing that the maximum regret is the maximum among two choices for the adversary policies, the maximum regret associated to the policy $g =(0, g_1, 0)$ (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following
 \begin{align}
-r \cdot g - r \cdot f = A + B +A \pi_0 -(A+B)\pi_1 \label{eq:best_stoc_1}
+r \cdot g - r \cdot \tilde{f} = A + B +A \pi_0 -(A+B)\pi_1 \label{eq:best_stoc_1}
 \end{align}   
-and the maximum regret associated to the policy $g_1=g_2=0$ and $g_0 > 0$ is obtained by fixing $r_0 = A$ and $r_1 = -A+B$, leading to a value of
+and the maximum regret associated to the policy $g' = (g_0, 0, 0)$ where $g_0 > 0$ is obtained by fixing $r_0 = A$ and $r_1 = -A+B$, leading to a value of
 \begin{align}
-r \cdot g - r \cdot f = A - A \pi_0 -(B-A)\pi_1 \label{eq:best_stoc_2}\;.
+r \cdot g - r \cdot \tilde{f}  = A - A \pi_0 -(B-A)\pi_1 \label{eq:best_stoc_2}\;.
 \end{align}   
-We are interested in minmizing the max regret, this measn that we want to find the values of $\pi_0$ and $\pi_1$ that minimize $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations 
+We are interested in minimising the max regret, this means that we want to find the values of $\pi_0$ and $\pi_1$ that minimize $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations 
 \begin{align*}
 A + B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
 \pi_0+\pi_1 &= 1
@@ -82,10 +91,11 @@ That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1
 
 Proposition~\ref{theorem:opt_stoc} implies the following Lemma:
 \begin{lemma}\label{lemma:heur_policy}
-The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$ and its maximum regret is equal to $2A-B$.
+The rounded deterministic policy for the Trident MDP is $\hat{\pi} = (0, 1, 0)$ %$ $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$ 
+and its maximum regret is $MR(\hat{f}, \mathcal{R}) = 2A-B$.
 \end{lemma}
 \begin{proof}
-It is a direct consequence of the fact that in the optimal stochastic solution we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
+It is a direct consequence of the fact that in the optimal stochastic policy we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
 \end{proof}
 
 
@@ -132,7 +142,7 @@ We observe that $A\gg B$ and $T_0+T_1= 1$, this imply that  $\eqref{eq:regret0} 
 
 
 \textit{Maximum regret of $\pi_1=1$}.\\
-It is trivial to chech, with calculations analogous to the one used to compute the regret of $\pi_0=1$, that the maximum regret in this case is equal to $2A-B$.\\
+It is trivial to check, with calculations analogous to the one used to compute the regret of $\pi_0=1$, that the maximum regret in this case is equal to $2A-B$.\\
 
 
 
