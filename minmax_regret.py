@@ -82,7 +82,7 @@ class minmax_regret:
         self.TIME_limit = 0
         self.TIME_limit_reached = False
 
-        self.verbosity = 2
+        self.verbosity = 1
 
         self.output = ""
 
