@@ -81,8 +81,8 @@ That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1
 
 
 Proposition~\ref{theorem:opt_stoc} implies the following Lemma:
-\begin{lemma}
-The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$.
+\begin{lemma}\label{lemma:heur_policy}
+The rounded deterministic policy for the Trident MDP is $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$ and its maximum regret is equal to $2A-B$.
 \end{lemma}
 \begin{proof}
 It is a direct consequence of the fact that in the optimal stochastic solution we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
@@ -91,7 +91,8 @@ It is a direct consequence of the fact that in the optimal stochastic solution w
 
 
 \begin{proposition}\label{theorem:opt_det}
-If $T_1\geq T_0$, The optimal deterministic policy is $\pi_{a_2}=1$, $\pi_{a_0}=\pi_{a_1}=0$. 
+If $T_1 > T_0$, The optimal deterministic policy is $\pi_{2}=1$, $\pi_{0}=\pi_{1}=0$ 
+and its maximum regret is $A- A T_0 +(A-B) T_1$. 
 \end{proposition}
 \begin{proof}
 We proof the statement by explicitly computing the maximum regret of the three possible deterministic policy: $\pi_0=1$, $\pi_1=1$ and $\pi_2=1$.
@@ -149,11 +150,21 @@ The maximum between~\eqref{eq:regret2_1} and~\eqref{eq:regret2_2} depends on the
 By imposing  $A- A T_0 +(A-B) T_1 \geq A+B+A T_0 -(A+B) T_1$ we obtain:
 $$ 2A T_1 \geq 2 A T_0 + B\;. $$
 We recall that by construction we have $A \gg B$, this implies that if $T_1> T_0$ (resp. $T_1\leq T_0$)  we have that the maximum regret is equal to~\eqref{eq:regret2_1} (resp.~\eqref{eq:regret2_2}).
-The minimum maximum regret found so far is the one obtained for $\pi_1=1$, and it is equal to $2A-B$. It remains to check for which values of $T_0$ and $T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
+The minimum maximum regret found so far is the one obtained for $\pi_1=1$, and it is equal to $2A-B$. It remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
 \begin{align*}
-sqdf
+A- A T_0 +(A-B) T_1 \leq 2A - B \Leftrightarrow_{T_0 = 1-T_1} A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
+  \Leftrightarrow (2A-B)T_1 \leq 2A-B  \Leftrightarrow T1 \leq 1\;.
 \end{align*}
- 
-
+ Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is obtained when $\pi_{2}=1$ and $\pi_{0}=\pi_{1}=0$ and its maximum regret is equal to $A- A T_0 +(A-B) T_1$. $\square$
 \end{proof}
 
+
+Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that for any Trident MDP we have that the optimal deterministic policy and the rounded deterministic policy are always different. In the following Lemma we estimate the value of each policy:
+
+
+\begin{lemma}
+the ratio between the maximum regret of the rounding deterministic policy and the optimal deterministic policy goes to zero with the increase of the value of $A$ with respect to $B$ and the increase of $T_1$. In other words:  
+\begin{align*}
+\lim_{A/B \rightarrow \infty, T_1 \rightarrow 1} \dfrac{2A-B}{A- A T_0 +(A-B) T_1} = 2
+\end{align*}
+\end{lemma}
