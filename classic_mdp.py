@@ -273,6 +273,67 @@ def diamond_mdp(half_level):
 def create_diamond_MDP(half_level,probab_low , probab_high,  reward_type):
     if half_level == 2:
         return diamond_mdp_2(probab_low , probab_high,  reward_type)
+    if half_level == 3:
+        return diamond_mdp_3(probab_low , probab_high,  reward_type)
+
+def diamond_mdp_3(probab_low , probab_high,  reward_type):
+    n_states = 22
+    n_actions = 3
+
+    state_dict = {0:(0, 0), 1: (1,0), 2: (1,1), 3: (2,0), 4: (2,1), 5: (2,2), 6:(2,3), 7: (3,0), 8: (3,1), 9: (3,2), 10: (3,3), 11: (3,4), 12: (3,5),
+    13: (3,6), 14: (3,7), 15: (4,0), 16: (4,1), 17: (4,2), 18: (4,3), 19: (5,0), 20: (5,1), 26 : (6,0)}
+
+    actions = {0: 'a0', 1: 'a1', 2: 'a2'}
+    _t = {}
+
+    #action a_0
+    _t.update({(0, 0, 1):0.5, (0,0,2): 0.5})
+    _t.update({(1,0,3): 0.5, (1, 0, 4):0.5, (2, 0, 5): 0.5, (2, 0, 6): 0.5})
+    _t.update({(3,0,7):0.5, (3, 0,8): 0.5, (4,0,9):0.5, (4, 0,10): 0.5, (5,0,11):0.5, (5, 0,12): 0.5, (6,0,13):0.5, (6, 0,14): 0.5 })
+    _t.update({(7,0,15):0.5, (7, 0,16): 0.5, (8,0,15):0.5, (8, 0,16): 0.5, (9,0,15):0.5, (9, 0,16): 0.5, (10,0,15):0.5, (10, 0,16): 0.5 })
+    _t.update({(11,0,17):0.5, (11, 0,18): 0.5, (12,0,17):0.5, (12, 0,18): 0.5, (13,0,17):0.5, (13, 0,18): 0.5, (14,0,17):0.5, (17, 0,18): 0.5 })
+    _t.update({(15,0,19):0.5, (15, 0,20): 0.5, (16,0,19):0.5, (16, 0,20): 0.5, (17,0,19):0.5, (17, 0,20): 0.5, (18,0,19):0.5, (18, 0,20): 0.5 })
+    _t.update({(19, 0, 21):1.0, (20, 0, 21): 1.0})
+
+    # action a1
+    _t.update({(0, 1, 1):probab_low, (0,1,0): probab_high, (1,1 ,3 ):probab_low, (1,1 ,0 ):probab_high, (2, 1, 5):probab_low, (2, 1,0 ):probab_high})
+    _t.update({(3,1 ,7 ):probab_low, (3, 1, 1):probab_high, (4, 1,9 ):probab_low, (4,1 ,1 ):probab_high, (5,1 ,11 ):probab_low, (5,1 ,2 ):probab_high, (6,1 ,13):probab_low, (6, 1,2 ):probab_high})
+    _t.update({(7,1 ,18 ):probab_low, (7, 1, 3):probab_high, (8, 1,15 ):probab_low, (8,1 ,3 ):probab_high, (9,1 ,15 ):probab_low, (9,1 ,4 ):probab_high, (10,1 ,16):probab_low, (10, 1,4 ):probab_high})
+    _t.update({(11, 1, 16):probab_low, (11,1,5): probab_high, (12,1 ,17 ):probab_low, (12,1 ,15 ):probab_high, (13, 1, 17):probab_low, (13, 1,6 ):probab_high, (14, 1, 18):probab_low, (14, 1,6 ):probab_high})
+    _t.update({(15,1 ,20 ):probab_low, (15, 1, 8):probab_high, (16, 1,19 ):probab_low, (16,1 ,10 ):probab_high, (17,1 ,19 ):probab_low, (17,1 ,12 ):probab_high, (18,1 ,20):probab_low, (18, 1,14 ):probab_high})
+    _t.update({(19,1 ,21 ):probab_low, (19,1,15 ):probab_high, (20, 1, 21):probab_low, (20,1 ,17):probab_high})
+
+    # action a2
+    _t.update({(0, 2, 2):probab_high, (0,2,0): probab_low, (1,2 ,4 ):probab_high, (1,2 ,0 ):probab_low, (2, 2, 6):probab_high, (2, 2,0 ):probab_low})
+    _t.update({(3,2 ,8 ):probab_high, (3, 2, 1):probab_low, (4, 2,10):probab_high, (4,2 ,1):probab_low, (5,2 ,12 ):probab_high, (5,2 ,2 ):probab_low, (6,2 ,14 ):probab_high, (6, 2,2 ):probab_low})
+    _t.update({(7,2 ,15 ):probab_high, (7, 2, 3):probab_low, (8, 2,16):probab_high, (8,2 ,3):probab_low, (9,2 ,16 ):probab_high, (9,2 ,4 ):probab_low, (10,2 ,17 ):probab_high, (10, 2,4 ):probab_low})
+    _t.update({(11,2 ,17 ):probab_high, (11, 2, 5):probab_low, (12, 2,18):probab_high, (12,2 ,5):probab_low, (13,2 ,18 ):probab_high, (13,2 ,6 ):probab_low, (14,2 ,15):probab_high, (14, 2,6 ):probab_low})
+    _t.update({(15,2 ,19 ):probab_high, (15, 2, 7):probab_low, (16, 2,20):probab_high, (16,2 ,9):probab_low, (17,2 ,20 ):probab_high, (17,2 ,11 ):probab_low, (18,2 ,19):probab_high, (18, 2,13):probab_low})
+    _t.update({(19,2 ,21 ):probab_high, (19, 2, 16):probab_low, (20, 2,21):probab_high, (20,2 ,18):probab_low})
+
+
+    _r_bounds = {}
+
+    for s in range(7)+range(15,22,1):
+        _r_bounds.update({(s, 0): [0.0, 0.0], (s, 1): [0.0, 0.0], (s, 2): [0.0, 0.0]})
+
+    if reward_type == 0:
+        # # U states
+
+        for s in range(7,15, 1):
+            _r_bounds.update({(s, 0): [-600, 600], (s, 1): [-600, 600], (s, 2): [-600, 600]})
+
+        # goal
+        _r_bounds.update({(21, 0): [600, 1000], (21, 1): [600, 1000], (21, 2): [600, 1000]})
+    else:
+        print "THATS IT"
+
+
+    return MDP(
+        _startingstate= set(range(n_states)),
+        _transitions= _t,
+        _rewards_bounds= _r_bounds,
+        _gamma = 0.95, _alpha= [1.0]+21*[0.0])
 
 def diamond_mdp_2(probab_low , probab_high,  reward_type):
 
@@ -403,7 +464,7 @@ def diamond_mdp_2(probab_low , probab_high,  reward_type):
         _startingstate= set(range(n_states)),
         _transitions= _t,
         _rewards_bounds= _r_bounds,
-        _gamma = 0.95, _alpha= [1]+9*[0.0])
+        _gamma = 0.95, _alpha= [1.0]+9*[0.0])
 
 #%%%%%%%%%%%%% counter example %%%%%%%%%%%%%
 def mdp_counter_example(T0, T1, A, B, C):
