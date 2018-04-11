@@ -1,0 +1,26 @@
+\section{Experimental results}\label{sec:experiments}
+
+In this section, we provide an experimental evaluation of our approach
+based on two classes of test instances. More precisely, we test our approach on the following MDPS:
+\begin{itemize}
+\item Random MDPs (\texttt{Random}).
+\item Diamond MDPs (\texttt{Diamond}).
+\item Grid MDPs (\texttt{Grid}).
+\end{itemize}
+
+For each class of MDP, we provide a brief description and the parameters used to generate the testbed.\\
+
+As already mentioned in the introduction, the aim of this section is two-fold:
+
+(i) First of all, we would like to motivate the use of deterministic over stochastic policies. To do this, we show the ratio between the maximum regret of the rounding policy explained in Section~\ref{sec:rounding}. 
+%
+%The TUP uses the concept of sparsity presented in this paper to generalize the methodology proposed in~\cite{Buchheim18} to solve efficiently combinatorial problems with a quadratic objective function.
+%In Section~\ref{sec:TUP} we show how the application of TUD allows to improve the dual bounds obtained in the approach presented in~\cite{Buchheim18}.  
+
+(ii) Secondly, in the tests concerning the CCKP and the MVO, we show that our heuristic procedure is able to provide almost-optimal solutions within a short amount of time.
+%[riflettere se paralre di piu'].
+
+For assessing the performance of our algorithm, we use CPLEX~12.6~\cite{cplex126} with an optimality tolerance of~$10^{-6}$. For CCKP and MVO, we also use CPLEX in order to solve Problem~\eqref{prob:basicsparsefixedt} -- in the former case, we call the LP solver, while in the second case we need the SOCP solver of CPLEX. In both cases, dual solutions are also provided by CPLEX. For TUP, we use the SDP solver CSDP~\cite{csdp}.
+
+%CPLEX tolerance: $10^{-6}$ (EPGAP)
+
