@@ -1,8 +1,8 @@
-\section{Theoretical analysis of the optimal deterministic policy}
+\section{Theoretical analysis of the optimal deterministic policy}\label{sec:comparison}
 
 In this section we first introduce the intuitive concept of rounding heuristic, a way to obtain a feasible deterministic policy starting from a stochastic (maybe optimal) policy. Subsequently, we analyse the situations where such rounding heuristic could provide maximum regrets far from the one given by the optimal deterministic policy.
 
-\subsection{The ``rounding'' heuristic}
+\subsection{The ``rounding'' heuristic}\label{sec:rounding}
 
 Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounded'' deterministic policy $\pi$ can be computed as follows:
 
@@ -26,7 +26,7 @@ In fact, the heuristic approach computes the deterministic policy by selecting t
 %
 %All the tests so far showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we hope that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
 %
-\subsection{A small counterexample}
+\subsection{A small counterexample}\label{sec:counter}
 
 We call \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) the IRMDP defined to have:
 \begin{itemize}

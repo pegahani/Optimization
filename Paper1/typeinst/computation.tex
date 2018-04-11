@@ -8,20 +8,31 @@ based on two classes of test instances. More precisely, we test our approach on 
 \item Grid MDPs (\texttt{Grid}).
 \end{itemize}
 
+
+For each class of MDP, we provide a brief description of its structure and of the parameters used to generate the testbed.
+
 As already mentioned in the introduction, the aim of this section is two-fold:
 
-(i) First of all, we would like to motivate the use of deterministic over stochastic policies. To do this, we show the ratio between the maximum regret of the rounding policy explained in Section~\ref{sec:rounding}. 
+(i) First of all, we would like to motivate the use of deterministic over stochastic policies. To do this, we compare the value of the maximum regret obtained by the optimal deterministic policy with the one of the rounding policy explained in Section~\ref{sec:rounding}. 
 %
 %The TUP uses the concept of sparsity presented in this paper to generalize the methodology proposed in~\cite{Buchheim18} to solve efficiently combinatorial problems with a quadratic objective function.
 %In Section~\ref{sec:TUP} we show how the application of TUD allows to improve the dual bounds obtained in the approach presented in~\cite{Buchheim18}.  
 
 (ii) Secondly, we would like to assess the additional computational effort of computing the optimal deterministic policy in comparison to the one needed to compute the optimal stochastic policy. 	 
 
-In the following section we use the notion of Time ratio (TR) and Value Ratio (VR).
+In the following section we use the notion of Time ratio ($TR$) and Value Ratio ($VR$), defined as follows:
 
-TODO: definition of time ratio and value ratio!
-
-For each class of MDP, we first provide a brief description and the parameters used to generate the testbed.
+\begin{definition}
+For a given MDP, let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the rounding deterministic policy and $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy. We have that the Value Ratio of such MDPs is defined as follows:
+\begin{align}
+VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;.
+\end{align} 
+Moreover, let $\hat{T}$ (respectively $T^*$) be the computing time necessary to calculate the rounding (respectively optimal) deterministic policy, we have that the Time Ratio is defined as:
+\begin{align}
+TR=\dfrac{T^*}{\hat{T}}\;.
+\end{align}
+ 
+\end{definition}
 
 \subsection{Random MDPs}
 blablabla
@@ -63,8 +74,8 @@ In Table~\ref{tab:diamond} We show
 \begin{tabular}{ccccccccccc}																						
 p	&	5	&	10	&	15	&	20	&	25	&	30	&	35	&	40	&	45	&	Avg.	\\	
 \cmidrule(lr){1-1} \cmidrule(lr){2-10} \cmidrule(lr){11-11}
-Value Ratio	&	1.66	&	1.24	&	1.16	&	1.13	&	1.15	&	1.15	&	1.15	&	1.14	&	1.16	&	\textbf{1.22}	\\	
-Time Ratio	&	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8.44}	\\	\\
+VR &	1.66	&	1.24	&	1.16	&	1.13	&	1.15	&	1.15	&	1.15	&	1.14	&	1.16	&	\textbf{1.22}	\\	
+TR &	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8.44}	\\	\\
 \end{tabular}
 \caption{Time Ratio and Value Ratio for \texttt{Diamond}.}														\label{tab:diamond}								
 \end{table}																						
