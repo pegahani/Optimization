@@ -289,39 +289,42 @@ Regarding to constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} $I$ is a $|S|\tim
 
 %%================================================================
 
-\section{An exact Enumerative scheme to find the optimal deterministic solution} 
+\section{An exact Enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
 
-To find the optimal deteministic solution,  we incorporate the Benders decomposition procedure described in the previous section in a branch-and-bound framework (see for example \cite{bertsimas2005optimization}, Section 11). 
+To find the optimal deterministic solution, we incorporate the Benders decomposition procedure described in the previous section in a branch-and-bound framework (see for example \cite{bertsimas2005optimization}, Section 11). 
 
-A branch-and-bound algorithm consists of a clever enumeration of the space of feasibile policies through a space search: the set of deterministic policies that can potentially be the optimal is represented with a rooted tree with the full set at the root. The algorithm explores branches of this tree, where each branch represents a subset of the solution set.
-Once a new branch of the tree is created, and before that branches is splitted again in additional subbranches, a (lower) bounding procedure is executed on that branch. The bounding procedure gives an underestimation of the optimal solution of the problem over the feasible set associated to the given branch.
+\begin{wrapfigure}{r}{0.5\textwidth}
+	\begin{center}
+    \includegraphics[scale=0.25]{images/bb.png}
+	\end{center}
+	\caption{Example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions per state}
+	\label{fig:pic_bb}
+\end{wrapfigure}
+
+A branch-and-bound algorithm consists of a clever enumeration of the space of feasible policies through a space search: the set of deterministic policies that can potentially be the optimal is represented with a rooted tree with the full set associated to the root. The algorithm explores branches of this tree, where each branch represents a subset of the solution set.
+Once a new branch of the tree is created, and before that branches is split again in additional subbranches, a (lower) bounding procedure is executed on that branch. The bounding procedure gives an underestimation of the optimal solution of the problem over the feasible set associated to the given branch.
 The branch is hence discarded if it cannot produce a better solution than the best one found so far by the algorithm.
 
 In our application, the root of the branch-and-bound tree is associated to the full set of deterministic policies, while a branch is obtained by selecting a couple $(s,a)$ of state and action and subsequently imposing the following disjunction on the two child nodes:
 \begin{itemize}
-\item $f_{s,a'}=0, \forall a'\neq a$ for the ``left'' childred.
-\item $f_{s,a}=0$ for the ``right'' childred. 
+\item $f_{s,a'}=0, \forall a'\neq a$ for the ``left'' child node.
+\item $f_{s,a}=0$ for the ``right'' child node. 
 \end{itemize} 
 
-The disjunctions imposes to the left child to represent only deterministic policies with $f_{s,a}\neq 0 $  (i.e. $\pi_{s,a}=1$). On the other hand, the right child represents deterministic p with $f_{s,a}=0$  (i.e. $\pi_{s,a}=0$).
-The total number of choices (i.e., the number of state-action pairs) is finite, therefore also the maximum size of the branch-and-bond tree is finite. In Figure~\ref{fig:pic_bb} we present an example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions. 
+The disjunctions imposes to the left child to represent only deterministic policies with $f_{s,a}\neq 0$  (i.e. $\pi(s,a)=1$). On the other hand, the right child represents deterministic p with $f_{s,a}=0$  (i.e. $\pi(s,a)=0$)
+\footnote{The total number of choices (i.e., the number of state-action pairs) is finite, therefore also the size of the branch-and-bond tree is finite.}. Figure~\ref{fig:pic_bb} presents an example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions. 
 %In this representation, we show at each node the additional restriction to the region 
  
- 
- 
-\begin{center}
-\input{pic_bb.tex} 
-\end{center}
 
-As already mentioned, to avoid exploring the whole tree, we need a lower bounding procedure to \textit{prune} some of the nodes that do not contain the optimal policy. In our application, we use the optimal stochastic policy as underestimator of the optimal deterministic policy for a given branch of the tree. In this way, if a node has a stochastic policy higher than the best deterministic policy found so far it not necesssary to continue explore in that branch and the node ca be pruned.
+As already mentioned, to avoid exploring the whole tree, we need a lower bounding procedure to \textit{prune} some of the nodes that do not contain the optimal policy. In our application, we use the optimal stochastic policy as under-estimator of the optimal deterministic policy for a given branch of the tree. In this way, if a node has a stochastic policy higher than the best deterministic policy found so far it is not necessary to continue exploring that branch and the node thus can be pruned.
 
-The final ingredient of a branch-and-bound is a procedure to find feasible deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic we can update the value of the best known deterministic solution to its value.
+The final ingredient of a branch-and-bound is a procedure to find feasible deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic, its value can be used to update the value of the best known deterministic policy. %to its value.
 
 
 \input{basic_bb.tex}
 
-In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplred nodes to the root node (i.e., the one with no constraints on the $f$ variables).
-The while loop extract one unexplored node from the list, fix the $f$ corresponding to its subregion of feasible deterministic policies and compute a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. if the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more thant one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is selected to be next disjunction used the create the two child nodes.
+In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplored nodes to the root node (i.e., the one with no constraints on the $f$ variables).
+The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
 
 
 \input{comparison.tex}
