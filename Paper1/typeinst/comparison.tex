@@ -38,14 +38,23 @@ We call \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) the IRMDP defined 
 \end{itemize} 
 
 %%%%%%%%%%%%%%%%%
-\begin{figure}[]
+%\begin{figure}[]
+%	\begin{center}
+%    \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
+%	\end{center}
+%	\caption{Trident IRMDP with $3$ states and $3$ actions.}
+%	\label{fig:trident} 
+%\end{figure}
+%%%%%%%%%%%%%%%%%
+\begin{wrapfigure}{r}{0.5\textwidth}
 	\begin{center}
     \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
 	\end{center}
 	\caption{Trident IRMDP with $3$ states and $3$ actions.}
 	\label{fig:trident} 
-\end{figure}
-%%%%%%%%%%%%%%%%%
+\end{wrapfigure}
+
+
 
 The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the pedix $a$ instead of using $s_2,s_a$, i.e. instead of writing $\pi(s_2, s_a)$ we use $\pi_a$. According to Figure~\ref{fig:trident}, this is due to the fact that two states $s_0$ and $s_1$ are terminal states and the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi(s_2, a_1)$). For the same reason, we use $r_{0}$ in place of $r(s_0)$ and $r_{1}$ in place of $r(s_1)$. Thus each stochastic policy on the trident MDP can be demonstrated as tuple $\pi = (\pi_0, \pi_1, \pi_2)$ where each element indicates the probability of choosing action $a_i$ in state $s_i$. Similarly the visitation frequency functions are presented as $f = (f_0, f_1, f_2)$.
 

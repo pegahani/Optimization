@@ -32,6 +32,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{wrapfig}
+
 
 \usepackage{tikz}
 \usepackage{tikzsymbols}
@@ -305,6 +307,8 @@ In our application, the root of the branch-and-bound tree is associated to the f
 The disjunctions imposes to the left child to represent only deterministic policies with $f_{s,a}\neq 0 $  (i.e. $\pi_{s,a}=1$). On the other hand, the right child represents deterministic p with $f_{s,a}=0$  (i.e. $\pi_{s,a}=0$).
 The total number of choices (i.e., the number of state-action pairs) is finite, therefore also the maximum size of the branch-and-bond tree is finite. In Figure~\ref{fig:pic_bb} we present an example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions. 
 %In this representation, we show at each node the additional restriction to the region 
+ 
+ 
  
 \begin{center}
 \input{pic_bb.tex} 
