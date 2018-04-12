@@ -175,7 +175,7 @@ We finally report an experimental study on random and diamond MDPs, in which we 
 %This section concerns the required components of MDPs and minimax regret criterion for MDPs with imprecise rewards.
 
 \section{Preliminaries}\label{sec:Preliminaries}
-\textit{Markov Decision Process (MDP)} \citep{Puterman1994} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where: $S$ is a finite set of states; $A$ is finite set of actions, $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$, and choosing action $a$; $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$; $\gamma \in [0, 1[$ is the discount factor; and $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function} indicating probability of initiating in state $s$ by $\beta(s)$.
+A \textit{Markov Decision Process (MDP)} \citep{Puterman1994} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where: $S$ is a finite set of states; $A$ is finite set of actions, $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$, and choosing action $a$; $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$; $\gamma \in [0, 1[$ is the discount factor; and $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function} indicating probability of initiating in state $s$ by $\beta(s)$.
 
 A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$. A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$. A policy $\pi$ induces a \textit{visitation frequency function} $f^{\tilde{\pi}}$ where $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$ (see Section $6.9$ in \cite{Puterman1994}):
 \begin{align*}
@@ -203,10 +203,10 @@ For a give initial state $\beta$, the value of the optimal policy is $\beta \cdo
 \beta \cdot V^{\tilde{\pi}} = r \cdot f^{\tilde{\pi}}\;.
 %\;\;\;\;  (\sum_{s \in S} \sum_{a \in A} r(s,a) f^{\tilde{\pi}}(s,a) )
 \end{align}
-An MDP always has an optimal policy $\pi^*$ such that; $\pi^* = \text{argmax}_{\pi} \beta \cdot V^{\pi}$ or $f^{*} = \text{argmax}_{f} r \cdot f$ where the optimal policy can be recovered from $f^*$ using Equation \ref{pi_f}. 
+An MDP always has an optimal policy $\pi^*$ such that; $\pi^* = \text{argmax}_{\pi} \beta \cdot V^{\pi}$ or $f^{*} = \text{argmax}_{f} r \cdot f$, where the optimal policy can be recovered from $f^*$ using Equation \ref{pi_f}. 
 %%================================================================
 
-\subsection{MDPs with Uncertain Rewards}
+\subsection{MDPs with Imprecise Rewards}
 When designing real cases as MDPs, specifying the reward function is generally a hard problem. For instance preferences stating which (state, action) pairs are good or bad should be interpreted into numerical costs. Note that even knowing all these preferences is time consuming. In order to
 tackle this complexity, we use an MDP with \textit{imprecise reward values (IRMDP)}. An IRMDP \citep{Regan2009} is a tuple $\tilde{M}(S, A, P, \tilde{r}, \gamma, \beta)$ where $S, A, P, \gamma$ and $\beta$ are the same as MDP while $\tilde{r}$ is a set of possible reward functions on $S \times A$. $\tilde{r}$ models the uncertainty on real reward values. To stay coherent, we use the notation presented by \shortcite{benavent2018}, i.e. $M, \tilde{M}, r, \tilde{r}$ signify the standard MDP, IRMDP, real valued reward function and uncertain reward function model respectively.  
 
