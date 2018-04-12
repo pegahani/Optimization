@@ -321,10 +321,11 @@ def diamond_mdp_3(probab_low , probab_high,  reward_type):
         # # U states
 
         for s in range(7,15, 1):
-            _r_bounds.update({(s, 0.0): [-6, 6.0], (s, 1): [-6.0, 6.0], (s, 2): [-6.0, 6.0]})
+            _r_bounds.update({(s, 0): [-0.06, 0.06], (s, 1): [-0.06, 0.06], (s, 2): [-0.06, 0.06]})
 
         # goal
-        _r_bounds.update({(21, 0): [6.0, 10.0], (21, 1): [6.0, 10.0], (21, 2): [6.0, 10.0]})
+        _r_bounds.update({(21, 0): [0.06, 0.1], (21, 1): [0.06, 0.1], (21, 2): [0.06, 0.1]})
+
     else:
         print "THATS IT"
     
@@ -335,7 +336,7 @@ def diamond_mdp_3(probab_low , probab_high,  reward_type):
         _startingstate= set(range(n_states)),
         _transitions= _t,
         _rewards_bounds= _r_bounds,
-        _gamma = 0.95, _alpha= [1.0]+21*[0.0])
+        _gamma = 0.5, _alpha= [1.0]+21*[0.0])
 
 def diamond_mdp_2(probab_low , probab_high,  reward_type):
 

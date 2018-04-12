@@ -102,8 +102,11 @@ class minmax_regret:
             for _s in range(ns):
                 V1[_s] = max(self.reward_bounds[_s*na + _a][1] + gamma * sum(transition[_s,_a][0,_s2] * V[_s2] for _s2 in range(ns)) for _a in range(na))
                 delta = max(delta, abs(V1[_s] - V[_s]))
+            print V
+            print V.tolist()
 
             if delta < epsilon * 1.0/(1.0-gamma): #(1 - gamma) / gamma:
+                print 'v.toloist', V.tolist()
                 return V.tolist()
 
     def worst_Q(self, epsilon=0.001):
@@ -248,6 +251,7 @@ class minmax_regret:
 
 	#big_M = [1e8]*ns*na
         big_M = self.get_bigM() #of size ns*na
+        print 'big_M', big_M
         for _a in range(na):
             for _s in range(ns):
                 coeff, index = [], []
