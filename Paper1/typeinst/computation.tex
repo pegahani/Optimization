@@ -35,9 +35,10 @@ TR=\dfrac{T^*}{\hat{T}}\;.
 \end{definition}
 
 \subsection{Random MDPs}
-blablabla
 \paragraph{Description}
-blablabla
+A random MDP is defined by several parameters including its number of states $n$ , its number of actions $k$. All rewards are bounded between randomly two real numerical points. Transition function has several properties: from any state $s$ restrict transitions to reach $\lceil \log_2(n) \rceil$ states. For each pair of $(s, a)$ draw reachable states based on uniform
+distribution over the set of states. For drawn states, transition probabilities are formed based on Gaussian distribution.
+The initial state distribution β is uniform and we choose discount factor $\gamma = 0.95$. 
 \paragraph{Analysis of the results}
 blablabla
 
@@ -51,7 +52,7 @@ In Figure~\ref{fig:diamond}, the structure of the diamond MDPs is presented.
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=8cm]{diamond.png}
+\includegraphics[width=8cm]{images/diamond.png}
 \end{center}
 \caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right).}
 \label{fig:diamond}
