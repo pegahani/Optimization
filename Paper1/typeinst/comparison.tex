@@ -174,13 +174,15 @@ A- A T_0 +(A-B) T_1 \leq 2A - B \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A 
 \end{proof}
 
 \begin{remark}
-Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that \textbf{for any Trident MDP we have that the optimal deterministic policy and the rounded deterministic policy are always different}. 
+Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that for any Trident MDP we have that the optimal deterministic policy and the rounded deterministic policy are always different. 
 \end{remark}
-In the following Lemma we estimate the value of each policy:
 
-\begin{lemma}
+The following Lemma shows that the rounding policy could be significantly worse than the optimal deterministic policy:
+
+\begin{lemma}\label{lemma:gap2}
 The ratio between the maximum regret of the rounding deterministic policy and the optimal deterministic policy goes to zero with the increase of the value of $A$ with respect to $B$ and the increase of $T_1$. In other words:  
 \begin{align*}
 \lim_{A/B \rightarrow \infty, T_1 \rightarrow \frac{1}{2}} \dfrac{2A-B}{A- A T_0 +(A-B) T_1} = 2
 \end{align*}
 \end{lemma}
+
