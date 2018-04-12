@@ -60,6 +60,8 @@
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 \newcommand{\ea}[1]{#1 \emph{et al.}}
+\newcommand{\ET}[1]{{\textcolor{blue}{#1}}}
+
 
 \begin{document}
 
@@ -115,6 +117,7 @@ In several real world situations a stochastic policy is not easily interpretable
 
 \section{Introduction}
 
+
 %outline for introduction
 %\begin{itemize}
 %\item MDP are important to model many things
@@ -127,21 +130,40 @@ In several real world situations a stochastic policy is not easily interpretable
 %-- finance \\
 %\end{itemize}
 
-Markov Decision Processes (MDPs) have proven to be effective models for representing and solving sequential decision problems under uncertainty. It is natural to model a decision making problems in stochastic environments as MDPs such as navigation, robotics or service composition problems. In navigation context such as assistant autonomous vehicles, at each stage, the agent executes an action with probabilistic effects and this state conducts her to a next state and yields a reward (punishment). The goal is to maximise (minimise) the expected sum of rewards. The environment dynamic (traffics and roads) are modelled as states and actions with probability affections. Despite of knowing the final goal, specifying rewards or punishments for choosing actions in states is not obvious all the time %for several reasons
+Markov Decision Processes (MDPs) have proven to be effective models for representing and solving sequential decision problems under uncertainty. It is natural to model a decision making problems in stochastic environments as MDPs. \ET{To mention just few example: navigation, robotics or service composition problems are all well established appication of MDPs}. In navigation context such as assistant autonomous vehicles, at each stage, the agent executes an action with probabilistic effects and this state conducts her to a next state and yields a reward (\ET{penalty}). The goal is to maximise (minimise) the expected sum of rewards. The environment %dynamic
+ (traffics and roads) is modeled as states and actions with probability assignment.%affections?. 
+ 
+Despite of knowing the final goal, specifying rewards or punishments for choosing actions in states is not obvious \ET{in all the applications and}  all the time.
+\ET{Thi can happen} %for several reasons
 %Specifying exact rewards (punishments) is not obvious 
 for multiple reasons:
-\begin{itemize}
-\item insufficient data to estimate rewards,
-\item parts of models are too complex to detail: in assistant vehicle example defining exact rewards for all actions is time consuming or complicated and can variate during the driving process. For this reason, we consider them bounded in real valued intervals.
-\item in communication with system's users: If the model is designed for different drivers with various preferences, even after limited number of communications with drivers and diminishing the unknown rewards to smaller sets, the MDP is still partially known. 
-\end{itemize}
+%\begin{itemize}
+%\item 
+(1) insufficient data to estimate \ET{the} rewards,
+%\item 
+(2) parts of models are too complex to detail. In assistant vehicle example, defining exact rewards for all actions is time consuming or complicated and can variate during the driving process. For this reason, we consider them bounded in real valued intervals,
+%\item 
+(3) in communication with user systems. In the assistant vehicle case, if the model is designed for different drivers with various preferences, even after \ET{a} limited number of communications with drivers and diminishing the unknown rewards to smaller sets, the MDP is still partially known. 
+%\end{itemize}
 
 %In MDPs with unknown rewards, the system have all information about the dynamics (road and traffics) and final goal but it lacks some information about the user preferences inside the system
-In order to find the best \textit{policy} (strategy) regarding the imprecise information on rewards, there are some robust optimization approaches in literature\cite{Ahmed2017,Iyengar2005,Nilim2003,Xu2009}. In this work, we focus on \textit{minimax regret} method \cite{Regan2009} in which proposes the optimal policy with the minimum lost in comparison with other possible policies. Majority of methods for computing the optimal policy including the exact or approximate ones propose a \textit{stochastic policy} for the MDP (see related work). That causes some problems for some real environments such as ethic cases, financial applications (Bitcoin and Crypto-currency) or any applications that can not risk more than once executions. In assistant autonomous vehicle case, if there is a risk of dealing an ethic dilemma \footnote{such as the famous train example. The conductor should decide between killing one persons or one person}, the optimal policy should be deterministic without putting the user in a situation to train between a north direction with $0.3$ or the west direction with $0.7$ probability by being in a special position.
+\ET{Several approaches has been proposed in the literature to find the best \textit{policy} (strategy) in an environment with imprecise information on the rewards.}
+In this work, we focus on \textit{minimax regret} method.\ET{The basic idea of minmax regret is to find the} policy with the minimum lost in comparison with other possible policies \ET{and rewards. Minmizing the max regret is more optimistic then  minimising the worst case scenario and has been widely used in the literature. In the context of MDPs, it has been used, among others, in \cite{Regan2009,Xu2009}.}
+
+\ET{The majority of the exact and approximate methods for computing the optimal policy of an MDP accept to have  \textit{stochastic policy} as feasible policies for the MDP. A policy is defined as stochastic if, for a given state, the action to be taken is chosen with a given probability associated to each possible state.
+On the other hand, in a \textit{deterministic policy} the action to be taken in a state is uniquely defined.\\
+The use of stochastic policies present two main advantages. From a algorithmic point of view (as shown also in this work), finding the optimal stochastic policy is usually easier than finding the optimal deterministic policy. Moreover, accepting also stochastic policies implies to have a larger search space in comparison to the search space of the determinstic policies, allowing to have optimal policies with an optimal value better than the one of an optimal deterministic policy.
+Despite these two obvious advantages of stochastic over deterministic policies, in sevaral situation the use of stochastic policies can be either not recommended or not possible.} 
+First of all, the use of a stochastic policy could be ethically problematic. If we take for example the case of assistant autonomous vehicle case, we can incur in the famous ``trolley dilemma'', where the conductor must decide between killing all the people in the trolley without changing the track or pulling the lever, diverting the trolley onto the side track where it will kill one person.The optimal policy should be deterministic without putting the user in a situation to decide every time with a given probability $p$ if staying on the same track ore changing track with a probability $1-p$.
+More in general, a deterministic policy is easier to understand from a user's point of view and therefore it is  more likely to be used un practice. Finally, in several situations the nature of the problems does not allow any choices and requires a deterministi policy, this is due to either the discrete/combinatorial nature of the problem (financial applications (Bitcoin and Crypto-currency) MORE EXAMPLES AND QUOTES!!!) or to the fact that the algorithm must be executed only once, losing the relevance of the stochastic aspects (EXPLAIN BETTER, MORE EXAMPLES AND QUOTES!!!).
+
+In this paper we introduce a first in depth study of finding the deterministic policy that minimises the maximu regret in an MDP with uncertain rewards. Our method finds the best deterministic policy in a computing time that is relatively close to the one needed to compute the optimal stochastic policy. 
+We theoretically prove that the use of a intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy far from the optimal. 
+%Some may claim that \textit{determinising} the stochastic policy computed by minimax regret is a \textit{deterministic optimal policy}. We present an MDP with imprecise rewards, as a counter example to this claim. 
+We finally report an experimental study on random and diamond MDPs, in which we analyze the performances of our algorithm. 
 
 
-In this paper we introduce a first in depth study of deterministic policy for minimax regret approach. Our method finds the best deterministic policy enough close to the stochastic solution calculated by the minimax regret approach. Some may claim that \textit{determinising} the stochastic policy computed by minimax regret is a \textit{deterministic optimal policy}. We present an MDP with imprecise rewards, as a counter example to this claim. We finally report on an experimental study on random MDPs with different structures, in which we compare deterministic and stochastic policies with different scenarios. 
-
+%, (just to mention a few, there are some robust optimization approaches in literature\cite{Ahmed2017,Iyengar2005,Nilim2003,Xu2009}
 
 %%================================================================
 \input{related_work.tex}
