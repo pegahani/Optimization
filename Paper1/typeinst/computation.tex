@@ -5,7 +5,7 @@ based on two classes of test instances. More precisely, we test our approach on 
 \begin{itemize}
 \item Random MDPs (\texttt{Random}).
 \item Diamond MDPs (\texttt{Diamond}).
-\item Grid MDPs (\texttt{Grid}).
+%\item Grid MDPs (\texttt{Grid}).
 \end{itemize}
 
 
@@ -40,7 +40,13 @@ A random MDP is defined by several parameters including its number of states $n$
 distribution over the set of states. For drawn states, transition probabilities are formed based on Gaussian distribution.
 The initial state distribution β is uniform and we choose discount factor $\gamma = 0.95$. 
 \paragraph{Analysis of the results}
-In Table~\ref{tab:random} we have th resutm
+In Table~\ref{tab:random} we present the results concerning the performances of our algorithm on random instances with $|S| \in \{5,10,15\}$ and $|A| \in \{1, 2, 3, 4, 5, 10\}$. For each combination of states and actions, we provide the average results over $10$ different instances. The first two columns report the Value Ratio and the Time Ratio (\texttt{VR} and \texttt{TR}). The column \texttt{\% diff} shows the percentage of cases where the optimal policy is different from the rounding policy. The final two columns shows the computing time of the baseline branch-and-bound algorithm presented in Section TODO and the improved version (cut-and-branch) presented in Section TODO.
+
+We notice that $70\%$ of the times the optimal deterministic policy differs from the rounding and that the maximum regret of the rounding deterministic policy is $6\%$ worse than the maximum regret of the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}. From the point of view of the computing times, calculating the optimal determinstic policy is one order of magnitude slower than computing the optimal stochastic policy. On the other hand, it is interesting to notice that the improved version lf the algorithm is two times faster than the basic version.  
+Finally it is interesting to notice that even in the basic implementation of the algorithm, the number of additional Benders cuts added during the branch-and-bound is significantly low (on average no more than $2$ cuts per node). This explains why the cut-and-branch version of the branch-and-bound algorithm performs better than the standard version.
+
+
+  
 
 \input{tab_random.tex}
 
@@ -85,12 +91,12 @@ TR &	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8
 
 
 
-\subsection{Grid MDPs}
-blablabla
-\paragraph{Description}
-blablabla
-\paragraph{Analysis of the results}
-blablabla
+%\subsection{Grid MDPs}
+%blablabla
+%\paragraph{Description}
+%blablabla
+%\paragraph{Analysis of the results}
+%blablabla
 
 
 
