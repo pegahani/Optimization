@@ -84,6 +84,7 @@ class minmax_regret:
 
         self.verbosity = 2
 
+
         self.output = ""
 
 
