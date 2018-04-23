@@ -1,30 +1,22 @@
+\documentclass[twocolumn]{article}
 
-%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% This is the LaTeX source for the instructions to authors using
-% the LaTeX document class 'llncs.cls' for contributions to
-% the Lecture Notes in Computer Sciences series.
-% http://www.springer.com/lncs       Springer Heidelberg 2006/05/04
-%
-% It may be used as a template for your own input - copy it
-% to a new file with a new name and use it as the basis
-% for your article.
-%
-% NB: the document class 'llncs' has its own and detailed documentation, see
-% ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e/llncsdoc.pdf
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[width=17cm,height=22cm]{geometry}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyvrb}
+\usepackage{authblk}
+\usepackage{hyperref}
 
 
-\documentclass[runningheads,a4paper]{llncs}
-
-\usepackage{amssymb}
-\usepackage{named}
-\setcounter{tocdepth}{3}
+\usepackage{xcolor}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage[numbers]{natbib}
-\usepackage{mathtools}
+
+\usepackage{amsthm}
+\usepackage{amssymb}
 
 \usepackage{tabularx,ragged2e}
 \newcolumntype{C}{>{\Centering\arraybackslash}X} % centered "X" column
@@ -40,10 +32,6 @@
 \usepackage{tikz}
 \usepackage{tikzsymbols}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\up}[1]{\textsuperscript{#1}}
-\newcommand{\imp}[1]{{\color{red}{#1}}}
-\newcommand{\AO}[1]{{\color{red}{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newlength{\mylengthleft}
@@ -54,70 +42,40 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\usepackage{xcolor}
-\usepackage{url}
-
-\urldef{\mailsa}\path|pegah.alizadeh@unicaen.fr|
-\urldef{\mailsb}\path|{emiliano.traversi, ao}@lipn.univ-paris13.fr|
-\newcommand{\keywords}[1]{\par\addvspace\baselineskip
-\noindent\keywordname\enspace\ignorespaces#1}
-\newcommand{\ea}[1]{#1 \emph{et al.}}
 \newcommand{\ET}[1]{{\textcolor{black}{#1}}}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Théorème}
+\newtheorem{lemma}{Lemme}
+\newtheorem{proposition}{Proposition}
+
+
+
+\bibliographystyle{alpha}
+
+\title{Exemple d'article au format CAp'2018}
+\author[1]{Auteur A\thanks{Si vraiment vous voulez mettre votre email
+    ou page web...: A.A@univ-x.fr}}
+\author[2]{Auteur B}
+\affil[1]{Université X, CNRS}
+\affil[2]{Université Y, CNRS et INRIA}
+
+\renewcommand\Authands{, et }
+\renewcommand\Authand{ et }
 \begin{document}
-
-\mainmatter  % start of an individual contribution
-
-% first the title is needed
-\title{Deterministic Solutions Based on Maximum Regrets in Markov Decision Processes with Imprecise Rewards}
-
-% a short form should be given in case it is too long for the running head
-\titlerunning{Deterministic Solutions for IRMDPs}
-
-% the name(s) of the author(s) follow(s) next
-%
-% NB: Chinese authors should write their first names(s) in front of
-% their surnames. This ensures that the names appear correctly in
-% the running heads and the author index.
-%
-
-%\author{Pegah Alizadeh \up{1} \and Emiliano Traversi \up{2} \and Aomar Osmani\up{2}}
-
-%
-%\authorrunning{Pegah Alizadeh, Emiliano Traversi and Aomar Osmani}
-% (feature abused for this document to repeat the title also on left hand pages)
-
-% the affiliations are given next; don't give your e-mail address
-% unless you accept that it will be published
-
-%\institute{(1) GREYC, UMR 6072, UNICAEN/CNRS/ENSICAEN, 14000 CAEN, FRANCE\\
-%(2) LIPN-UMR CNRS 7030, PRES Sorbonne Paris-cit\'e, FRANCE\\
-%\mailsa\\
-%\mailsb \\
-%%\url{http://www.springer.com/lncs}
-%}
-
-%
-% NB: a more complex sample for affiliations and the mapping to the
-% corresponding authors can be found in the file "llncs.dem"
-% (search for the string "\mainmatter" where a contribution starts).
-% "llncs.dem" accompanies the document class "llncs.cls".
-%
-
-\toctitle{Lecture Notes in Computer Science}
-\tocauthor{Authors' Instructions}
 \maketitle
 
 
 \begin{abstract}
 In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
-
-\keywords{Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy}
 \end{abstract}
 
+
+\medskip
+
+\noindent\textbf{Mots-clef}: Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy
 
 \section{Introduction}
 
@@ -140,7 +98,7 @@ Markov Decision Processes (MDPs) have proven to be effective models for represen
 %This motivates using MDPs that account for this ambiguity in model parameters. 
  
 %Despite of knowing the final goal, specifying rewards or punishments for choosing actions in states is never obvious. 
-Mannor et al. \shortcite{Mannor2007} demonstrate that the strategy found via an optimisation process under the MDPs with numerical parameters, sometimes can be much worse than the anticipated policy. This can happen for multiple reasons:
+Mannor et al. \cite{Mannor2007} demonstrate that the strategy found via an optimisation process under the MDPs with numerical parameters, sometimes can be much worse than the anticipated policy. This can happen for multiple reasons:
 %\begin{itemize}
 %\item 
 (1) insufficient data to estimate the rewards,
@@ -180,7 +138,7 @@ We finally report an experimental study on random and diamond MDPs, in which we 
 \section{Preliminaries}\label{sec:Preliminaries}
 
 \textbf{Markov Decision Process.}  
-A \textit{Markov Decision Process (MDP)} \citep{Puterman1994} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where: $S$ is a finite set of states; $A$ is finite set of actions, $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$, and choosing action $a$; $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$; $\gamma \in [0, 1[$ is the discount factor; and $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function} indicating probability of initiating in state $s$ by $\beta(s)$.
+A \textit{Markov Decision Process (MDP)} \cite{Puterman1994} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where: $S$ is a finite set of states; $A$ is finite set of actions, $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$, and choosing action $a$; $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$; $\gamma \in [0, 1[$ is the discount factor; and $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function} indicating probability of initiating in state $s$ by $\beta(s)$.
 
 A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$. A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$. A policy $\pi$ induces a \textit{visitation frequency function} $f^{\tilde{\pi}}$ where $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$ (see Section $6.9$ in \cite{Puterman1994}):
 \begin{align*}
@@ -218,7 +176,7 @@ In this manuscript we deal with
 %For instance preferences stating which (state, action) pairs are good or bad should be interpreted into numerical costs. Note that even knowing all these preferences is time consuming. In order to
 %tackle this complexity, 
 %we use an 
-MDPs with \textit{imprecise reward values} (IRMDP). An IRMDP \citep{Regan2009} is a tuple $M(S, A, P, r, \gamma, \beta)$ where $S, A, P, \gamma$ and $\beta$ are defined as in the previous section, while $r$ is a set of possible reward functions on $S \times A$. $r$ models the uncertainty on real reward values. 
+MDPs with \textit{imprecise reward values} (IRMDP). An IRMDP \cite{Regan2009} is a tuple $M(S, A, P, r, \gamma, \beta)$ where $S, A, P, \gamma$ and $\beta$ are defined as in the previous section, while $r$ is a set of possible reward functions on $S \times A$. $r$ models the uncertainty on real reward values. 
 %To stay coherent, we use the notation presented by \shortcite{benavent2018}, i.e. $M, M, r, r$ signify the standard MDP, IRMDP, real valued reward function and uncertain reward function model respectively.  
 
 Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that the set of possible rewards is modelled as a polytope $\mathcal{R} = \{r: Cr \leq d \}$. % More precisely, we suppose that, each $r(s,a) \in r$ is restricted in an interval. 
@@ -240,7 +198,7 @@ In other words, when we should select the $f$ policy, what is the worst case los
 Finally we define the \textit{minimax regret} of feasible reward set $\mathcal{R}$ as
 $$MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)\;.$$
 Any policy $f^*$  that minimises the maximum regret is the \textit{minimax-regret optimal policy} for $M$. There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. 
-In this paper, we use the approach presented by Regan and Boutilier \citep{Regan2009} based on \textit{Benders Decomposition} \cite{Benders1962}.
+In this paper, we use the approach presented by Regan and Boutilier \cite{Regan2009} based on \textit{Benders Decomposition} \cite{Benders1962}.
 % to approximate the optimal minimimax regret policy. 
  The idea is to formulate the problem as series of linear programs (LPs) and Mixed Integer Linear Programs (MILPs):
 
@@ -284,7 +242,7 @@ The second set of constraints of the master problem, $\gamma E ^{\top}f+ \beta =
        P(s'|s, a) - \frac{1}{\gamma} &\quad \text{if } s' = s
      \end{cases}\;.$
      
-The intuition behind this constraint is related to the dual linear program of the Bellman Equation (see for example \cite{Sutton1998}, Chapter $4$ or \citep{Puterman1994}, Section $6.9$). 
+The intuition behind this constraint is related to the dual linear program of the Bellman Equation (see for example \cite{Sutton1998}, Chapter $4$ or \cite{Puterman1994}, Section $6.9$). 
 
 %From a practical point of view, it is uncovenient to enumerate a priori all the constraints~\eqref{delta_cut}. 
 %Benders decomposition is based on the idea of starting with a small (maybe empty) subset of constraints~\eqref{delta_cut} and interact with the slave problem to have either a certificate of optimality of the master problem or a new inequality that can potentially change the value of the master.
@@ -368,8 +326,12 @@ In the computation section we show how the cut-and-branch version of the algorit
 
 %\section*{Acknowledgement}
 
-\bibliographystyle{splncs04}
-\bibliography{biblio}
 
+\bibliography{cap2018}
 
 \end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
