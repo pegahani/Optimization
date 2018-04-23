@@ -79,11 +79,11 @@ In this work we compare the behaviour of deterministic and stochastic policies f
 
 \noindent\textbf{Mots-clef}: Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy
 
-\textcolor{red}{ FROM EMILIANO: I removed the following things from the text:\\
-1- the improved version of the branch-and-bound (what we called cut-and-branch in the other paper).\\ 
-2- the counterexample.\\
-I think I removed from the text any reference to one of the two points. If you find some, feel free to delete it.
-}
+%\textcolor{red}{ FROM EMILIANO: I removed the following things from the text:\\
+%1- the improved version of the branch-and-bound (what we called cut-and-branch in the other paper).\\ 
+%2- the counterexample.\\
+%I think I removed from the text any reference to one of the two points. If you find some, feel free to delete it.
+%}
 
 
 \section{Introduction}
@@ -213,13 +213,15 @@ In this paper, we use the approach presented by Regan and Boutilier \cite{Regan2
 
 %----------------- minmax regret model --------------------
 
+{
+\small
 \begin{center}\label{minimax}
 %%%%%
 \texttt{Master Program}
 %%%%%%
 \begin{alignat}{3}
-&\text{minimise}_{\delta, f} && \delta & \\
-&\text{subject to:}&\quad& r\cdot g - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}\label{delta_cut}\\
+&\text{min}_{\delta, f} && \delta & \\
+&\text{s.t.:}&\quad& r\cdot g - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}\label{delta_cut}\\
 && \quad& \gamma E^{\top} f + \beta = 0 
 \end{alignat}
 %%%%%%%
@@ -229,8 +231,8 @@ In this paper, we use the approach presented by Regan and Boutilier \cite{Regan2
 %%%%%%%%
 \texttt{Slave Program}
 \begin{alignat}{3}
-&\text{maximize}_{Q, V, I, r} && \beta \cdot V - r \cdot f \\
-&\text{subject to:} &\quad& Q_a = r_a + \gamma P_aV &\quad \forall a \in A\\
+&\text{max}_{Q, V, I, r} && \beta \cdot V - r \cdot f \\
+&\text{s.t.:} &\quad& Q_a = r_a + \gamma P_aV &\quad \forall a \in A\\
 && \quad& V \geq Q_a  &\quad \forall a \in A\\
 && \quad& V \leq (1-I_a)M_a + Q_a  &\quad \forall a \in A\\
 && \quad& Cr \leq d \\
@@ -240,6 +242,7 @@ In this paper, we use the approach presented by Regan and Boutilier \cite{Regan2
 \end{alignat}
 %%%%%%
 \end{center}
+}
 %----------------- minmax regret model --------------------
 
 The master program is a linear program computing the minimum regret with respect to all the possible combinations of rewards and adversary policies. We call GEN the set containg all the combinations of rewards and adversary policies. 
@@ -280,8 +283,9 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 
 %%================================================================
 
-\section{An exact enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
+\section{Exact and heuristic approaches}\label{sec:bb} 
 
+\paragraph{\textbf{A branch-and-bound scheme to find the optimal deterministic solution.}}
 From now on, we are interested in how to obtain an optimal deterministic policy for an IRMDP.
 The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section 11 for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
 
@@ -314,18 +318,17 @@ To avoid exploring the whole tree, we need a lower bounding procedure to \textit
 The final ingredient of a branch-and-bound is a procedure to find feasible deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic, its value can be used to update the value of the best known deterministic policy. %to its value.
 
 
-In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplored nodes to the root node (i.e., the one with no constraints on the $f$ variables).
-The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
+In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplored nodes to the root node (i.e., the one with no constraints on the $f$ variables). The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
+
+\input{basic_bb.tex}
 
 %\textbf{Cut-and-branch version of the algorithm.}  %\label{sec:cb}
 %In the computational experiments, we test also a modification of the algorithm, called \textit{cut-and-branch}. In this version of the algorithm, we decide to solve the root note of the branch-and-bound tree as usual. % (i.e. with the standard interactin between master and slave). 
 %Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
 %In the computation section we show how the cut-and-branch version of the algorithm outperforms the basic implementation.    
 
-\input{basic_bb.tex}
 
-\section{A ``rounding'' heuristic.}
-
+\paragraph{\textbf{A ``rounding'' heuristic.}}
 %
 %\begin{wrapfigure}{r}{0.5\textwidth}
 %	\begin{center}
