@@ -55,7 +55,7 @@
 
 \bibliographystyle{alpha}
 
-\title{Exemple d'article au format CAp'2018}
+\title{Stochastic vs deterministic policies for Markov Decision Processes}
 \author[1]{Auteur A\thanks{Si vraiment vous voulez mettre votre email
     ou page web...: A.A@univ-x.fr}}
 \author[2]{Auteur B}
@@ -69,13 +69,22 @@
 
 
 \begin{abstract}
-In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
+In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. 
+In this work we compare the behaviour of deterministic and stochastic policies for minimizing the maximum regret in Markov Decision Processes (MDPs). 
+%In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
 \end{abstract}
 
 
 \medskip
 
 \noindent\textbf{Mots-clef}: Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy
+
+\textcolor{red}{ FROM EMILIANO: I removed the following things from the text:\\
+1- the improved version of the branch-and-bound (what we called cut-and-branch in the other paper).\\ 
+2- the counterexample.\\
+I think I removed from the text any reference to one of the two points. If you find some, feel free to delete it.
+}
+
 
 \section{Introduction}
 
@@ -120,7 +129,7 @@ Despite these two obvious advantages of stochastic over deterministic policies, 
 More generally, a deterministic policy is easier to understand from a user's point of view and therefore it is more likely to be used in practice. Finally, in several situations the nature of the problems does not allow any choices and requires a deterministic policy, this is due to either the discrete/combinatorial nature of the problem studied or to the fact that the algorithm must be executed only once, losing the relevance of the stochastic aspects. 
 
 In this paper, we introduce a first study of finding the deterministic policy that minimises the maximum regret in an MDP with uncertain rewards. Our method finds the best deterministic policy in a computing time that is relatively close to the one needed to compute the optimal stochastic policy. 
-We theoretically prove that the use of an intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy far from the optimal. 
+We show that the use of an intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy significantly different from the optimal. 
 %Some may claim that \textit{determinising} the stochastic policy computed by minimax regret is a \textit{deterministic optimal policy}. We present an MDP with imprecise rewards, as a counter example to this claim. 
 We finally report an experimental study on random and diamond MDPs, in which we analyze the performances of our algorithms. 
 
@@ -277,13 +286,13 @@ From now on, we are interested in how to obtain an optimal deterministic policy 
 The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section 11 for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
 
 
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{figure}{h}
 	\begin{center}
     \includegraphics[scale=0.22]{images/bb.png}
 	\end{center}
 	\caption{Example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions per state}
 	\label{fig:pic_bb}
-\end{wrapfigure}
+\end{figure}
 
 %A branch-and-bound algorithm consists of a clever enumeration of the space of feasible policies through a space search: the set of deterministic policies that can potentially be the optimal is represented with a rooted tree with the full set associated to the root. The algorithm explores branches of this tree, where each branch represents a subset of the solution set.
 %Once a new branch of the tree is created, and before that branches is split again in additional subbranches, a (lower) bounding procedure is executed on that branch. The bounding procedure gives an underestimation of the optimal solution of the problem over the feasible set associated to the given branch.
@@ -308,14 +317,53 @@ The final ingredient of a branch-and-bound is a procedure to find feasible deter
 In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplored nodes to the root node (i.e., the one with no constraints on the $f$ variables).
 The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
 
-\textbf{Cut-and-branch version of the algorithm.}  %\label{sec:cb}
-In the computational experiments, we test also a modification of the algorithm, called \textit{cut-and-branch}. In this version of the algorithm, we decide to solve the root note of the branch-and-bound tree as usual. % (i.e. with the standard interactin between master and slave). 
-Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
-In the computation section we show how the cut-and-branch version of the algorithm outperforms the basic implementation.    
+%\textbf{Cut-and-branch version of the algorithm.}  %\label{sec:cb}
+%In the computational experiments, we test also a modification of the algorithm, called \textit{cut-and-branch}. In this version of the algorithm, we decide to solve the root note of the branch-and-bound tree as usual. % (i.e. with the standard interactin between master and slave). 
+%Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
+%In the computation section we show how the cut-and-branch version of the algorithm outperforms the basic implementation.    
 
 \input{basic_bb.tex}
 
-\input{comparison.tex}
+\section{A ``rounding'' heuristic.}
+
+%
+%\begin{wrapfigure}{r}{0.5\textwidth}
+%	\begin{center}
+%    \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
+%	\end{center}
+%	\caption{Trident IRMDP with $3$ states and $3$ actions.}
+%	\label{fig:trident} 
+%\end{wrapfigure}
+
+In this section we introduce the intuitive concept of rounding heuristic, a way to obtain a feasible deterministic policy starting from a stochastic optimal policy. Such heuristic will be compared with the optimal algorithm proposed in the previous Section. \\
+
+
+
+Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounding'' deterministic policy $\hat{\pi}$ can be computed as follows:
+
+\begin{itemize}
+\item for each $s'\in S$:
+\begin{itemize}
+\item find the action $a' = \text{argmax}_{a \in A}f_{s',a}$.
+\item fix the rest of the action to zero: $\hat{f}_{s',a} =0, \forall a \neq a'$
+\end{itemize}
+\item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing.
+\end{itemize} 
+ 
+The heuristic approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behaviour of a user that want to derive a deterministic policy starting from a stochastic one. 
+%
+%For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimises the max regrets).
+%
+%What we would like to find is a class of instances where this is not the case or, even better, instances where the difference between the heuristic deterministic policy and the optimal deterministic policy can be arbitr
+%
+%For a given node of the branch and 
+%As bounding procedure   
+%
+%All the tests so far showed that the vast majority of the benders inequalities are added in the computation of the root node of the branch-and-bound (i.e., in the computation of the stochastic policy), we hope that in this way the time spent in the enumeration of the branch-and-bound tree will be reasonable.
+%
+
+
+%\input{comparison.tex}
 
 \input{computation.tex}
 

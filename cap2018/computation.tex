@@ -5,15 +5,16 @@ In this section, we provide an experimental evaluation of our algorithms based o
 
 For a given MDP, let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the rounding deterministic policy and $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy. We define the Value Ratio of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;$.
 Moreover, let $\hat{T}$ (respectively $T^*$) be the computing time necessary to calculate the rounding (respectively optimal) deterministic policy, we define the Time Ratio as: $TR=\dfrac{T^*}{\hat{T}}\;$.
-\input{tab_random.tex}  
+\input{tab_random_cap2018.tex}  
 \subsection{Random MDPs}
 \paragraph{Description}
 A random MDP is defined by several parameters including its number of states $|S|$, its number of actions $|A|$. The rewards are bounded between randomly two real values. Transition function has several properties: from any state $s$ restrict transitions to reach $\lceil \log_2(n) \rceil$ states. For each pair of $(s, a)$ draw reachable states based on uniform distribution over the set of states. For drawn states, transition probabilities are formed based on Gaussian distribution. The initial state distribution $\beta$ is uniform and we choose discount factor $\gamma = 0.95$. 
 \paragraph{Analysis of the results}
-In Table~\ref{tab:random} we present the results concerning the performances of our algorithm on random MDP with $|S| \in \{5,10,15\}$ and $|A| \in \{2, 3, 4, 5, 10\}$. For each combination of states and actions, we provide the average results over $10$ different simulations. The first two columns report the Value Ratio and the Time Ratio (\texttt{VR} and \texttt{TR}). The column \texttt{\% diff} shows the percentage of cases where the optimal policy is different from the rounding policy. The final two columns show the computing time of the baseline branch-and-bound algorithm (\texttt{Base}) and the improved version (\texttt{C\&B}), presented in Section~\ref{sec:bb}.
+In Table~\ref{tab:random} we present the results concerning the performances of our algorithm on random MDP with $|S| \in \{5,10,15\}$ and $|A| \in \{2, 3, 4, 5, 10\}$. For each combination of states and actions, we provide the average results over $10$ different simulations. The first two columns report the Value Ratio and the Time Ratio (\texttt{VR} and \texttt{TR}). The column \texttt{\% diff} shows the percentage of cases where the optimal policy is different from the rounding policy. The final column shows the computing time of the branch-and-bound algorithm (\texttt{Base}) presented in Section~\ref{sec:bb}.
 
-We notice that in average, $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
-Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. On the other hand, the cut-and-branch version of the algorithm is almost two times faster than the basic version.  
+We notice that in average, $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. 
+%For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
+Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. This difference is acceptable, considering that in each node of the branch-and-bound the bounding procedure reduces to a problem that is as difficult as computing the optimal stochastic policy.  
 %Finally, it is interesting to notice that in the basic implementation of the algorithm, the number of additional Benders cuts added during the branch-and-bound is significantly low (on average no more than $2$ cuts per node). This explains why the cut-and-branch version of the branch-and-bound algorithm performs better than the standard version.
  
 
@@ -48,20 +49,20 @@ The imprecise values of the rewards for the middle layer are $[-600,600]$, while
 We propose a generalization of this family of MDP by testing a range of parameters for the probability $p \in \{0.05,0.10,\dots,0.40,0.45\}$. %We also introduce an additional intermediate layer, between the extreme states and the middle layer. In this way we have, in addition to $10$-states MDPs (callend one-level diamond MDPs) also  22-states MDPs (called two-level diamond MDPs). 
 
 \paragraph{Analysis of the results}
-In Table~\ref{tab:diamond}, we show how the Time Ratio and the Value ratio change with the increase of $p$.
-It is clear that for Diamond MDPs the situation is different than for Random MDPs. In this case, the max regret of the rounding deterministic policy is $20\%$ worse than the one of the optimal deterministic policy. Moreover, the computing time for the optimal deterministic policy is less than one order of magnitude lower than the one needed by the rounding deterministic policy. These results show how, in presence of a specific structure, the difference between $MR(f^{\hat{\pi}}, \mathcal{R})$ and $MR(f^{\pi^*}, \mathcal{R})$ increases significantly.
+In Table~\ref{tab:diamond}, we show how the  Value Ratio change with the increase of $p$.
+It is clear that for Diamond MDPs the situation is different. In this case, the max regret of the rounding deterministic policy is $20\%$ worse than the one of the optimal deterministic policy. Moreover, the computing time for the optimal deterministic policy is less than one order of magnitude lower than the one needed by the rounding deterministic policy. These results show how, in presence of a specific structure, the difference between $MR(f^{\hat{\pi}}, \mathcal{R})$ and $MR(f^{\pi^*}, \mathcal{R})$ increases significantly.
 
 
 \begin{table}[h]																	
  \centering
  \small
- \setlength{\tabcolsep}{4.0pt}
- \renewcommand \arraystretch{1.1}
+ \setlength{\tabcolsep}{2.9pt}
+ \renewcommand \arraystretch{1.0}
 \begin{tabular}{ccccccccccc}																					
 \texttt{p}	&	5	&	10	&	15	&	20	&	25	&	30	&	35	&	40	&	45	&	Avg.	\\	
 \cmidrule(lr){1-1} \cmidrule(lr){2-10} \cmidrule(lr){11-11}
-\texttt{VR} &	1.66	&	1.24	&	1.16	&	1.13	&	1.15	&	1.15	&	1.15	&	1.14	&	1.16	&	\textbf{1.22}	\\	
-\texttt{TR} &	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8.44}	\\	\\
+\texttt{VR} &	1.66	&	1.24	&	1.16	&	1.13	&	1.15	&	1.15	&	1.15	&	1.14	&	1.16	&	\textbf{1.22}		
+%\texttt{TR} &	10.23	&	7.44	&	6.32	&	6.48	&	7.67	&	5.93	&	7.62	&	10.46	&	13.80	&	\textbf{8.44}	\\	\\
 \end{tabular}
 \caption{Time Ratio and Value Ratio for \texttt{Diamond}.}														\label{tab:diamond}								
 \end{table}																						
