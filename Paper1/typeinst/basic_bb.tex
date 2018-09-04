@@ -20,10 +20,11 @@ $\mathcal{N} = \{\{\emptyset\}\}$ {\em {\footnotesize /* the collection of open 
 \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $BestVal = \delta^*$ {\em {\footnotesize /* update the best det. policy */}}\\
 \hspace*{3ex} \hspace*{3ex} {\bf else}:\\
  \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} {\em {\footnotesize /* create the two child nodes */}}\\
- \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} find $f^*_{s,a}$ that correspond to a state that is not deterministic  \\
+ \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} find $f^*_{s,a}$ of highest value among the ones associated to a non det. state \\
  \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_L := N \cup_{s' \neq s} f_{s',a}$  \\
 \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_R := N \cup f_{s,a}$  \\
 \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $\mathcal{N} := \mathcal{N} \cup N_L \cup N_R$\\
 }}
 \caption{Algorithm to find an optimal deterministic policy.} \label{fig:basic_bb}
 \end{figure}
+

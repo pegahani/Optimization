@@ -4,7 +4,7 @@ In this section, we provide an experimental evaluation of our algorithms based o
 %\item Grid MDPs (\texttt{Grid}).
 
 For a given MDP, let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the rounding deterministic policy and $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy. We define the Value Ratio of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;$.
-Moreover, let $\hat{T}$ (respectively $T^*$) be the computing time necessary to calculate the rounding (respectively optimal) deterministic policy, we define the Time Ratio as: $TR=\dfrac{T^*}{\hat{T}}\;$.
+Moreover, let $\hat{T}$ (respectively $T^*$) be the computing time necessary to calculate the rounding (respectively optimal) deterministic policy, we define the Time Ratio as: $TR=\dfrac{T^*}{\hat{T}}\;$. \ET{(Practically speaking, $\hat T$ reduces to the time needed for computing the stochastic policy)}
 \input{tab_random.tex}  
 \subsection{Random MDPs}
 \paragraph{Description}
@@ -27,7 +27,7 @@ This class of MDPs has a diamond structure, with one top and one bottom state (p
 \begin{center}
 \includegraphics[width=8cm]{images/diamond.png}
 \end{center}
-\caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right) (Figure comes from \cite{benavent2018}).}
+\caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right) (Figure taken from \cite{benavent2018}).}
 \label{fig:diamond}
 \end{figure}
 

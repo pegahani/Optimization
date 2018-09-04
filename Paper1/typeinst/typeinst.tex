@@ -64,7 +64,7 @@
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 \newcommand{\ea}[1]{#1 \emph{et al.}}
-\newcommand{\ET}[1]{{\textcolor{black}{#1}}}
+\newcommand{\ET}[1]{{\textcolor{blue}{#1}}}
 
 
 \begin{document}
@@ -155,11 +155,21 @@ Several approaches have been proposed in the literature to find the best \textit
 
 The majority of the exact and approximate methods for solving an MDP accept to have \textit{stochastic policies} as feasible policies for the MDP. A policy is defined as stochastic if, for a given state, the action to be taken is chosen with a given probability associated to each possible state.
 On the other hand, in a \textit{deterministic policy}, the action to be taken in a state is uniquely defined.\\
-The use of stochastic policies present two main advantages. From a algorithmic point of view (as shown also in this work), finding the optimal stochastic policy is usually easier than finding the optimal deterministic policy. Moreover, accepting also stochastic policies implies to explore a larger search space in comparison to the search space of the deterministic policies, allowing to have optimal policies with the value better than the one of an optimal deterministic policy.
+The use of stochastic policies present two main advantages. From a algorithmic point of view (as shown also in this work), finding an optimal stochastic policy is usually easier than finding the optimal deterministic policy. Moreover, accepting also stochastic policies implies to explore a larger search space in comparison to the search space of the deterministic policies, allowing to have optimal policies with a better value than the one of an optimal deterministic policy.
 
-Despite these two obvious advantages of stochastic over deterministic policies, in several situations the use of stochastic policies can be either not recommended or not possible. First of all, the use of a stochastic policy could be ethically problematic. If we take for example the case of assistant autonomous vehicle, we can incur in the famous ``trolley dilemma'', where the conductor must decide between killing all the people in the trolley without changing the track or pulling the lever, diverting the trolley onto the side track where it will kill one person. The optimal policy should be deterministic without putting the user in a situation to decide every time with a given probability $p$ if staying on the same track or changing track with a probability $1-p$. 
+Despite these two obvious advantages of stochastic over deterministic policies, in several situations the use of stochastic policies can be either not recommended or not possible. 
+%
+%
+First of all, the use of a stochastic policy could be ethically problematic. If we take for example the case of assistant autonomous vehicle, we can incur in the well-known ``trolley dilemma'', where the conductor must decide between killing all the people in the trolley without changing the track or pulling the lever, diverting the trolley onto the side track where it will kill one person. The optimal policy should be deterministic without putting the user in a situation to decide every time with a given probability $p$ if staying on the same track or changing track with a probability $1-p$. 
 
 More generally, a deterministic policy is easier to understand from a user's point of view and therefore it is more likely to be used in practice. Finally, in several situations the nature of the problems does not allow any choices and requires a deterministic policy, this is due to either the discrete/combinatorial nature of the problem studied or to the fact that the algorithm must be executed only once, losing the relevance of the stochastic aspects. 
+
+\ET{
+Finally, probably the most significative drawback of stochastic policy is that 
+%we recall that for a policy to be stochastic means that 
+such a policy is 
+optimal only in expectation on random draws of actions. This implies that to be effective in practice it needs to be used a great number of times and/or for a very long time with independent and identically distributed draws of actions. In contrast, when used only once or for a short time such a policy offers no guarantee of optimality. On the other and, a deterministic policy maintains its definiton of ``optimality'' even if it is used only once and starting from the first time it is used.
+}
 
 In this paper, we introduce a first study of finding the deterministic policy that minimises the maximum regret in an MDP with uncertain rewards. Our method finds the best deterministic policy in a computing time that is relatively close to the one needed to compute the optimal stochastic policy. 
 We theoretically prove that the use of an intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy far from the optimal. 
@@ -239,7 +249,9 @@ In other words, when we should select the $f$ policy, what is the worst case los
 
 Finally we define the \textit{minimax regret} of feasible reward set $\mathcal{R}$ as
 $$MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)\;.$$
-Any policy $f^*$  that minimises the maximum regret is the \textit{minimax-regret optimal policy} for $M$. There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. 
+Any policy $f^*$  that minimises the maximum regret is the \textit{minimax-regret optimal policy} for $M$. 
+\ET{We recall that usually such optimal policies are considered stochastic and not deterministic.}
+There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. 
 In this paper, we use the approach presented by Regan and Boutilier \citep{Regan2009} based on \textit{Benders Decomposition} \cite{Benders1962}.
 % to approximate the optimal minimimax regret policy. 
  The idea is to formulate the problem as series of linear programs (LPs) and Mixed Integer Linear Programs (MILPs):
@@ -292,7 +304,7 @@ The intuition behind this constraint is related to the dual linear program of th
 The slave program receives a feasible policy $f^*$ and 
 %a minimax regret value $\delta^*$; then it 
 searches for a policy and a reward value that maximise the regret of the given policy.
-%, in other words, it finds a $\bar{r}$ and $\bar{g}$ such that $\bar{r} \cdot \bar{g}  - \bar{r}  \cdot f^* > \delta^*$. If such a $(\bar{r},\bar{g})$ is found, it is added to GEN and the master problem is solved again. 
+%, in other words, it finds a $\bar{r}$ and $\bar{g}$ such that $r{r} \cdot \bar{g}  - \bar{r}  \cdot f^* > \delta^*$. If such a $(\bar{r},\bar{g})$ is found, it is added to GEN and the master problem is solved again. 
 If this is not the case, the procedure stops and $f^*$ is the (stochastic) policy that minimises the maximum regret. 
 The interaction between master and slave program  can be viewed as a game between two players. The master program  finds an optimal policy that minimises the regret  w.r.t the given adversaries found so far by the slave program, while the slave program searches for an adversary with the maximum gain against the master policy. 
 %This game continues until the slave problem can not find neither a policy as $g$ nor a reward as $r$ to generate a higher regret for the given $f$ by the master program.  
@@ -315,7 +327,7 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 
 \section{An exact enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
 
-From now on, we are interested in how to obtain an optimal deterministic policy for an IRMDP.
+From now on, we \ET{focus on developing an algorithm able to provide} an optimal deterministic policy for an IRMDP.
 The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section 11 for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
 
 
