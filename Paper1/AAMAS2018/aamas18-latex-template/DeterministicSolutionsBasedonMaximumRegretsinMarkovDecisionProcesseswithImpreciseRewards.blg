@@ -1,0 +1,67 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: DeterministicSolutionsBasedonMaximumRegretsinMarkovDecisionProcesseswithImpreciseRewards.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: biblio.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--empty address in alizadeh2015
+Warning--empty publisher in benavent2018
+Warning--empty address in benavent2018
+Warning--page numbers missing in both pages and numpages fields in benavent2018
+Warning--empty address in bertsimas2005optimization
+Warning--empty address in Dolgov2005
+Warning--numpages field, but no articleno or eid field, in Dolgov2005
+Warning--page numbers missing in both pages and numpages fields in Mannor2012
+Warning--no journal in mastin2012
+Warning--no number and no volume in mastin2012
+Warning--page numbers missing in both pages and numpages fields in Montufar2015
+Warning--empty address in Regan2009
+Warning--empty address in Regan2010
+Warning--page numbers missing in both pages and numpages fields in Regan2010
+Warning--empty address in Weng2013
+Warning--empty address in Xu2009
+You've used 22 entries,
+            5758 wiz_defined-function locations,
+            1469 strings with 19197 characters,
+and the built_in function-call counts, 26080 in all, are:
+= -- 3336
+> -- 836
+< -- 0
++ -- 254
+- -- 312
+* -- 1754
+:= -- 2571
+add.period$ -- 112
+call.type$ -- 22
+change.case$ -- 141
+chr.to.int$ -- 22
+cite$ -- 38
+duplicate$ -- 2378
+empty$ -- 1668
+format.name$ -- 388
+if$ -- 6368
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 91
+newline$ -- 211
+num.names$ -- 176
+pop$ -- 880
+preamble$ -- 1
+purify$ -- 337
+quote$ -- 0
+skip$ -- 837
+stack$ -- 0
+substring$ -- 2000
+swap$ -- 248
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 475
+warning$ -- 16
+while$ -- 188
+width$ -- 0
+write$ -- 419
+(There were 16 warnings)
