@@ -71,17 +71,16 @@ $$\pi_{0}=\dfrac{2A - B}{4A},~~~\pi_{1}=\dfrac{2A + B}{4A}, ~~~\pi_2 = 0\;.$$
 \begin{proof}
 %We first show that there exists always an optimal stochastic policy with $\pi_2 = 0$. We do this by
 We first observe that for every policy $\pi' = (\pi'_0, \pi'_1, \pi'_2)$ with $\pi'_2 > 0$, it is possible to construct a policy $\pi'' = (\pi''_0, \pi''_1, \pi''_2)$ with $\pi''_2 = 0$ and with the same value in the following way:
-\vspace{-0.2cm}
 \begin{align*}
 \pi''_0 = \pi'_0 + \pi'_2 T_0, ~~~ \pi''_1 = \pi'_1 + \pi'_2 T_1\;.
 \end{align*}
 If we compute the value of the first policy we notice that:
-\vspace{-0.2cm}
 \begin{align*}
 \beta \cdot V^{\pi'} = V^{\pi'}(s_2) =
 r_{_0} \pi'_0 + r_{_1}\pi'_1 + r_{_0} T_0 \pi'_2 + r_{_1} T_1 \pi'_2 \\
 = r_{_0} (\pi'_0 + T_0 \pi'_2) + r_{_1} (\pi'_1 + T_1 \pi'_2)
-= r_{_0} \pi''_0 + r_{_1}\pi''_1 = V^{\pi''}(s_2) =\beta \cdot V^{\pi''}\;,
+= r_{_0} \pi''_0 + r_{_1}\pi''_1  \\
+= V^{\pi''}(s_2) =\beta \cdot V^{\pi''}\;,
 \end{align*}
 showing that both policies have the same value.
 Moreover, the equivalence shows that  $\beta \cdot V^{\pi'}= \beta \cdot V^{\pi''}$, $\forall r \in \mathcal{R}$,
@@ -95,22 +94,19 @@ As second part of the proof, we compute the value of the optimal policy consider
 We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see~\ref{sec:Preliminaries}). For this reason, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (We notice that, with arguments analogous to the ones used in the first part of the proof, we can rule out the case where $g_2 \geq 0$.)
 
 Knowing that the maximum regret is the maximum among two choices for the adversary policies, the maximum regret associated to the policy $g =(0, g_1, 0)$ (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following
-\vspace{-0.2cm}
 \begin{align}
 r \cdot g - r \cdot \tilde{f} = A + B +A \pi_0 -(A+B)\pi_1 \label{eq:best_stoc_1}
 \end{align}   
 and the maximum regret associated to the policy $g' = (g_0, 0, 0)$ where $g_0 > 0$ is obtained by fixing $r_0 = A$ and $r_1 = -A+B$, leading to a value of
-\vspace{-0.2cm}
 \begin{align}
 r \cdot g - r \cdot \tilde{f}  = A - A \pi_0 -(B-A)\pi_1 \label{eq:best_stoc_2}\;.
 \end{align}   
 We are interested in minimising the max regret, this means that we want to find the values of $\pi_0$ and $\pi_1$ that minimise $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations: 
-\vspace{-0.2cm}
 \begin{align*}
 A + B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
 \pi_0+\pi_1 &= 1
 \end{align*} 
-That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1}=\dfrac{2A + B}{4A}$, concluding the proof.$\square$
+That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1}=\dfrac{2A + B}{4A}$, concluding the proof.
 \end{proof}
 
 
@@ -120,7 +116,7 @@ The rounding deterministic policy for the Trident MDP is $\hat{\pi} = (0, 1, 0)$
 and its maximum regret is $MR(\hat{f}, \mathcal{R}) = 2A-B$.
 \end{lemma}
 \begin{proof}
-It is a direct consequence of the fact that in the optimal stochastic policy we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.$\square$
+It is a direct consequence of the fact that in the optimal stochastic policy we always have $\pi_1 > \pi_2$ and $\pi_0 = 0$.
 \end{proof}
 
 \begin{proposition}\label{theorem:opt_det}
@@ -132,29 +128,25 @@ We prove the statement by explicitly computing the maximum regret of the three p
 \textit{Maximum regret of $\pi = (1, 0, 0)$}. We want to find the adversary policy that maximises the regret for the policy $\pi$. We do that by computing all possible combinations of adversary policies and rewards:
 \begin{itemize}
 \item If a visitation frequency for adversary policy is $g = (0, g_1, 0)$ where $g_1> 0$, the reward maximising the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
-\vspace{-0.5cm}
+
 \begin{align}
 A+B-(-A)=2A+B \label{eq:regret0}
 \end{align}
 \item If the adversary policy is $g' = (0, 0, g_2)$ where $g_2>0$, we need to check all four combinations of extreme rewards:
 \begin{itemize}
 \item $r_0 = -A$ and $r_1= A+B$. Maximum regret of
-\vspace{-0.2cm}
 \begin{align}
 -A T_0 + (A+B)T_1 + A = (1-T_0 + T_1)A + T_1 B \label{eq:regret1}
 \end{align}
 \item $r_0 = A$ and $r_1= A+B$. Maximum regret of
-\vspace{-0.2cm}
 \begin{align}
 A T_0 + (A+B)T_1 - A = (-1+T_0 + T_1)A + T_1 B  \label{eq:regret2}
 \end{align}
 \item $r_0 = A$ and $r_1= -A+B$. Maximum regret of
-\vspace{-0.2cm}
 \begin{align} 
 A T_0 + (-A+B)T_1 - A =  (-1+T_0 - T_1)A + T_1 B \label{eq:regret3}
 \end{align}
 \item $r_0 = -A$ and $r_1= -A+B$. Maximum regret of
-\vspace{-0.2cm}
 \begin{align}
 -A T_0 + (-A+B)T_1 + A =  (1 - T_0 - T_1)A - T_1 B \label{eq:regret4}
 \end{align}
@@ -168,12 +160,10 @@ It is trivial to check, with calculations analogous to the one used above to com
 
 \textit{Maximum regret of $\pi'' = (0, 0, 1)$}.
 Also in this case, we need to consider the two cases of $g =(g_0, 0 ,0)$ where $g_0 > 0$ and $g' = (0, g_1, 0)$ with $g_1 > 0$. For $g$, we fix $r_0 = A$ and $r_1 = -A+B$, obtaining a regret equal to 
-\vspace{-0.2cm}
 \begin{align}
 A- A T_0 +(A-B) T_1 \label{eq:regret2_1}
 \end{align}
 And for $g'$ we fix $r_0 = -A$ and $r_1 = A+B$, obtaining a regret equal to 
-\vspace{-0.2cm}
 \begin{align}
 A+B+A T_0 -(A+B) T_1\;. \label{eq:regret2_2}
 \end{align}
@@ -182,12 +172,12 @@ By imposing  $A- A T_0 +(A-B) T_1 \geq A+B+A T_0 -(A+B) T_1$ we obtain:
 $$ 2A T_1 \geq 2 A T_0 + B\;. $$
 We recall that by construction we have $A \gg B$, this implies that if $T_1> T_0$ (resp. $T_1\leq T_0$)  we have that the maximum regret is equal to~\eqref{eq:regret2_1} (resp.~\eqref{eq:regret2_2}).
 The minimum maximum regret found so far is the one obtained for $\pi = \pi' = (0, 1, 0)$, and it is equal to $MR(f^{\pi'}, \mathcal{R}) = 2A-B$. Therefore, it remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
-\vspace{-0.2cm}
 \begin{align*}
-A- A T_0 +(A-B) T_1 \leq 2A - B \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
+A- A T_0 +(A-B) T_1 \leq 2A - B \\
+ \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
   \Leftrightarrow (2A-B)T_1 \leq 2A-B  \Leftrightarrow T1 \leq 1\;.
 \end{align*}
- Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is $\piç* = \pi''= (0, 0,1)$ and its maximum regret is equal to $MR(f^{\pi''}, \mathcal{R})A- A T_0 +(A-B) T_1$. $\square$
+ Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is $\piç* = \pi''= (0, 0,1)$ and its maximum regret is equal to $MR(f^{\pi''}, \mathcal{R})A- A T_0 +(A-B) T_1$. 
 \end{proof}
 
 Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} shows that for any Trident MDP we have that the optimal deterministic policy and the rounding deterministic policy are always different. 
@@ -197,13 +187,12 @@ The following Lemma shows that the rounding policy could be significantly worse 
 
 \begin{lemma}\label{lemma:gap2}
 The ratio between the maximum regret of the rounding deterministic policy and the optimal deterministic policy goes to $2$ with the increase of the value of $A$ with respect to $B$ and the increase of $T_1$. In other words:  
-\vspace{-0.2cm}
 \begin{align*}
 \lim_{A/B \rightarrow \infty, T_1 \rightarrow {\frac{1}{2}}^+} \dfrac{2A-B}{A- A T_0 +(A-B) T_1} = 2
 \end{align*}
 \end{lemma}
 \begin{proof}
-The statement follows from the definition of the limit.$\square$
+The statement follows from the definition of the limit.
 \end{proof}
 
 %Lemma~\ref{lemma:gap2} shows that even small MDP can present

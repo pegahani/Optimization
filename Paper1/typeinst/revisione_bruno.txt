@@ -1,0 +1,38 @@
+
+TO BE DONE:
+
+* Abstract:  giving some context (MDPs, sequential decision making under uncertainty, uncertain rewards) would be nice.
+
+* Last but one paragraph of Intro: "[...] cannot risk more than once executions": I think this is THE argument for studying deterministic policies, but written as such it will certainly be hard for the reader to figure out what you mean. I think you should write that for a policy to be stochastic means that it is optimal in expectation on random draws of actions, and that this means that using it a great number of times (in episodic tasks) or for a very long time (in continual tasks) with iid draws of actions is the condition for it to be actually optimal. In contrast, when used only once (episodic) or for a short time (continual) such a policy offers no guarantee, blah blah.
+
+* 2nd paragraph in Section 3.1: "For each r(s,a), the reward uncertainty is restricted in an interval" -> this suggests that the polytope is a Cartesian product of intervals, which is not the case in general (it might be a polytope like r(s_0,a_0) = - r(s_1,a_1), for instance).
+
+* After definitions of regret, MR, MMR: write here that in general, MMR policies are stochastic and not deterministic.
+
+* When explaining the slave program: "The slave program receives [...] and a minimax regret value \delta*" -> no, it does not use \delta*, it just maximizes the regret of the received f* (and a little later in the same sentence: "such that\bar r \cdot \bar g - \bar r \cdot f* > \delta*" should also be corrected - it just maximises this).
+
+* Before Section 4 or at its beginning, a discussion of why you want deterministic policies (and at least, writing that from now on, you want such policies) is lacking.
+
+* When describing the B&B algorithm, maybe remind the reader that you are minimizing, so that an "underestimation" means an optimistic estimation (I got confused at some point).
+
+* In general, I think there are two natural baselines (in addition to rounding and optimal stochastic) to be reported on in the experiments: (a) replace master program with an MILP computing a deterministic policy (should give the same value - optimal - as your B&B, but may be faster or slower, and (b) as evoked on Monday, replace master program with master program + rouding (that is, round at each iteration so that master returns a deterministic policy at each iteration - might give worse or not-so-worse policies as your optimal approach, and might be faster or slower).
+
+* Another approach which maybe could be interesting (per se or as a baseline): get optimal stochastic policy, find "most deterministic" s, namely, the one for which the policy has highest probability for its most probable action (i.e., find argmax_s (max_a f(s,a))): determinize the stochastic policy at this state only, and consider it to be fixed from now on. Iterate by computing an optimal stochastic policy in the so-restricted IRMDP, etc. until all states have been determinized. -> This resembles your B&B but traversing only one branch: might be rather fast (|S| \times |A| standard MMR problems, of lower and lower dimension), or not, and might give good results, or not. (This comment has the highest probability of being stupid among all the comments in this email ;-) ).
+
+* General remark: there may be several MMR stochastic policies, all with same MR by definition, but whose respective roundings may have different regrets. Similarly, there may be several roundings for one stochastic policy (actions chosen 50/50). Do you detect such cases in the experiments? Report on them?
+
+* When explaining Algo. 2, you say that f*_{s,a} with highest value is selected, but the pseudo-code is not committed to this heuristic nor to any other (maybe you should just say that this is how you choose s,a in your implementation).
+
+* When defining VR and TR, I guess \hat T includes the time for computing the MMR stochastic policy plus rounding (the definition might leave the impression that only the time for rounding is measured)
+
+* Description of random MDPs: give \mu and \sigma for Gaussian distribution.
+
+* Figure for diamond MDPs: it is customary to write down that the figure is reproduced from... (I guess it is the case).
+
+* When describing generalisation of diamond MDPs: p \in {0.05, 0.1, ...} (not {5, 10, ...});
+
+#################################################################################
+#################################################################################
+#################################################################################
+
+DONE:

@@ -1,123 +1,79 @@
+%%
+%% sample document for AAMAS'18 conference
+%%
+%% modified from sample-sigconf.tex
+%%
+%% see ACM instructions acmguide.pdf
+%%
+%% AAMAS-specific questions? n.yorke-smith@tudelft.nl
+%%
 
-%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% This is the LaTeX source for the instructions to authors using
-% the LaTeX document class 'llncs.cls' for contributions to
-% the Lecture Notes in Computer Sciences series.
-% http://www.springer.com/lncs       Springer Heidelberg 2006/05/04
-%
-% It may be used as a template for your own input - copy it
-% to a new file with a new name and use it as the basis
-% for your article.
-%
-% NB: the document class 'llncs' has its own and detailed documentation, see
-% ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e/llncsdoc.pdf
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[sigconf]{aamas}  % do not change this line!
 
+%% your usepackages here, for example:
+\usepackage{booktabs}
 
-\documentclass[runningheads,a4paper]{llncs}
+%% do not change the following lines
+\setcopyright{ifaamas}  % do not change this line!
+\acmDOI{doi}  % do not change this line!
+\acmISBN{}  % do not change this line!
+\acmConference[AAMAS'18]{Proc.\@ of the 17th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2018), M.~Dastani, G.~Sukthankar, E.~Andre, S.~Koenig (eds.)}{July 2018}{Stockholm, Sweden}  % do not change this line!
+\acmYear{2018}  % do not change this line!
+\copyrightyear{2018}  % do not change this line!
+\acmPrice{}  % do not change this line!
 
+%% the rest of your preamble here
 \usepackage{amssymb}
-\usepackage{named}
-\setcounter{tocdepth}{3}
+%\usepackage{named}
+%\setcounter{tocdepth}{3}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage[numbers]{natbib}
+%\usepackage[numbers]{natbib}
 \usepackage{mathtools}
 
 \usepackage{tabularx,ragged2e}
 \newcolumntype{C}{>{\Centering\arraybackslash}X} % centered "X" column
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{wrapfig}
 \usepackage{rotating} % <-- HERE
 \usepackage{multirow}
 
-
 \usepackage{tikz}
 \usepackage{tikzsymbols}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\up}[1]{\textsuperscript{#1}}
-\newcommand{\imp}[1]{{\color{red}{#1}}}
-\newcommand{\AO}[1]{{\color{red}{#1}}}
+
+
+\newcommand{\ET}[1]{{\textcolor{blue}{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newlength{\mylengthleft}
 \setlength{\mylengthleft}{1ex}
 \newlength{\mylength}
-\setlength{\mylength}{\textwidth}
+\setlength{\mylength}{0.45\textwidth}
 \addtolength{\mylength}{-\mylengthleft}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\usepackage{xcolor}
-\usepackage{url}
-
-\urldef{\mailsa}\path|pegah.alizadeh@unicaen.fr|
-\urldef{\mailsb}\path|{emiliano.traversi, ao}@lipn.univ-paris13.fr|
-\newcommand{\keywords}[1]{\par\addvspace\baselineskip
-\noindent\keywordname\enspace\ignorespaces#1}
-\newcommand{\ea}[1]{#1 \emph{et al.}}
-\newcommand{\ET}[1]{{\textcolor{blue}{#1}}}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\mainmatter  % start of an individual contribution
+%\title{Sample AAMAS Paper using the New ACM LaTeX Template}  % put your title here!
+\title{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
+%\title{Deterministic Solutions Based on Maximum Regrets in Markov Decision Processes with Imprecise Rewards}
 
-% first the title is needed
-\title{Deterministic Solutions Based on Maximum Regrets in Markov Decision Processes with Imprecise Rewards}
 
-% a short form should be given in case it is too long for the running head
-\titlerunning{Deterministic Solutions for IRMDPs}
+\begin{abstract}  % put your abstract here!
+In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
+\end{abstract}
 
-% the name(s) of the author(s) follow(s) next
-%
-% NB: Chinese authors should write their first names(s) in front of
-% their surnames. This ensures that the names appear correctly in
-% the running heads and the author index.
-%
 
-%\author{Pegah Alizadeh \up{1} \and Emiliano Traversi \up{2} \and Aomar Osmani\up{2}}
+\keywords{Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy}
 
-%
-%\authorrunning{Pegah Alizadeh, Emiliano Traversi and Aomar Osmani}
-% (feature abused for this document to repeat the title also on left hand pages)
-
-% the affiliations are given next; don't give your e-mail address
-% unless you accept that it will be published
-
-%\institute{(1) GREYC, UMR 6072, UNICAEN/CNRS/ENSICAEN, 14000 CAEN, FRANCE\\
-%(2) LIPN-UMR CNRS 7030, PRES Sorbonne Paris-cit\'e, FRANCE\\
-%\mailsa\\
-%\mailsb \\
-%%\url{http://www.springer.com/lncs}
-%}
-
-%
-% NB: a more complex sample for affiliations and the mapping to the
-% corresponding authors can be found in the file "llncs.dem"
-% (search for the string "\mainmatter" where a contribution starts).
-% "llncs.dem" accompanies the document class "llncs.cls".
-%
-
-\toctitle{Lecture Notes in Computer Science}
-\tocauthor{Authors' Instructions}
 \maketitle
 
 
-\begin{abstract}
-In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
-
-\keywords{Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy}
-\end{abstract}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% start of main body of paper
 
 \section{Introduction}
 
@@ -175,17 +131,11 @@ In this paper, we introduce a first study of finding the deterministic policy th
 We theoretically prove that the use of an intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy far from the optimal. 
 %Some may claim that \textit{determinising} the stochastic policy computed by minimax regret is a \textit{deterministic optimal policy}. We present an MDP with imprecise rewards, as a counter example to this claim. 
 We finally report an experimental study on random and diamond MDPs, in which we analyze the performances of our algorithms. 
-
-
 %, (just to mention a few, there are some robust optimization approaches in literature\cite{Ahmed2017,Iyengar2005,Nilim2003,Xu2009}
 
 %%================================================================
 \input{related_work.tex}
-
-
 %%================================================================
-
-%This section concerns the required components of MDPs and minimax regret criterion for MDPs with imprecise rewards.
 
 \section{Preliminaries}\label{sec:Preliminaries}
 
@@ -330,14 +280,23 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 From now on, we \ET{focus on developing an algorithm able to provide} an optimal deterministic policy for an IRMDP.
 The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section 11 for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
 
-
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{figure}
 	\begin{center}
-    \includegraphics[scale=0.22]{images/bb.png}
+    \includegraphics[scale=0.25]{images/bb.png}
 	\end{center}
 	\caption{Example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions per state}
 	\label{fig:pic_bb}
-\end{wrapfigure}
+\end{figure}
+
+%
+%
+%\begin{wrapfigure}{r}{0.6\textwidth}
+%	\begin{center}
+%    \includegraphics[scale=0.22]{images/bb.png}
+%	\end{center}
+%	\caption{Example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions per state}
+%	\label{fig:pic_bb}
+%\end{wrapfigure}
 
 %A branch-and-bound algorithm consists of a clever enumeration of the space of feasible policies through a space search: the set of deterministic policies that can potentially be the optimal is represented with a rooted tree with the full set associated to the root. The algorithm explores branches of this tree, where each branch represents a subset of the solution set.
 %Once a new branch of the tree is created, and before that branches is split again in additional subbranches, a (lower) bounding procedure is executed on that branch. The bounding procedure gives an underestimation of the optimal solution of the problem over the feasible set associated to the given branch.
@@ -367,21 +326,24 @@ In the computational experiments, we test also a modification of the algorithm, 
 Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
 In the computation section we show how the cut-and-branch version of the algorithm outperforms the basic implementation.    
 
+
+
 \input{basic_bb.tex}
 
 \input{comparison.tex}
 
 \input{computation.tex}
 
- 
-%%================================================================
 \section{Conclusions}
 \input{conclusions.tex}		
 
-%\section*{Acknowledgement}
 
-\bibliographystyle{splncs04}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% bibliography: see CFP for number of permitted pages
+
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{biblio}
-
 
 \end{document}
