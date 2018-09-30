@@ -1,0 +1,305 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{00}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Ahmed, Varakantham, Lowalekar, Adulyasak, and
+  Jaillet}{Ahmed et~al\mbox{.}}{2017}]%
+        {Ahmed2017}
+\bibfield{author}{\bibinfo{person}{Asrar Ahmed}, \bibinfo{person}{Pradeep
+  Varakantham}, \bibinfo{person}{Meghna Lowalekar}, \bibinfo{person}{Yossiri
+  Adulyasak}, {and} \bibinfo{person}{Patrick Jaillet}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Sampling Based Approaches for Minimizing Regret in
+  Uncertain Markov Decision Processes (MDPs)}.
+\newblock \bibinfo{journal}{{\em J. Artif. Intell. Res.\/}}
+  \bibinfo{volume}{59} (\bibinfo{year}{2017}), \bibinfo{pages}{229--264}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Alizadeh, Chevaleyre, and Zucker}{Alizadeh
+  et~al\mbox{.}}{2015}]%
+        {alizadeh2015}
+\bibfield{author}{\bibinfo{person}{Pegah Alizadeh}, \bibinfo{person}{Yann
+  Chevaleyre}, {and} \bibinfo{person}{Jean{-}Daniel Zucker}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Approximate regret based elicitation in Markov
+  decision process}. In \bibinfo{booktitle}{{\em {RIVF}}}.
+  \bibinfo{publisher}{{IEEE}}, \bibinfo{pages}{47--52}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Benavent and Zanuttini}{Benavent and
+  Zanuttini}{2018}]%
+        {benavent2018}
+\bibfield{author}{\bibinfo{person}{Florian Benavent} {and}
+  \bibinfo{person}{Bruno Zanuttini}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{{An Experimental Study of Advice in Sequential
+  Decision-Making under Uncertainty}}. In \bibinfo{booktitle}{{\em {32nd AAAI
+  Conference on Artificial Intelligence}}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Benders}{Benders}{1962}]%
+        {Benders1962}
+\bibfield{author}{\bibinfo{person}{J.~F. Benders}.}
+  \bibinfo{year}{1962}\natexlab{}.
+\newblock \showarticletitle{Partitioning Procedures for Solving Mixed-variables
+  Programming Problems}.
+\newblock \bibinfo{journal}{{\em Numer. Math.\/}} \bibinfo{volume}{4},
+  \bibinfo{number}{1} (\bibinfo{year}{1962}), \bibinfo{pages}{238--252}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bertsimas and Weismantel}{Bertsimas and
+  Weismantel}{2005}]%
+        {bertsimas2005optimization}
+\bibfield{author}{\bibinfo{person}{D. Bertsimas} {and} \bibinfo{person}{R.
+  Weismantel}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Optimization Over Integers}}.
+\newblock \bibinfo{publisher}{Dynamic Ideas}.
+\newblock
+\showISBNx{9780975914625}
+
+
+\bibitem[\protect\citeauthoryear{da~Silva and Costa}{da~Silva and
+  Costa}{2011}]%
+        {daSilva2011}
+\bibfield{author}{\bibinfo{person}{Valdinei~Freire da Silva} {and}
+  \bibinfo{person}{Anna Helena~Reali Costa}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{A Geometric Approach to Find Nondominated Policies
+  to Imprecise Reward MDPs}. In \bibinfo{booktitle}{{\em Proceedings of the
+  2011 European Conference on Machine Learning and Knowledge Discovery in
+  Databases - Volume Part I}} {\em (\bibinfo{series}{ECML PKDD'11})}.
+  \bibinfo{publisher}{Springer-Verlag}, \bibinfo{address}{Berlin, Heidelberg},
+  \bibinfo{pages}{439--454}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Delage and Mannor}{Delage and Mannor}{2007}]%
+        {Delage2007}
+\bibfield{author}{\bibinfo{person}{Erick Delage} {and} \bibinfo{person}{Shie
+  Mannor}.} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Percentile Optimization in Uncertain Markov
+  Decision Processes with Application to Efficient Exploration}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 24th International Conference on
+  Machine Learning}} {\em (\bibinfo{series}{ICML '07})}.
+  \bibinfo{publisher}{ACM}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{225--232}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Dolgov and Durfee}{Dolgov and Durfee}{2005}]%
+        {Dolgov2005}
+\bibfield{author}{\bibinfo{person}{Dmitri Dolgov} {and} \bibinfo{person}{Edmund
+  Durfee}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Stationary Deterministic Policies for Constrained
+  MDPs with Multiple Rewards, Costs, and Discount Factors}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 19th International Joint
+  Conference on Artificial Intelligence}} {\em (\bibinfo{series}{IJCAI'05})}.
+  \bibinfo{publisher}{Morgan Kaufmann Publishers Inc.},
+  \bibinfo{pages}{1326--1331}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Givan, Leach, and Dean}{Givan
+  et~al\mbox{.}}{2000}]%
+        {GIVAN2000}
+\bibfield{author}{\bibinfo{person}{Robert Givan}, \bibinfo{person}{Sonia
+  Leach}, {and} \bibinfo{person}{Thomas Dean}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Bounded-parameter Markov decision processes}.
+\newblock \bibinfo{journal}{{\em Artificial Intelligence\/}}
+  \bibinfo{volume}{122}, \bibinfo{number}{1} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{71 -- 109}.
+\newblock
+\showISSN{0004-3702}
+
+
+\bibitem[\protect\citeauthoryear{Iyengar}{Iyengar}{2005}]%
+        {Iyengar2005}
+\bibfield{author}{\bibinfo{person}{Garud~N. Iyengar}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Robust Dynamic Programming}.
+\newblock \bibinfo{journal}{{\em Mathematics of Operations Research\/}}
+  \bibinfo{volume}{30}, \bibinfo{number}{2} (\bibinfo{year}{2005}),
+  \bibinfo{pages}{257--280}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Mannor, Mebel, and Xu}{Mannor
+  et~al\mbox{.}}{2012}]%
+        {Mannor2012}
+\bibfield{author}{\bibinfo{person}{Shie Mannor}, \bibinfo{person}{Ofir Mebel},
+  {and} \bibinfo{person}{Huan Xu}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Lightning Does Not Strike Twice: Robust MDPs with
+  Coupled Uncertainty}.
+\newblock \bibinfo{journal}{{\em CoRR\/}}  \bibinfo{volume}{abs/1206.4643}
+  (\bibinfo{year}{2012}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Mannor, Simester, Sun, and Tsitsiklis}{Mannor
+  et~al\mbox{.}}{2007}]%
+        {Mannor2007}
+\bibfield{author}{\bibinfo{person}{Shie Mannor}, \bibinfo{person}{Duncan
+  Simester}, \bibinfo{person}{Peng Sun}, {and} \bibinfo{person}{John~N.
+  Tsitsiklis}.} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Bias and Variance Approximation in Value Function
+  Estimates}.
+\newblock \bibinfo{journal}{{\em Management Science\/}} \bibinfo{volume}{53},
+  \bibinfo{number}{2} (\bibinfo{year}{2007}), \bibinfo{pages}{308--322}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Mastin and Jaillet}{Mastin and
+  Jaillet}{2012}]%
+        {mastin2012}
+\bibfield{author}{\bibinfo{person}{Andrew Mastin} {and}
+  \bibinfo{person}{Patrick Jaillet}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Loss bounds for uncertain transition probabilities
+  in Markov decision processes}.
+\newblock  (\bibinfo{date}{12} \bibinfo{year}{2012}),
+  \bibinfo{pages}{6708--6715}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Mont{\'{u}}far, Ghazi{-}Zahedi, and
+  Ay}{Mont{\'{u}}far et~al\mbox{.}}{2015}]%
+        {Montufar2015}
+\bibfield{author}{\bibinfo{person}{Guido Mont{\'{u}}far},
+  \bibinfo{person}{Keyan Ghazi{-}Zahedi}, {and} \bibinfo{person}{Nihat Ay}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Geometry and Determinism of Optimal Stationary
+  Control in Partially Observable Markov Decision Processes}.
+\newblock \bibinfo{journal}{{\em CoRR\/}}  \bibinfo{volume}{abs/1503.07206}
+  (\bibinfo{year}{2015}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Nilim and Ghaoui}{Nilim and Ghaoui}{2005}]%
+        {Nilim2005}
+\bibfield{author}{\bibinfo{person}{Arnab Nilim} {and}
+  \bibinfo{person}{Laurent~El Ghaoui}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Robust Control of Markov Decision Processes with
+  Uncertain Transition Matrices}.
+\newblock \bibinfo{journal}{{\em Operations Research\/}} \bibinfo{volume}{53},
+  \bibinfo{number}{5} (\bibinfo{year}{2005}), \bibinfo{pages}{780--798}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Puterman}{Puterman}{1994}]%
+        {Puterman1994}
+\bibfield{author}{\bibinfo{person}{Martin~L. Puterman}.}
+  \bibinfo{year}{1994}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Markov Decision Processes: Discrete
+  Stochastic Dynamic Programming\/} (\bibinfo{edition}{1st} ed.)}.
+\newblock \bibinfo{publisher}{John Wiley \& Sons, Inc.}, \bibinfo{address}{New
+  York, NY, USA}.
+\newblock
+\showISBNx{0471619779}
+
+
+\bibitem[\protect\citeauthoryear{Regan and Boutilier}{Regan and
+  Boutilier}{2009}]%
+        {Regan2009}
+\bibfield{author}{\bibinfo{person}{Kevin Regan} {and} \bibinfo{person}{Craig
+  Boutilier}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Regret-based Reward Elicitation for Markov Decision
+  Processes}. In \bibinfo{booktitle}{{\em {UAI}}}. \bibinfo{publisher}{{AUAI}
+  Press}, \bibinfo{pages}{444--451}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Regan and Boutilier}{Regan and
+  Boutilier}{2010}]%
+        {Regan2010}
+\bibfield{author}{\bibinfo{person}{Kevin Regan} {and} \bibinfo{person}{Craig
+  Boutilier}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Robust Policy Computation in Reward-Uncertain MDPs
+  Using Nondominated Policies}. In \bibinfo{booktitle}{{\em {AAAI}}}.
+  \bibinfo{publisher}{{AAAI} Press}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Sutton and Barto}{Sutton and Barto}{1998}]%
+        {Sutton1998}
+\bibfield{author}{\bibinfo{person}{Richard~S. Sutton} {and}
+  \bibinfo{person}{Andrew~G. Barto}.} \bibinfo{year}{1998}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Introduction to Reinforcement Learning\/}
+  (\bibinfo{edition}{1st} ed.)}.
+\newblock \bibinfo{publisher}{MIT Press}, \bibinfo{address}{Cambridge, MA,
+  USA}.
+\newblock
+\showISBNx{0262193981}
+
+
+\bibitem[\protect\citeauthoryear{Weng and Zanuttini}{Weng and
+  Zanuttini}{2013}]%
+        {Weng2013}
+\bibfield{author}{\bibinfo{person}{Paul Weng} {and} \bibinfo{person}{Bruno
+  Zanuttini}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Interactive Value Iteration for Markov Decision
+  Processes with Unknown Rewards}. In \bibinfo{booktitle}{{\em {IJCAI}}}.
+  \bibinfo{publisher}{{IJCAI/AAAI}}, \bibinfo{pages}{2415--2421}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Wiesemann, Kuhn, and Rustem}{Wiesemann
+  et~al\mbox{.}}{2013}]%
+        {Wiesemann2013}
+\bibfield{author}{\bibinfo{person}{Wolfram Wiesemann}, \bibinfo{person}{Daniel
+  Kuhn}, {and} \bibinfo{person}{Berç Rustem}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Robust Markov Decision Processes}.
+\newblock \bibinfo{journal}{{\em Mathematics of Operations Research\/}}
+  \bibinfo{volume}{38}, \bibinfo{number}{1} (\bibinfo{year}{2013}),
+  \bibinfo{pages}{153--183}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Xu and Mannor}{Xu and Mannor}{2009}]%
+        {Xu2009}
+\bibfield{author}{\bibinfo{person}{Huan Xu} {and} \bibinfo{person}{Shie
+  Mannor}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Parametric regret in uncertain Markov decision
+  processes}. In \bibinfo{booktitle}{{\em {CDC}}}. \bibinfo{publisher}{{IEEE}},
+  \bibinfo{pages}{3606--3613}.
+\newblock
+
+
+\end{thebibliography}

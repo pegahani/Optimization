@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: typeinst.aux
+The style file: splncs04.bst
+Database file #1: biblio.bib
+Warning--empty journal in mastin2012
+You've used 22 entries,
+            2850 wiz_defined-function locations,
+            749 strings with 8227 characters,
+and the built_in function-call counts, 12604 in all, are:
+= -- 1086
+> -- 299
+< -- 24
++ -- 125
+- -- 102
+* -- 756
+:= -- 1548
+add.period$ -- 36
+call.type$ -- 22
+change.case$ -- 134
+chr.to.int$ -- 0
+cite$ -- 23
+duplicate$ -- 1153
+empty$ -- 1203
+format.name$ -- 121
+if$ -- 2843
+int.to.chr$ -- 0
+int.to.str$ -- 22
+missing$ -- 221
+newline$ -- 72
+num.names$ -- 44
+pop$ -- 417
+preamble$ -- 1
+purify$ -- 95
+quote$ -- 0
+skip$ -- 381
+stack$ -- 0
+substring$ -- 780
+swap$ -- 628
+text.length$ -- 24
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 82
+warning$ -- 1
+while$ -- 106
+width$ -- 24
+write$ -- 231
+(There was 1 warning)

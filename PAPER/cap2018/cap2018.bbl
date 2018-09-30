@@ -1,0 +1,133 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{AVL{\etalchar{+}}17}
+
+\bibitem[ACZ15]{alizadeh2015}
+Pegah Alizadeh, Yann Chevaleyre, and Jean{-}Daniel Zucker.
+\newblock Approximate regret based elicitation in markov decision process.
+\newblock In {\em {RIVF}}, pages 47--52. {IEEE}, 2015.
+
+\bibitem[AVL{\etalchar{+}}17]{Ahmed2017}
+Asrar Ahmed, Pradeep Varakantham, Meghna Lowalekar, Yossiri Adulyasak, and
+  Patrick Jaillet.
+\newblock Sampling based approaches for minimizing regret in uncertain markov
+  decision processes (mdps).
+\newblock {\em J. Artif. Intell. Res.}, 59:229--264, 2017.
+
+\bibitem[Ben62]{Benders1962}
+J.~F. Benders.
+\newblock Partitioning procedures for solving mixed-variables programming
+  problems.
+\newblock {\em Numer. Math.}, 4(1):238--252, 1962.
+
+\bibitem[BW05]{bertsimas2005optimization}
+D.~Bertsimas and R.~Weismantel.
+\newblock {\em Optimization Over Integers}.
+\newblock Dynamic Ideas, 2005.
+
+\bibitem[BZ18]{benavent2018}
+Florian Benavent and Bruno Zanuttini.
+\newblock {An Experimental Study of Advice in Sequential Decision-Making under
+  Uncertainty}.
+\newblock In {\em {32nd AAAI Conference on Artificial Intelligence}}, 2018.
+
+\bibitem[DD05]{Dolgov2005}
+Dmitri Dolgov and Edmund Durfee.
+\newblock Stationary deterministic policies for constrained mdps with multiple
+  rewards, costs, and discount factors.
+\newblock In {\em Proceedings of the 19th International Joint Conference on
+  Artificial Intelligence}, IJCAI'05, pages 1326--1331. Morgan Kaufmann
+  Publishers Inc., 2005.
+
+\bibitem[DM07]{Delage2007}
+Erick Delage and Shie Mannor.
+\newblock Percentile optimization in uncertain markov decision processes with
+  application to efficient exploration.
+\newblock In {\em Proceedings of the 24th International Conference on Machine
+  Learning}, ICML '07, pages 225--232, New York, NY, USA, 2007. ACM.
+
+\bibitem[dSC11]{daSilva2011}
+Valdinei~Freire da~Silva and Anna Helena~Reali Costa.
+\newblock A geometric approach to find nondominated policies to imprecise
+  reward mdps.
+\newblock In {\em Proceedings of the 2011 European Conference on Machine
+  Learning and Knowledge Discovery in Databases - Volume Part I}, ECML PKDD'11,
+  pages 439--454, Berlin, Heidelberg, 2011. Springer-Verlag.
+
+\bibitem[GLD00]{GIVAN2000}
+Robert Givan, Sonia Leach, and Thomas Dean.
+\newblock Bounded-parameter markov decision processes.
+\newblock {\em Artificial Intelligence}, 122(1):71 -- 109, 2000.
+
+\bibitem[Iye05]{Iyengar2005}
+Garud~N. Iyengar.
+\newblock Robust dynamic programming.
+\newblock {\em Mathematics of Operations Research}, 30(2):257--280, 2005.
+
+\bibitem[MGA15]{Montufar2015}
+Guido Mont{\'{u}}far, Keyan Ghazi{-}Zahedi, and Nihat Ay.
+\newblock Geometry and determinism of optimal stationary control in partially
+  observable markov decision processes.
+\newblock {\em CoRR}, abs/1503.07206, 2015.
+
+\bibitem[MJ12]{mastin2012}
+Andrew Mastin and Patrick Jaillet.
+\newblock Loss bounds for uncertain transition probabilities in markov decision
+  processes.
+\newblock pages 6708--6715, 12 2012.
+
+\bibitem[MMX12]{Mannor2012}
+Shie Mannor, Ofir Mebel, and Huan Xu.
+\newblock Lightning does not strike twice: Robust mdps with coupled
+  uncertainty.
+\newblock {\em CoRR}, abs/1206.4643, 2012.
+
+\bibitem[MSST07]{Mannor2007}
+Shie Mannor, Duncan Simester, Peng Sun, and John~N. Tsitsiklis.
+\newblock Bias and variance approximation in value function estimates.
+\newblock {\em Management Science}, 53(2):308--322, 2007.
+
+\bibitem[NG05]{Nilim2005}
+Arnab Nilim and Laurent~El Ghaoui.
+\newblock Robust control of markov decision processes with uncertain transition
+  matrices.
+\newblock {\em Operations Research}, 53(5):780--798, 2005.
+
+\bibitem[Put94]{Puterman1994}
+Martin~L. Puterman.
+\newblock {\em Markov Decision Processes: Discrete Stochastic Dynamic
+  Programming}.
+\newblock John Wiley \& Sons, Inc., New York, NY, USA, 1st edition, 1994.
+
+\bibitem[RB09]{Regan2009}
+Kevin Regan and Craig Boutilier.
+\newblock Regret-based reward elicitation for markov decision processes.
+\newblock In {\em {UAI}}, pages 444--451. {AUAI} Press, 2009.
+
+\bibitem[RB10]{Regan2010}
+Kevin Regan and Craig Boutilier.
+\newblock Robust policy computation in reward-uncertain mdps using nondominated
+  policies.
+\newblock In {\em {AAAI}}. {AAAI} Press, 2010.
+
+\bibitem[SB98]{Sutton1998}
+Richard~S. Sutton and Andrew~G. Barto.
+\newblock {\em Introduction to Reinforcement Learning}.
+\newblock MIT Press, Cambridge, MA, USA, 1st edition, 1998.
+
+\bibitem[WKR13]{Wiesemann2013}
+Wolfram Wiesemann, Daniel Kuhn, and Berç Rustem.
+\newblock Robust markov decision processes.
+\newblock {\em Mathematics of Operations Research}, 38(1):153--183, 2013.
+
+\bibitem[WZ13]{Weng2013}
+Paul Weng and Bruno Zanuttini.
+\newblock Interactive value iteration for markov decision processes with
+  unknown rewards.
+\newblock In {\em {IJCAI}}, pages 2415--2421. {IJCAI/AAAI}, 2013.
+
+\bibitem[XM09]{Xu2009}
+Huan Xu and Shie Mannor.
+\newblock Parametric regret in uncertain markov decision processes.
+\newblock In {\em {CDC}}, pages 3606--3613. {IEEE}, 2009.
+
+\end{thebibliography}

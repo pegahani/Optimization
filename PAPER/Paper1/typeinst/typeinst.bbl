@@ -1,0 +1,106 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{Ahmed2017}
+Ahmed, A., Varakantham, P., Lowalekar, M., Adulyasak, Y., Jaillet, P.: Sampling
+  based approaches for minimizing regret in uncertain markov decision processes
+  (mdps). J. Artif. Intell. Res.  \textbf{59},  229--264 (2017)
+
+\bibitem{alizadeh2015}
+Alizadeh, P., Chevaleyre, Y., Zucker, J.: Approximate regret based elicitation
+  in markov decision process. In: {RIVF}. pp. 47--52. {IEEE} (2015)
+
+\bibitem{benavent2018}
+Benavent, F., Zanuttini, B.: {An Experimental Study of Advice in Sequential
+  Decision-Making under Uncertainty}. In: {32nd AAAI Conference on Artificial
+  Intelligence} (2018)
+
+\bibitem{Benders1962}
+Benders, J.F.: Partitioning procedures for solving mixed-variables programming
+  problems. Numer. Math.  \textbf{4}(1),  238--252 (1962)
+
+\bibitem{bertsimas2005optimization}
+Bertsimas, D., Weismantel, R.: Optimization Over Integers. Dynamic Ideas (2005)
+
+\bibitem{Delage2007}
+Delage, E., Mannor, S.: Percentile optimization in uncertain markov decision
+  processes with application to efficient exploration. In: Proceedings of the
+  24th International Conference on Machine Learning. pp. 225--232. ICML '07,
+  ACM, New York, NY, USA (2007)
+
+\bibitem{Dolgov2005}
+Dolgov, D., Durfee, E.: Stationary deterministic policies for constrained mdps
+  with multiple rewards, costs, and discount factors. In: Proceedings of the
+  19th International Joint Conference on Artificial Intelligence. pp.
+  1326--1331. IJCAI'05, Morgan Kaufmann Publishers Inc. (2005)
+
+\bibitem{GIVAN2000}
+Givan, R., Leach, S., Dean, T.: Bounded-parameter markov decision processes.
+  Artificial Intelligence  \textbf{122}(1),  71 -- 109 (2000)
+
+\bibitem{Iyengar2005}
+Iyengar, G.N.: Robust dynamic programming. Mathematics of Operations Research
+  \textbf{30}(2),  257--280 (2005)
+
+\bibitem{Mannor2012}
+Mannor, S., Mebel, O., Xu, H.: Lightning does not strike twice: Robust mdps
+  with coupled uncertainty. CoRR  \textbf{abs/1206.4643} (2012)
+
+\bibitem{Mannor2007}
+Mannor, S., Simester, D., Sun, P., Tsitsiklis, J.N.: Bias and variance
+  approximation in value function estimates. Management Science
+  \textbf{53}(2),  308--322 (2007)
+
+\bibitem{mastin2012}
+Mastin, A., Jaillet, P.: Loss bounds for uncertain transition probabilities in
+  markov decision processes pp. 6708--6715 (12 2012)
+
+\bibitem{Montufar2015}
+Mont{\'{u}}far, G., Ghazi{-}Zahedi, K., Ay, N.: Geometry and determinism of
+  optimal stationary control in partially observable markov decision processes.
+  CoRR  \textbf{abs/1503.07206} (2015)
+
+\bibitem{Nilim2005}
+Nilim, A., Ghaoui, L.E.: Robust control of markov decision processes with
+  uncertain transition matrices. Operations Research  \textbf{53}(5),  780--798
+  (2005)
+
+\bibitem{Puterman1994}
+Puterman, M.L.: Markov Decision Processes: Discrete Stochastic Dynamic
+  Programming. John Wiley \& Sons, Inc., New York, NY, USA, 1st edn. (1994)
+
+\bibitem{Regan2009}
+Regan, K., Boutilier, C.: Regret-based reward elicitation for markov decision
+  processes. In: {UAI}. pp. 444--451. {AUAI} Press (2009)
+
+\bibitem{Regan2010}
+Regan, K., Boutilier, C.: Robust policy computation in reward-uncertain mdps
+  using nondominated policies. In: {AAAI}. {AAAI} Press (2010)
+
+\bibitem{daSilva2011}
+da~Silva, V.F., Costa, A.H.R.: A geometric approach to find nondominated
+  policies to imprecise reward mdps. In: Proceedings of the 2011 European
+  Conference on Machine Learning and Knowledge Discovery in Databases - Volume
+  Part I. pp. 439--454. ECML PKDD'11, Springer-Verlag, Berlin, Heidelberg
+  (2011)
+
+\bibitem{Sutton1998}
+Sutton, R.S., Barto, A.G.: Introduction to Reinforcement Learning. MIT Press,
+  Cambridge, MA, USA, 1st edn. (1998)
+
+\bibitem{Weng2013}
+Weng, P., Zanuttini, B.: Interactive value iteration for markov decision
+  processes with unknown rewards. In: {IJCAI}. pp. 2415--2421. {IJCAI/AAAI}
+  (2013)
+
+\bibitem{Wiesemann2013}
+Wiesemann, W., Kuhn, D., Rustem, B.: Robust markov decision processes.
+  Mathematics of Operations Research  \textbf{38}(1),  153--183 (2013)
+
+\bibitem{Xu2009}
+Xu, H., Mannor, S.: Parametric regret in uncertain markov decision processes.
+  In: {CDC}. pp. 3606--3613. {IEEE} (2009)
+
+\end{thebibliography}
