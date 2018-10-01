@@ -67,15 +67,15 @@ class Display_mdp:
 
 
 def main():
-    # h = Display_mdp( _file= '../MDPs/ex2.txt')#, _nstate= 4, _naction= 5)
+    # h = Display_mdp( _file= '../DATA/MDPs/ex2.txt')#, _nstate= 4, _naction= 5)
     # #h.load(1)
     # h.reload(1)
     # h.save_mdp()
 
-    text_file = open("./results/diamond.txt", "w")
+    text_file = open("../DATA/results/diamond.txt", "w")
 
     for reward_type in [0,1,2,3]:
-            for prob_low in range (5,50,5):
+            for prob_low in range(5,50,5):
                 if reward_type == 0:
                     seed = 0
                     print reward_type, prob_low, seed

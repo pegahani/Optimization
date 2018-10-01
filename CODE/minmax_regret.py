@@ -285,8 +285,8 @@ class minmax_regret:
                 index = _s*na+_a
                 index_I = ns*na+ ns + index
                 # r bounds
-                self.slave.variables.set_lower_bounds(ns*na + ns + na*ns + index, self.reward_bounds[index][0])
-                self.slave.variables.set_upper_bounds(ns*na + ns + na*ns + index, self.reward_bounds[index][1])
+                self.slave.variables.set_lower_bounds(ns*na + ns + na*ns + index, float(self.reward_bounds[index][0]))
+                self.slave.variables.set_upper_bounds(ns*na + ns + na*ns + index, float(self.reward_bounds[index][1]))
                 # I binaries
                 self.slave.variables.set_types(index_I, self.slave.variables.type.binary)
                 # Q bounds
@@ -951,17 +951,17 @@ class minmax_regret:
         return
 
 
-def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up):
+def load_mdp(state, action, gamma, _id, _reward_lb, _reward_up, reward_on_state = False):
     """
     Creates a new mdp, initialize related global variables and saves what is needed for reuse
     :type _id: string e.g. 80-1 to save in param80-1.dmp"""
 
-    mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up)
+    mdp = classic_mdp.general_random_mdp(state, action, gamma,_reward_lb = _reward_lb, _reward_up = _reward_up, reward_on_state= reward_on_state)
 
     # if not _id is None:
     #name = "param_" + str(_id) + ".dmp"
-    #name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
-    name = './Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    #name = '../DATA/Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    name = '../DATA/Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_'+ str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
 
     pp = pickle.Pickler(open(name, 'w'))
     pp.dump(mdp)
@@ -974,8 +974,8 @@ def reload_mdp(state, action, gamma, _id, _reward_lb, _reward_up):#(_id):
     :type _id: string e.g. 80-1 to reload param80-1.dmp
     """
     #name = "param_" + str(_id) + ".dmp"
-    #name = './Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
-    name = './Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    #name = '../DATA/Models/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
+    name = '../DATA/Models_clear/mdp_' + str(state) + '_' + str(action) + '_' + str(gamma) + '_' + str(_id) + '_' + str(_reward_lb) + '_' + str(_reward_up) + ".dmp"
 
     pup = pickle.Unpickler(open(name, 'r'))
     mdp = pup.load()

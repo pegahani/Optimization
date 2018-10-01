@@ -2,12 +2,12 @@ from minmax_regret import reload_mdp, load_mdp, minmax_regret
 import sys
 
 def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds):
-    text_file = open("./results/deterministic_vs_stochastic_"
+    text_file = open("../DATA/results/deterministic_vs_stochastic_"
     + str(min_states)+"_"+ str(max_states)+"_"+ str(step_states)
     + str(min_actions)+"_"+str(max_actions)+"_"+str(max_seeds)+".txt", "w")
-    #text_file = open("./results/deterministic_vs_stochastic_fango_07_04_2018.txt", "w")
-    #text_file = open("./results/deterministic_vs_stochastic.txt", "w")
-    #text_file = open("./results/deterministic_vs_stochastic_clear.txt", "w")
+    #text_file = open("../DATA/results/deterministic_vs_stochastic_fango_07_04_2018.txt", "w")
+    #text_file = open("../DATA/results/deterministic_vs_stochastic.txt", "w")
+    #text_file = open("../DATA/results/deterministic_vs_stochastic_clear.txt", "w")
     _gamma = 0.9
     for _action in range(min_actions,max_actions+1): #11
         #for _state in range(3,20): #51
@@ -18,7 +18,7 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
                 print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed
 #                print "**************************"
 #                print "**************************"
-                load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10 )
+                load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10, reward_on_state= False )
                 _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
                 #_mdp.modify_mdp()
                 minmax = minmax_regret(_mdp)
@@ -55,16 +55,17 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
 
 if __name__ == '__main__':
 
-    a = int(sys.argv[1])
-    b = int(sys.argv[2])
-    c = int(sys.argv[3])
-    d = int(sys.argv[4])
-    e = int(sys.argv[5])
-    f = int(sys.argv[6])
+    # a = int(sys.argv[1])
+    # b = int(sys.argv[2])
+    # c = int(sys.argv[3])
+    # d = int(sys.argv[4])
+    # e = int(sys.argv[5])
+    # f = int(sys.argv[6])
+    #
+    # main(a,b,c,d,e,f)
 
+    main(5, 5, 1, 3, 3, 1)
 
-    #def main(min_states, max_states, step_states, min_actions, max_actions, max_seeds):
-    main(a,b,c,d,e,f)
 
 
 

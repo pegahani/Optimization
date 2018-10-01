@@ -99,7 +99,7 @@ class MDP:
         self.alpha[0] = 1.0
         pass
 
-def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
+def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up, reward_on_state):
     """ Builds a random MDP.
         Each state has ceil(log(nstates)) successors.
         Reward are random values between 0 and 1
@@ -109,15 +109,23 @@ def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up):
     _t = {}
     _r = {}
 
-    for s, a in product(range(n_states), range(n_actions)):
-        next_states = random.sample(range(n_states), nsuccessors)
-        probas = np.fromiter(islice(ifilter(lambda x: 0 < x < 1 ,gauss_iter),nsuccessors), ftype)
+    for s in range(n_states):
+        rewards = np.random.uniform(_reward_lb, _reward_up, 2)
+        for a in range(n_actions):
+            next_states = random.sample(range(n_states), nsuccessors)
+            probas = np.fromiter(islice(ifilter(lambda x: 0 < x < 1, gauss_iter), nsuccessors), ftype)
 
-        _t.update({(s,a,s2):p for s2,p in izip(next_states, probas/sum(probas))})
-        #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
-        #_r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+            _t.update({(s, a, s2): p for s2, p in izip(next_states, probas / sum(probas))})
 
-        _r.update({(s, a): [_reward_lb, _reward_up]})
+            if reward_on_state:
+                lb = np.float32(min(rewards))
+                up = np.float32( max(rewards))
+                _r.update({(s, a): [lb, up]})
+            else:
+                #_r.update({(s,a):r for r in np.random.uniform(-600.,600,1)})
+                #_r.update({(s, a): r for r in np.random.uniform(_reward_lb, _reward_up, 1)})
+                _r.update({(s, a): [_reward_lb, _reward_up]})
+
 
     return MDP(
         _startingstate= set(range(n_states)),

@@ -55,8 +55,6 @@ class VV_MDP:
     def _get_Actions(self, _state):
         return set(self.actionInd[a] for (s,a,s2) in self.transitions if s == _state)
 
-
-
 def random_mdp(n_states, n_actions, _r=None):
     """ Builds a random MDP.
         Each state has ceil(log(nstates)) successors.
@@ -69,7 +67,7 @@ def random_mdp(n_states, n_actions, _r=None):
 
     for s,a in product(range(n_states), range(n_actions)):
         next_states = random.sample(range(n_states), nsuccessors)
-        probas =  np.fromiter(islice(ifilter(lambda x: 0 < x < 1 ,gauss_iter),nsuccessors), ftype)
+        probas = np.fromiter(islice(ifilter(lambda x: 0 < x < 1 ,gauss_iter),nsuccessors), ftype)
 
         _t.update({(s,a,s2):p for s2,p in izip(next_states, probas/sum(probas))})
 

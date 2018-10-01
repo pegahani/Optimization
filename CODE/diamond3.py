@@ -10,7 +10,7 @@ def main():
     # h.reload(1)
     # h.save_mdp()
 
-    text_file = open("./results/diamond_3.txt", "w")
+    text_file = open("../DATA/results/diamond_3.txt", "w")
     reward_type = 0
     for prob_low in range (5,50,5):
                     seed = 0
