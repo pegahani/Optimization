@@ -20,7 +20,7 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
                 #load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10, reward_on_state= True )
                 #_mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
 
-                _mdp = trident_mdp(n_states=10, _gamma= 0.9, _reward_lb= -10, _reward_up= 10, probability = 0.4999)
+                _mdp = trident_mdp(n_states=10, _gamma= 0.9, _reward_lb= -10, _reward_up= 10, probability = 0.4999, next_states = 3)
                 #_mdp.modify_mdp()
                 minmax = minmax_regret(_mdp)
                 

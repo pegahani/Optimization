@@ -16,7 +16,7 @@ def main():
 
 if __name__ == "__main__":
     # execute only if run as a script
-    mdp = trident_mdp(n_states = 5, _gamma = 0.9,_reward_lb = -10.0, _reward_up = 10.0, probability = 0.3, next_states = 3)
+    mdp = trident_mdp(n_states = 7, _gamma = 0.9,_reward_lb = -10.0, _reward_up = 10.0, probability = 0.3, next_states = 2)
     mdp.display_mdp()
 
     minmax = minmax_regret(mdp)
