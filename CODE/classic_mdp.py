@@ -4,6 +4,7 @@ import numpy as np
 import random
 from operator import add
 from itertools import starmap, repeat, product, islice, ifilter, izip
+import math
 
 ftype = np.float32
 
@@ -82,15 +83,16 @@ class MDP:
 
     def display_mdp(self):
 
-        print 'sates = ', self.states
+        print 'states = ', self.states
         print 'actions = ', self.actions
         print 'gamma =', self.gamma
         print 'rewards', self.rewards_bounds
 
         for s in range(self.nstates):
             for a in range(self.nactions):
-                print [ 'P('+ str(i) + '|'+ str(s) + ',' + str(a) +') ='+ str(self.transitions[s, a][0, i]) for i in range(self.nstates)]
-
+                # print [ 'P('+ str(i) + '|'+ str(s) + ',' + str(a) +') ='+ str(self.transitions[s, a][0, i]) for i in range(self.nstates)]
+                print ['P(' + str(s) + ',' + str(a) + ',' + str(i) + ') =' + str(self.transitions[s, a][0, i]) for i in
+                       range(self.nstates)]
         pass
 
     def modify_mdp(self):
@@ -133,7 +135,6 @@ def general_random_mdp(n_states, n_actions, _gamma, _reward_lb, _reward_up, rewa
         _rewards_bounds= _r ,
         _gamma = 0.95)
 
-
 def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_up):
     """ Builds a random MDP.
         Each state has ceil(log(nstates)) successors.
@@ -164,6 +165,51 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
         _gamma = 0.95)
 
     pass
+
+######### Trident MDP ############
+
+def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_states = None):
+    if next_states is None:
+        nsuccessors = int(math.ceil(math.log1p(n_states)))
+    else:
+        nsuccessors = next_states
+
+    n_actions = nsuccessors + math.factorial(nsuccessors)/ (math.factorial(2)*math.factorial(nsuccessors-2))
+
+    _t = {}
+    _r = {}
+
+    for s in range(n_states):
+        rewards = np.random.uniform(_reward_lb, _reward_up, 2)
+        for a in range(n_actions):
+
+            lb = np.float32(min(rewards))
+            up = np.float32( max(rewards))
+            _r.update({(s, a): [lb, up]})
+
+        """It is syclic MDP"""
+        next_states = random.sample(range(n_states), nsuccessors)
+        action_list = range(n_actions)
+        """assign an action to each next state"""
+        for s2 in next_states[0:nsuccessors+1]:
+            action = action_list.pop()
+            _t.update({(s, action, s2): 1.0})
+            _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 != s2})
+
+        """assign an action two each pair of next states"""
+        for s2 in next_states:
+            for s3 in next_states[next_states.index(s2)+1:]:
+                action = action_list.pop()
+                _t.update({(s, action, s2): probability})
+                _t.update({(s, action, s3): 1.0 - probability})
+                _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 not in [s2,s3]})
+
+    return MDP(
+        _startingstate= set(range(n_states)),
+        _transitions= _t,
+        _rewards_bounds= _r ,
+        _gamma = 0.95)
+
 
 ######### GRID MDP ###############
 def grid_MDP(rows, columns, start=None, goal=None):
@@ -476,7 +522,6 @@ def diamond_mdp_2(probab_low , probab_high,  reward_type):
         _transitions= _t,
         _rewards_bounds= _r_bounds,
         _gamma = 0.95, _alpha= [1.0]+9*[0.0])
-
 
 # %%%%%%%%%%%%% counter example %%%%%%%%%%%%%
 def mdp_counter_example(T0, T1, A, B, C):

@@ -102,11 +102,11 @@ class minmax_regret:
             for _s in range(ns):
                 V1[_s] = max(self.reward_bounds[_s*na + _a][1] + gamma * sum(transition[_s,_a][0,_s2] * V[_s2] for _s2 in range(ns)) for _a in range(na))
                 delta = max(delta, abs(V1[_s] - V[_s]))
-            print V
-            print V.tolist()
+            # print V
+            # print V.tolist()
 
             if delta < epsilon * 1.0/(1.0-gamma): #(1 - gamma) / gamma:
-                print 'v.toloist', V.tolist()
+                #print 'v.toloist', V.tolist()
                 return V.tolist()
 
     def worst_Q(self, epsilon=0.001):
@@ -603,7 +603,7 @@ class minmax_regret:
             self.ROOT_tot_cuts = self.MASTER_tot_cuts
         if __debug__:
             if (self.verbosity == 1 and self.BB_tot_nodes % 100 == 0) or self.verbosity >= 2:
-                print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts , " T_M ", self.TIME_master, " T_S ", self.TIME_slave
+                    print "node ", self.BB_tot_nodes, " lv ", self.BB_current_level, " nd prnd ", self.BB_nodes_pruned, "UB ", self.UB, " LB ", results_master[0], " tot cuts ", self.MASTER_tot_cuts , " T_M ", self.TIME_master, " T_S ", self.TIME_slave
                 #self.output += "node "+ ","+ str(self.BB_tot_nodes) + ',' + " lv " + ',' + str(self.BB_current_level) + ',' + " nd prnd " + ',' + str(self.BB_nodes_pruned)+ ','\
                 #    "UB "+ str(self.UB) + ',' + " LB " + ',' + str(results_master[0]) + ',' + " tot cuts " + ',' + str(self.MASTER_tot_cuts) + ',' +  " T_M " + ',' +\
                 #               str(self.TIME_master) + ',' + " T_S " + ',' + str(self.TIME_slave) + ';'
@@ -728,7 +728,8 @@ class minmax_regret:
 
             if self.verbosity >= 2:
                 print "print", 'master_solve_'+str(self.BB_tot_nodes)+'_'+str(it_counter)+'.lp'
-                self.master.write('master_solve_'+str(self.BB_tot_nodes)+'_'+str(it_counter)+'.lp')
+                #self.master.write('master_solve_'+str(self.BB_tot_nodes)+'_'+str(it_counter)+'.lp')
+
             #self.master.write('master_after_after_fix.lp')
             #raw_input('PAUSA')
 
@@ -858,8 +859,8 @@ class minmax_regret:
                 if self.verbosity >= 2:
                     print "add cut alpha.V*-r*f* <= delta"
                     print result_slave
-                    print "print", 'master_fix_'+str(self.MASTER_tot_cuts)+'.lp'
-                    self.master.write('master_fix_'+str(self.MASTER_tot_cuts)+'.lp')    
+                    #print "print", 'master_fix_'+str(self.MASTER_tot_cuts)+'.lp'
+                    #self.master.write('master_fix_'+str(self.MASTER_tot_cuts)+'.lp')
 
             else:
                 break

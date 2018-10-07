@@ -1,4 +1,4 @@
-from classic_mdp import mdp_counter_example
+from classic_mdp import mdp_counter_example, trident_mdp
 from minmax_regret import minmax_regret
 
 
@@ -16,4 +16,8 @@ def main():
 
 if __name__ == "__main__":
     # execute only if run as a script
-    main()
+    mdp = trident_mdp(n_states = 5, _gamma = 0.9,_reward_lb = -10.0, _reward_up = 10.0, probability = 0.3, next_states = 3)
+    mdp.display_mdp()
+
+    minmax = minmax_regret(mdp)
+    minmax.solve_deterministic_opt_stack(36000, 0.01)

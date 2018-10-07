@@ -1,3 +1,4 @@
+from CODE.classic_mdp import trident_mdp
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 import sys
 
@@ -13,13 +14,13 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
         #for _state in range(3,20): #51
         for _state in range(min_states,max_states+step_states,step_states): #51
             for _seed in range(1,max_seeds+1):
-#                print "**************************"
-#                print "**************************"
+
                 print "_state _action, _gamma, _seed : " , _state, " , " , _action, " , " , _gamma, " , " , _seed
-#                print "**************************"
-#                print "**************************"
-                load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10, reward_on_state= False )
-                _mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
+
+                #load_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10, reward_on_state= True )
+                #_mdp = reload_mdp(_state, _action, _gamma, _seed, _reward_lb= -10, _reward_up= 10)
+
+                _mdp = trident_mdp(n_states=10, _gamma= 0.9, _reward_lb= -10, _reward_up= 10, probability = 0.4999)
                 #_mdp.modify_mdp()
                 minmax = minmax_regret(_mdp)
                 
