@@ -49,10 +49,21 @@ The VT gives an idea about how far is the determinised policy from the optimal p
 \input{tab_random_trident_slim.tex}  
 \input{tab_random_diamond_slim.tex}  
 
+
+In Tables~\ref{tab:random_slim},~\ref{tab:random_trident_slim} and~\ref{tab:diamond_slim} we present the results concerning the value Rations for the different classes of instances considered. In case of multiple isntances for compbination of settings, we present the average and the maximum value.
+We notice that the \texttt{Random-lim} and \texttt{Diamond} MDPs are the ones with an highest VR in general. The relative small value of VR for the \texttt{Random-unlim} MDPs is probably due to the fact that they do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}. 
+
+It is also interesting to notice that the maximum values are quite high for almost all the combinations of parameters considered. This implies that chosing to determinise my reveal as a unsafe choice, specially considering that there is no way to check how far a determinisied policy is from the optimal.  
+% $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
+
+%Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. On the other hand, the cut-and-branch version of the algorithm is almost two times faster than the basic version.  
+
+
+
 %\subsection{Random MDPs}\label{random_MDP}
-\paragraph{\texttt{Random-unlim}}
+%\paragraph{\texttt{Random-unlim}}
 %\paragraph{Analysis of the results}
-In Table~\ref{tab:random} we present the results concerning the performances of our algorithm on random MDP with $|S| \in \{5,10,15\}$ and $|A| \in \{2, 3, 4, 5, 10\}$. For each combination of states and actions, we provide the average results over $10$ different simulations. The first two columns report the Value Ratio and the Time Ratio (\texttt{VR} and \texttt{TR}). The column \texttt{\% diff} shows the percentage of cases where the optimal policy is different from the rounding policy. The final two columns show the computing time of the baseline branch-and-bound algorithm (\texttt{Base}) and the improved version (\texttt{C\&B}), presented in Section~\ref{sec:bb}.
+%In Table~\ref{tab:random} we present the results concerning the performances of our algorithm on random MDP with $|S| \in \{5,10,15\}$ and $|A| \in \{2, 3, 4, 5, 10\}$. For each combination of states and actions, we provide the average results over $10$ different simulations. The first two columns report the Value Ratio and the Time Ratio (\texttt{VR} and \texttt{TR}). The column \texttt{\% diff} shows the percentage of cases where the optimal policy is different from the rounding policy. The final two columns show the computing time of the baseline branch-and-bound algorithm (\texttt{Base}) and the improved version (\texttt{C\&B}), presented in Section~\ref{sec:bb}.
 
 We notice that in average, $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
 Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. On the other hand, the cut-and-branch version of the algorithm is almost two times faster than the basic version.  
@@ -68,4 +79,24 @@ It is clear that for Diamond MDPs the situation is different than for Random MDP
 
 
 \subsection{Impact of the cut-and-branch improvement}
-TODO
+
+
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.45]{GNUPLOT/output_random.png}
+	\end{center}
+	\caption{Impact of cut-and-branch, \texttt{Random-unlim} MDPs.}
+	\label{fig:impact_random} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.45]{GNUPLOT/output_trident.png}
+	\end{center}
+	\caption{Impact of cut-and-branch, \texttt{Random-lim} MDPs.}
+	\label{fig:impact_trident} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
