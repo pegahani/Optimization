@@ -1,11 +1,11 @@
 %%
-%% sample document for AAMAS'18 conference
+%% sample document for AAMAS'19 conference
 %%
 %% modified from sample-sigconf.tex
 %%
 %% see ACM instructions acmguide.pdf
 %%
-%% AAMAS-specific questions? n.yorke-smith@tudelft.nl
+%% AAMAS-specific questions? F.A.Oliehoek@tudelft.nl
 %%
 
 \documentclass[sigconf]{aamas}  % do not change this line!
@@ -17,9 +17,9 @@
 \setcopyright{ifaamas}  % do not change this line!
 \acmDOI{doi}  % do not change this line!
 \acmISBN{}  % do not change this line!
-\acmConference[AAMAS'18]{Proc.\@ of the 17th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2018), M.~Dastani, G.~Sukthankar, E.~Andre, S.~Koenig (eds.)}{July 2018}{Stockholm, Sweden}  % do not change this line!
-\acmYear{2018}  % do not change this line!
-\copyrightyear{2018}  % do not change this line!
+\acmConference[AAMAS'19]{Proc.\@ of the 18th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2019), N.~Agmon, M.~E.~Taylor, E.~Elkind, M.~Veloso (eds.)}{May 2019}{Montreal, Canada}  % do not change this line!
+\acmYear{2019}  % do not change this line!
+\copyrightyear{2019}  % do not change this line!
 \acmPrice{}  % do not change this line!
 
 %% the rest of your preamble here
@@ -46,6 +46,7 @@
 
 
 \newcommand{\ET}[1]{{\textcolor{blue}{#1}}}
+\newcommand{\PA}[1]{{\textcolor{orange}{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newlength{\mylengthleft}
@@ -53,6 +54,8 @@
 \newlength{\mylength}
 \setlength{\mylength}{0.45\textwidth}
 \addtolength{\mylength}{-\mylengthleft}
+
+\renewcommand{\labelitemii}{$\diamond$}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -61,13 +64,15 @@
 \title{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
 %\title{Deterministic Solutions Based on Maximum Regrets in Markov Decision Processes with Imprecise Rewards}
 
+\author{Paper \#XXX}  % put your paper number here!
+
 
 \begin{abstract}  % put your abstract here!
 In several real world applications of sequential decision making under uncertainty a stochastic policy is not easily interpretable for the system users. This might be due to the nature of the problem or to the system requirements. In these contexts, it is more convenient (inevitable) to provide a deterministic policy to the user. In this paper, we propose an approach for computing a deterministic policy for a Markov Decision Process with Imprecise Rewards in reasonable computational overhead in comparison to the required time for computing the optimal stochastic policy. To better motivate the use of an exact procedure for finding a deterministic policy, we show some cases where the intuitive idea of using a deterministic policy obtained after ``determinising" (rounding) the optimal stochastic policy leads to a deterministic policy different from the optimal.
 \end{abstract}
 
 
-\keywords{Markov Decision Processes, Minimax Regret, Unknown Rewards, Deterministic Policy, Stochastic Policy}
+\keywords{Markov Decision Processes, Minimax Regret, Unknown Rewards, Branch-and-Bound, Deterministic Policy, Stochastic Policy}
 
 \maketitle
 
@@ -107,11 +112,11 @@ and (3) conflicting elicitations from users. %In the assistant vehicle case, if 
 %\end{itemize}
 
 %In MDPs with unknown rewards, the system have all information about the dynamics (road and traffics) and final goal but it lacks some information about the user preferences inside the system
-Several approaches have been proposed in the literature to find the best \textit{policy} (strategy) in an environment with imprecise rewards. This work is focused on the \textit{minimax regret criterion}. The basic idea is to find the policy with the minimum lost in comparison with other possible policies and reward instantiations. Minimising the max regret is more optimistic then  minimising the worst case scenario and has been widely used in the literature. %In the context of MDPs, it has been used, among others, in \cite{Regan2009,Xu2009}.
+Several approaches have been proposed in the literature to find the best \textit{policy} (strategy) in an environment with imprecise rewards. This work is focused on the \textit{minimax regret criterion}. The basic idea is to find the policy with the minimum lost in comparison with other possible policies and reward instantiations. Minimising the max regret is more optimistic than s minimising the worst case scenario and has been widely used in the literature. %In the context of MDPs, it has been used, among others, in \cite{Regan2009,Xu2009}.
 
 The majority of the exact and approximate methods for solving an MDP accept to have \textit{stochastic policies} as feasible policies for the MDP. A policy is defined as stochastic if, for a given state, the action to be taken is chosen with a given probability associated to each possible state.
 On the other hand, in a \textit{deterministic policy}, the action to be taken in a state is uniquely defined.\\
-The use of stochastic policies present two main advantages. From a algorithmic point of view (as shown also in this work), finding an optimal stochastic policy is usually easier than finding the optimal deterministic policy. Moreover, accepting also stochastic policies implies to explore a larger search space in comparison to the search space of the deterministic policies, allowing to have optimal policies with a better value than the one of an optimal deterministic policy.
+The use of stochastic policies present two main advantages. From an algorithmic point of view (as shown also in this work), finding an optimal stochastic policy is usually easier than finding the optimal deterministic policy. \PA{Moreover, accepting also stochastic policies implies to explore a larger search space in comparison to the search space of the deterministic policies, allowing to have optimal policies with a better value than the one of an optimal deterministic policy.}
 
 Despite these two obvious advantages of stochastic over deterministic policies, in several situations the use of stochastic policies can be either not recommended or not possible. 
 %
@@ -120,12 +125,8 @@ First of all, the use of a stochastic policy could be ethically problematic. If 
 
 More generally, a deterministic policy is easier to understand from a user's point of view and therefore it is more likely to be used in practice. Finally, in several situations the nature of the problems does not allow any choices and requires a deterministic policy, this is due to either the discrete/combinatorial nature of the problem studied or to the fact that the algorithm must be executed only once, losing the relevance of the stochastic aspects. 
 
-\ET{
-Finally, probably the most significative drawback of stochastic policy is that 
-%we recall that for a policy to be stochastic means that 
-such a policy is 
-optimal only in expectation on random draws of actions. This implies that to be effective in practice it needs to be used a great number of times and/or for a very long time with independent and identically distributed draws of actions. In contrast, when used only once or for a short time such a policy offers no guarantee of optimality. On the other and, a deterministic policy maintains its definiton of ``optimality'' even if it is used only once and starting from the first time it is used.
-}
+\PA{Finally, probably the most significant drawback of stochastic policy is that  such a policy is  optimal only in expectation on random draws of actions. This implies that to be effective in practice it needs to be repeated for a great number of times and/or for a very long time with independent and identically distributed draws of actions. In contrast, this policy offers no guarantee of optimality if it used only once or for a short number of repetitions. On the other hand, a deterministic policy maintains its definition of ``optimality'' even if it is used only once starting from its initial state.}
+
 
 In this paper, we introduce a first study of finding the deterministic policy that minimises the maximum regret in an MDP with uncertain rewards. Our method finds the best deterministic policy in a computing time that is relatively close to the one needed to compute the optimal stochastic policy. 
 We theoretically prove that the use of an intuitive rounding technique to obtain a feasible deterministic policy based on the optimal stochastic solution can lead to a policy far from the optimal. 
@@ -161,7 +162,7 @@ Another way for defining the quality of policies is the \textit{Q-value function
 Q^{\tilde{\pi}}(s, a) = r(s, a) + \gamma \sum_{s' \in S} P(s'|s,a)V^{\tilde{\pi}}(s')\;.
 \end{align}
 
-For a give initial state $\beta$, the value of the optimal policy is $\beta \cdot V^{\tilde{\pi}}$, this quantity can be expressed in terms of the visitation frequency function (see \cite{Puterman1994}): 
+For a give initial state distribution $\beta$, the value of the optimal policy is $\beta \cdot V^{\tilde{\pi}}$, this quantity can be expressed in terms of the visitation frequency function (see \cite{Puterman1994}): 
 %The visitation frequency function and value function can be exchanged to each other:
 \begin{align}\label{f-v}
 %(\sum_{s \in S} \beta(s)V^{\tilde{\pi}}(s)) \;\; \;\;  
@@ -195,12 +196,12 @@ over reward function $r \in \mathcal{R}$ is the loss or difference in value betw
 $$R(f^{\pi}, r) = \text{max}_{g} \; r \cdot g - r \cdot f\;.$$
 The \textit{maximum regret} for policy $f^{\pi}$ is the maximum regret of this policy w.r.t the reward set 
 $\mathcal{R}$: $$MR(f^{\pi}, \mathcal{R}) = \text{max}_{r \in \mathcal{R}}\;R(f^{\pi},r)\;.$$ 
-In other words, when we should select the $f$ policy, what is the worst case loss over all possible rewards $\mathcal{R}$. Considering it as a game, the adversary tries to find a reward value in order to maximise our loss.  
+In other words, when we should select the $f$ policy, what is the worst case loss over all possible rewards $\mathcal{R}$. Considering it as a game, the adversary tries to find a reward value in order to maximise our loss for the given $f^{\pi}$.  
 
 Finally we define the \textit{minimax regret} of feasible reward set $\mathcal{R}$ as
 $$MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)\;.$$
-Any policy $f^*$  that minimises the maximum regret is the \textit{minimax-regret optimal policy} for $M$. 
-\ET{We recall that usually such optimal policies are considered stochastic and not deterministic.}
+Any policy $f^*$  that minimises the maximum regret is the \textit{minimax-regret optimal policy} for the $M$ MDP. 
+We recall that usually such optimal policies are considered stochastic and not deterministic.
 There are several approaches for computing the minimax regret \cite{alizadeh2015,benavent2018,Regan2009,daSilva2011,Xu2009}. 
 In this paper, we use the approach presented by Regan and Boutilier \citep{Regan2009} based on \textit{Benders Decomposition} \cite{Benders1962}.
 % to approximate the optimal minimimax regret policy. 
@@ -238,7 +239,7 @@ In this paper, we use the approach presented by Regan and Boutilier \citep{Regan
 %----------------- minmax regret model --------------------
 
 The master program is a linear program computing the minimum regret with respect to all the possible combinations of rewards and adversary policies. We call GEN the set containg all the combinations of rewards and adversary policies. 
-In the first set of constraints, one constraints for each element of GEN $\langle g_r, r \rangle \in \text{GEN}$ is considered. 
+In the first set of constraints, one constraints for each element $\langle g_r, r \rangle \in \text{GEN}$ is considered. 
 %These are pairs $\langle$ policy, reward $\rangle$s wining against policy $f$. 
 The second set of constraints of the master problem, $\gamma E ^{\top}f+ \beta = 0$ guaranties that $f$ is a valid visitation frequency function. For the sake of abbreviation, the $E$ matrix is generated according to the transition function $P$; $E$ is a $|S||A| \times |S|$-matrix with a row for each state action, and one column for each state: $E_{sa,s'} = 
      \begin{cases}
@@ -256,7 +257,7 @@ The slave program receives a feasible policy $f^*$ and
 searches for a policy and a reward value that maximise the regret of the given policy.
 %, in other words, it finds a $\bar{r}$ and $\bar{g}$ such that $r{r} \cdot \bar{g}  - \bar{r}  \cdot f^* > \delta^*$. If such a $(\bar{r},\bar{g})$ is found, it is added to GEN and the master problem is solved again. 
 If this is not the case, the procedure stops and $f^*$ is the (stochastic) policy that minimises the maximum regret. 
-The interaction between master and slave program  can be viewed as a game between two players. The master program  finds an optimal policy that minimises the regret  w.r.t the given adversaries found so far by the slave program, while the slave program searches for an adversary with the maximum gain against the master policy. 
+The interaction between master and slave programs  can be viewed as a game between two players. The master program  finds an optimal policy that minimises the regret  w.r.t the given adversaries found so far by the slave program, while the slave program searches for an adversary with the maximum gain against the master policy. 
 %This game continues until the slave problem can not find neither a policy as $g$ nor a reward as $r$ to generate a higher regret for the given $f$ by the master program.  
 
 The slave problem is a reformulation of the MR($f, \mathcal{R}$) for the received policy $f$ from the master program. According to equation~\eqref{f-v}, the objective function $r \cdot g - r \cdot f$ is rewritten as $\beta \cdot V - r \cdot f$. 
@@ -277,8 +278,8 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 
 \section{An exact enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
 
-From now on, we \ET{focus on developing an algorithm able to provide} an optimal deterministic policy for an IRMDP.
-The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section 11 for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
+From now on, we focus on developing an algorithm able to provide an optimal deterministic policy for an IRMDP.
+The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section $11$ for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
 
 \begin{figure}
 	\begin{center}
@@ -307,23 +308,23 @@ In our application, the root of the branch-and-bound tree is associated to the f
 \item $f_{s,a'}=0, \forall a'\neq a$ for the ``left'' child node.
 \item $f_{s,a}=0$ for the ``right'' child node. 
 \end{itemize} 
-The disjunctions imposes to the left child to represent only deterministic policies with $f_{s,a}\neq 0$  (i.e. $\pi(s,a)=1$). On the other hand, the right child represents deterministic p with $f_{s,a}=0$  (i.e. $\pi(s,a)=0$)
+The disjunctions impose to the left child represents only deterministic policies with $f_{s,a}\neq 0$  (i.e. $\pi(s,a)=1$). On the other hand, the right child represents deterministic policies with $f_{s,a}=0$  (i.e. $\pi(s,a)=0$)
 \footnote{The total number of choices (i.e., the number of state-action pairs) is finite, therefore also the size of the branch-and-bond tree is finite.}. Figure~\ref{fig:pic_bb} presents an example of a branch-and-bound tree for an MDP with $4$ states and $3$ actions. 
 %In this representation, we show at each node the additional restriction to the region 
  
 
 %As already mentioned, 
-To avoid exploring the whole tree, we need a lower bounding procedure to \textit{prune} some of the nodes that do not contain the optimal policy. In our application, we use the optimal stochastic policy as under-estimator of the optimal deterministic policy for a given branch of the tree (we remind that we are minimising, for this reason the underestimator can be viewed as an optimistic estimation of the policy). In this way, if a node has a stochastic policy higher than the best deterministic policy found so far it is not necessary to continue exploring that branch and the node can be pruned.
+To avoid exploring the whole tree, we need a lower bounding procedure to \textit{prune} some of the nodes that do not contain the optimal policy. In our application, we use the optimal stochastic policy as under-estimator of the optimal deterministic policy for a given branch of the tree (\PA{we remind that we are minimising, for this reason the underestimator can be viewed as an optimistic estimation of the policy)}. In this way, if a node has a stochastic policy higher than the best deterministic policy found so far it is not necessary to continue exploring that branch and the node can be pruned.
 
 The final ingredient of a branch-and-bound is a procedure to find feasible deterministic policies. In our implementation, every time that a stochastic policy computed in the bounding procedures is also deterministic, its value can be used to update the value of the best known deterministic policy. %to its value.
 
 
 In Figure~\ref{fig:basic_bb} we show the pseudo-code of our implementation of the branch-and-bound algorithm. The algorithm starts by initializing the value of the best known deterministic policy to $+\infty$ and the list of unexplored nodes to the root node (i.e., the one with no constraints on the $f$ variables).
-The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
+The while loop extracts one unexplored node from the list, fixes the $f$ corresponding to its subregion of feasible deterministic policies and computes a lower bound with Benders decomposition. If the resulting optimal stochastic policy has a maximum regret $\delta^*$ greater or equal than the lower maximum regret found so far for a deterministic policy, no additional nodes are created and the loop extracts another node from the list. \PA{If the node is not pruned but the stochastic solution is deterministic, the value of the best deterministic solution is updated to $\delta^*$}. As last option, if the stochastic solution is not deterministic, a state $s$ with more than one $f$ different from zero is found and the $f^*_{s,a}$ with the highest value is used to create the next two child nodes.
 
 \textbf{Cut-and-branch version of the algorithm.}  %\label{sec:cb}
-In the computational experiments, we test also a modification of the algorithm, called \textit{cut-and-branch}. In this version of the algorithm, we decide to solve the root note of the branch-and-bound tree as usual. % (i.e. with the standard interactin between master and slave). 
-Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
+In the computational experiments, we test also a modification of the algorithm, called \textit{cut-and-branch}. In this version of the algorithm, we decide to solve the root node of the branch-and-bound tree as usual. % (i.e. with the standard interactin between master and slave). 
+Once the algorithm starts to branch, additional Benders cuts are added only if the policy found by the master problem is deterministic. In this way we are sure to compute correctly the value of the maximum regret of a deterministic solution. The advantage of the proposed approach is that the computing time needed to process a node is lower than the one needed by the basic version of the algorithm. On the other hand, the lower bounds obtained in the second case are weaker, this means that the total number of nodes explored can potentially be higher.
 In the computation section we show how the cut-and-branch version of the algorithm outperforms the basic implementation.    
 
 
