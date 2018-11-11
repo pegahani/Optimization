@@ -14,10 +14,10 @@ The transition function has the following properties: from any state $s$ we rest
 For each pair of $(s, a)$ we draw reachable states based on uniform distribution over the set of states. For drawn states, the transition probabilities are formed based on Gaussian distribution. The initial state distribution $\beta$ is uniform and we choose a discount factor $\gamma = 0.95$. 
 \paragraph{Random MDPs, limited connections (\texttt{Random-lim})}
 A random-lim MDP is a random MDP where the number of next states that can be reached with a given action are limited in comparison with random-unlimit MDPs. A random-lim MDP is identified by its number of states $|S|$ and a fixed number of reachable states $n$. The rewards are bounded between two real random values uniformly selected in the interval $[-1.0,1.0]$.
-\PA{The transition function has the following properties: from any state $s$ the number of reachable states is equal to $n$, uniformly selected over the set of states. The number of actions depends on the value of $n$. First, we define $n$ actions, where each of them reaches only a single state among the allowed ones. Secondly, each of the remaining actions reaches two states.} Therefore, we have a total of $n+\frac{n(n-1)}{2}$ actions. The initial state distribution $\beta$ is uniform and we choose a discount factor $\gamma = 0.95$.
+The transition function has the following properties: from any state $s$ the number of reachable states $S'$ is equal to $n$, uniformly selected over the set of states. The number of actions depends on the value of $n$. First, we define $n$ actions, where each of them reaches only a single state from $S'$. Secondly, each of the remaining actions reaches all the possible pairs of states from $S'$. Therefore, we have a total of $n+\frac{n(n-1)}{2}$ actions. The initial state distribution $\beta$ is uniform and we choose a discount factor $\gamma = 0.95$.
 \paragraph{Diamond MDPs (\texttt{Diamond})}
 This class of MDPs has been introduced for the first time in Benavent and Zanuttini~\cite{benavent2018}. 
-\PA{In this family of problems, the reward of a few states suffices to generate a lot of uncertainties about the optimal policy.} %This IRMDP is an interesting set of instances to test our proposed algorithm. 
+%\In this family of problems, the reward of a few states suffices to generate a lot of uncertainties about the optimal policy. %This IRMDP is an interesting set of instances to test our proposed algorithm. 
 
 This class of MDPs has a diamond structure, with one top and one bottom state (playing the role of start and terminal states in the MDP), one intermediate layer of states, containing all the uncertainties on rewards, plus two intermediate layers between the extreme states and the intermediate layer. 
 
@@ -57,7 +57,7 @@ We first notice that the \texttt{Random-lim} and \texttt{Diamond} MDPs have high
 Generally speaking, a stochastic policy can easily allow to ``spread'' the choice from a state to the different next states by allowing fractional values of $\pi$.
 On the other side, a deterministic policy allows to move only to a few states (the ones reached by the single action selected). The higher is the different between the optimal deterministic and stochastic policy, the higher is the probability of taking a suboptimal choice when using the determinising procedure.
 %
-With \texttt{Random-unlim} MDPs, each action leads to  $\lceil \log_2(n) \rceil$ states (\PA{while for the other two classes of MDPs each action leads to two states}). Therefore, for \texttt{Random-unlim} MDPs, even a deterministic policy can visit a significant amount of states.
+With \texttt{Random-unlim} MDPs, each action leads to  $\lceil \log_2(n) \rceil$ states (while for the other two classes of MDPs each action leads to two states). Therefore, for \texttt{Random-unlim} MDPs, even a deterministic policy can visit a significant amount of states.
 %
 The relative small value of VR for the \texttt{Random-unlim} MDPs is probably due to the mentioned behaviour: for \texttt{Random-unlim} MDPs the stochastic policy is usually sufficiently close to the deterministic policy to allow a good approximation when determinising it. 
 
@@ -102,7 +102,7 @@ The use of the cut-and-branch option allows to decrease the computing times for 
 	\begin{center}
     \includegraphics[scale=0.45]{GNUPLOT/output_random.png}
 	\end{center}
-	\caption{Impact of cut-and-branch, \texttt{Random-unlim} MDPs. \PA{add axis names to the graph}}
+	\caption{Impact of cut-and-branch, \texttt{Random-unlim} MDPs (states-actions vs computing time,in seconds).}
 	\label{fig:impact_random} 
 \end{figure}
 %%%%%%%%%%%%%%%%%
@@ -112,7 +112,7 @@ The use of the cut-and-branch option allows to decrease the computing times for 
 	\begin{center}
     \includegraphics[scale=0.45]{GNUPLOT/output_trident.png}
 	\end{center}
-	\caption{Impact of cut-and-branch, \texttt{Random-lim} MDPs. \PA{add axis names to the graph}}
+	\caption{Impact of cut-and-branch, \texttt{Random-lim} MDPs (states-actions vs computing time,in seconds).}
 	\label{fig:impact_trident} 
 \end{figure}
 %%%%%%%%%%%%%%%%%

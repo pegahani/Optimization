@@ -59,7 +59,7 @@ We define the \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) as follows:
 \end{figure}
 %%%%%%%%%%%%%%%%%
 
-The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the \PA{pedix}$a$ instead of using $s_2,a$, i.e. instead of writing $\pi(s_2, a)$ we use $\pi_a$. 
+The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the subscript $a$ instead of using $s_2,a$, i.e. instead of writing $\pi(s_2, a)$ we use $\pi_a$. 
 %According to Figure~\ref{fig:trident}, this is due to the fact that two states $s_0$ and $s_1$ are terminal states and the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi(s_2, a_1)$). 
 %For the same reason, 
 We also use $r_{0}$ in place of $r(s_0)$ and $r_{1}$ in place of $r(s_1)$. Each stochastic policy on the trident MDP can be demonstrated as a tuple $\pi = (\pi_0, \pi_1, \pi_2)$. %where each element indicates the probability of choosing action $a_i$ in state $s_i$. 
@@ -92,9 +92,10 @@ We can hence suppose that there exists an optimal stochastic policy with $\pi_2 
 
 As second part of the proof, we compute the value of the optimal policy considering $\tilde{\pi} = (\pi_0, \pi_1, 0)$ where $\pi_0, \pi_1 \geq 0$ similarly its equivalent visitation frequency is $\tilde{f} = (f_0, f_1, 0)$. 
 %Let $\pi_0,\pi_1$ be a generic policy. 
-\PA{We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see~\ref{sec:Preliminaries}). }For this reason, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (We notice that, with arguments analogous to the ones used in the first part of the proof, we can rule out the case where $g_2 \geq 0$.)
+\PA{We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see Section~\ref{sec:Preliminaries}). }For this reason, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (With arguments analogous to the ones used in the first part of the proof, we can rule out the case where $g_2 \geq 0$.)
 
-Knowing that the maximum regret is the maximum among two choices for the adversary policies, the maximum regret associated to the policy $g =(0, g_1, 0)$ (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following \PA{(Is $g_1 = 1$ ?)}
+Knowing that the maximum regret is the maximum among two choices for the adversary policies, the maximum regret associated to the policy $g =(0, g_1, 0)$ (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following:
+%(Is $g_1 = 1$ ?)
 \begin{align}
 r \cdot g - r \cdot \tilde{f} = A + B +A \pi_0 -(A+B)\pi_1 \label{eq:best_stoc_1}
 \end{align}   
@@ -128,7 +129,8 @@ It is a direct consequence of the fact that in the optimal stochastic policy we 
 If $T_1 > T_0$, the optimal deterministic policy is $\pi^* = (0, 0, 1)$ and its maximum regret is $MR(f^*, \mathcal{R}) = A- A T_0 +(A-B) T_1$. 
 \end{proposition}
 \begin{proof}
-We prove the statement by explicitly computing the maximum regret of the three possible deterministic policies: $\pi = (1, 0, 0), \pi' =(0, 1, 0), \pi''= (0, 0, 1)$ $\PA{ and \; \pi_0=1}$.
+We prove the statement by explicitly computing the maximum regret of the three possible deterministic policies: $\pi = (1, 0, 0), \pi' =(0, 1, 0)$ and $ \pi''= (0, 0, 1)$. 
+%$ and \; \pi_0=1$.
 
 \textit{Maximum regret of $\pi = (1, 0, 0)$}. We want to find the adversary policy that maximises the regret for the policy $\pi$. We do that by computing all possible combinations of adversary policies and rewards:
 \begin{itemize}
