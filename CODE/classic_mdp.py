@@ -166,17 +166,13 @@ def general_random_mdp_rounded(n_states, n_actions, _gamma, _reward_lb, _reward_
 
     pass
 
-######### Trident MDP ############
 
-def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_states = None):
-    if next_states is None:
-        nsuccessors = int(math.ceil(math.log1p(n_states)))
-    else:
-        nsuccessors = next_states
+######### Required functions for Random-limited MDP and DAG MDP############
 
-    n_actions = nsuccessors + math.factorial(nsuccessors)/ (math.factorial(2)*math.factorial(nsuccessors-2))
+def compute_actions(nsuccessors):
+    return nsuccessors + math.factorial(nsuccessors)/ (math.factorial(2)*math.factorial(nsuccessors-2))
 
-    _t = {}
+def generate_reward_bounds(n_states, n_actions, _reward_lb, _reward_up):
     _r = {}
 
     for s in range(n_states):
@@ -187,16 +183,30 @@ def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_stat
             up = np.float32( max(rewards))
             _r.update({(s, a): [lb, up]})
 
+    return _r
+
+def generate_probabilities(n_states, n_actions, probability, nsuccessors, next_states_dic):
+
+    _t = {}
+    next_states = None
+
+    for s in range(n_states):
         """It is syclic MDP"""
-        next_states = random.sample(range(n_states), nsuccessors)
+        if nsuccessors != None:
+            next_states = random.sample(range(n_states), nsuccessors)
+
+        elif next_states_dic != None:
+            next_states = next_states_dic[s]
+
         action_list = range(n_actions)
+
         """assign an action to each next state"""
-        for s2 in next_states[0:nsuccessors+1]:
+        for s2 in next_states: #[0:nsuccessors+1]:
             action = action_list.pop()
             _t.update({(s, action, s2): 1.0})
             _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 != s2})
 
-        """assign an action two each pair of next states"""
+        """assign an action to each pair of next states"""
         for s2 in next_states:
             for s3 in next_states[next_states.index(s2)+1:]:
                 action = action_list.pop()
@@ -204,11 +214,95 @@ def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_stat
                 _t.update({(s, action, s3): 1.0 - probability})
                 _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 not in [s2,s3]})
 
+    return _t
+
+
+######### Random-limited MDP ############
+def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_states = None):
+    if next_states is None:
+        nsuccessors = int(math.ceil(math.log1p(n_states)))
+    else:
+        nsuccessors = next_states
+
+    n_actions = compute_actions(nsuccessors)
+
+    _t = {}
+    _r = {}
+
+    "define reward bounds for each (s,a) pairs"
+    _r = generate_reward_bounds(n_states, n_actions, _reward_lb, _reward_up)
+
+    # for s in range(n_states):
+    #
+    #     """It is syclic MDP"""
+    #     next_states = random.sample(range(n_states), nsuccessors)
+    #     action_list = range(n_actions)
+    #     """assign an action to each next state"""
+    #     for s2 in next_states[0:nsuccessors+1]:
+    #         action = action_list.pop()
+    #         _t.update({(s, action, s2): 1.0})
+    #         _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 != s2})
+    #
+    #     """assign an action to each pair of next states"""
+    #     for s2 in next_states:
+    #         for s3 in next_states[next_states.index(s2)+1:]:
+    #             action = action_list.pop()
+    #             _t.update({(s, action, s2): probability})
+    #             _t.update({(s, action, s3): 1.0 - probability})
+    #             _t.update({(s, action, s3): 0.0 for s3 in next_states if s3 not in [s2,s3]})
+
+    _t = generate_probabilities(n_states = n_states, n_actions = n_actions,probability= probability, nsuccessors= nsuccessors, next_states_dic= None)
+
     return MDP(
         _startingstate= set(range(n_states)),
         _transitions= _t,
-        _rewards_bounds= _r ,
+        _rewards_bounds= _r,
         _gamma = 0.95)
+
+######### DAG MDP ###############
+def DAG_mdp(_gamma, _reward_lb, _reward_up, probability, input_text): #,  next_states = None):
+
+    n_states = None
+    n_actions = None
+    next_states = {}
+
+    with open(input_text, "r") as ins:
+        line_counter = 1
+        for line in ins:
+            if line_counter == 1:
+                "this value is number of states"
+                n_states = int(line)
+                next_states = {i:[] for i in xrange(n_states)}
+
+            elif line_counter == 2:
+                "this value is number of actions"
+                n_actions = int(line)
+
+            else:
+                words = line.split(' ')
+                next_states[int(words[0])-1].append(int(words[1][:-1])-1)
+
+
+            line_counter += 1
+
+    max_successors = max(len(value) for value in next_states.itervalues())
+    n_actions = compute_actions(max_successors)
+
+    #transition probabailities
+    _t = {}
+    #reward bounds
+    _r = {}
+
+    _r = generate_reward_bounds(n_states, n_actions, _reward_lb, _reward_up)
+    _t = generate_probabilities(n_states = n_states, n_actions = n_actions,probability= probability, next_states_dic= next_states, nsuccessors= None)
+
+    return MDP(
+        #the first state is always the start states.
+        _startingstate= set([0]),
+        _transitions= _t,
+        _rewards_bounds= _r,
+        _gamma = 0.95)
+
 
 
 ######### GRID MDP ###############
@@ -546,3 +640,5 @@ def mdp_counter_example(T0, T1, A, B, C):
         _rewards_bounds= _r,
         _gamma = 0.9999, _alpha= _alpha)
 
+trident_mdp(5, 0.95, -1.0, 1.0, 0.3, next_states = None)
+DAG_mdp(0.95, -1.0, 1.0, 0.3, "./test_DAG/test.txt")

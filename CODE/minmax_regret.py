@@ -30,7 +30,7 @@ class minmax_regret:
             for a in xrange(len(self.mdp.actions)):
                 self.reward_bounds.append(self.mdp.rewards_bounds[(s, a)])
 
-	# self.reward_bounds = []
+    # self.reward_bounds = []
 	# for i in range((_mdp.nstates*_mdp.nactions)):
 	# 	random_a = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)
 	# 	random_b = round (random.uniform(_reward_bounds[0],_reward_bounds[1]) , 2)

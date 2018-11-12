@@ -384,7 +384,7 @@ def show_grid_policy(vvmdp,pi,n=10):
 
 
 #******************************** my code for simulating a VVmdp ****************************
-"this part simulate a mdp based on our general form"
+"this part simulate an mdp based on our general form"
 def generate_guassian(element_numbers):
     values = []
     sum = 0
@@ -543,7 +543,6 @@ def test_VVMDP():
     # print "--- value iteration ended ---"
     # pi = gridMdp.best_policy(U)
     # show_grid_policy(gridMdp,pi)
-
 
 def show_test_policy(test, pi):
     print([test.actions[pi[test.stateInd['buro']]], test.actions[pi[test.stateInd['couloir']]]])
