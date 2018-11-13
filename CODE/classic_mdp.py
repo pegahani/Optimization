@@ -260,7 +260,7 @@ def trident_mdp(n_states, _gamma, _reward_lb, _reward_up, probability, next_stat
         _gamma = 0.95)
 
 ######### DAG MDP ###############
-def DAG_mdp(_gamma, _reward_lb, _reward_up, probability, input_text): #,  next_states = None):
+def DAG_mdp(_gamma, _reward_lb, _reward_up, probability, input_text):
 
     n_states = None
     n_actions = None
@@ -302,8 +302,6 @@ def DAG_mdp(_gamma, _reward_lb, _reward_up, probability, input_text): #,  next_s
         _transitions= _t,
         _rewards_bounds= _r,
         _gamma = 0.95)
-
-
 
 ######### GRID MDP ###############
 def grid_MDP(rows, columns, start=None, goal=None):
@@ -640,5 +638,5 @@ def mdp_counter_example(T0, T1, A, B, C):
         _rewards_bounds= _r,
         _gamma = 0.9999, _alpha= _alpha)
 
-trident_mdp(5, 0.95, -1.0, 1.0, 0.3, next_states = None)
-DAG_mdp(0.95, -1.0, 1.0, 0.3, "./test_DAG/test.txt")
+#trident_mdp(5, 0.95, -1.0, 1.0, 0.3, next_states = None)
+exp = DAG_mdp(_gamma = 0.9, _reward_lb = -1.0, _reward_up = 1.0, probability = 0.3, input_text = "./test_DAG/test.txt")
