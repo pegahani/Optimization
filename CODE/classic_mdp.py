@@ -280,7 +280,10 @@ def DAG_mdp(_gamma, _reward_lb, _reward_up, probability, input_text):
 
             else:
                 words = line.split(' ')
-                next_states[int(words[0])-1].append(int(words[1][:-1])-1)
+                added = int(words[1][:-1])
+                source = int(words[0])
+                if added not in next_states[source]:
+                    next_states[source].append(added)
 
 
             line_counter += 1
@@ -639,4 +642,4 @@ def mdp_counter_example(T0, T1, A, B, C):
         _gamma = 0.9999, _alpha= _alpha)
 
 #trident_mdp(5, 0.95, -1.0, 1.0, 0.3, next_states = None)
-exp = DAG_mdp(_gamma = 0.9, _reward_lb = -1.0, _reward_up = 1.0, probability = 0.3, input_text = "./test_DAG/test.txt")
+#exp = DAG_mdp(_gamma = 0.9, _reward_lb = -1.0, _reward_up = 1.0, probability = 0.3, input_text = "./test_DAG/test.txt")

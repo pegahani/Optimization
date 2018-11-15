@@ -1,6 +1,8 @@
-from CODE.classic_mdp import trident_mdp, DAG_mdp
+from classic_mdp import trident_mdp, DAG_mdp
 from minmax_regret import reload_mdp, load_mdp, minmax_regret
 import sys
+import os
+path = os.getcwd()[0:-4]
 
 def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds):
     text_file = open("../DATA/results/deterministic_vs_stochastic_"
@@ -56,7 +58,7 @@ def main(min_states, max_states, step_states, min_actions, max_actions,max_seeds
 
 
 def main_for_DAG(min_layers, max_layers, min_state_layer, max_state_layer, min_edge_per_state, max_edge_per_state):
-    text_file = open("../DATA/results/deterministic_vs_stochastic_"
+    text_file = open(path + "DATA/results/deterministic_vs_stochastic_"
                      + str(min_layers) + "_" + str(max_layers) + "_" + str(min_state_layer)
                      + str(max_state_layer) + "_" + str(min_edge_per_state) + "_" + str(max_edge_per_state) + ".txt", "w")
     # text_file = open("../DATA/results/deterministic_vs_stochastic_fango_07_04_2018.txt", "w")
@@ -69,9 +71,9 @@ def main_for_DAG(min_layers, max_layers, min_state_layer, max_state_layer, min_e
 
                 print "_layers _state_per_layer, _edge_per_state, _gamma : ", _layer, " , ", _state_per_layer, " , ", _edge_per_state, " , ", _gamma
 
-                input_ = "../DATA/instance_DAG/DAG_"+ str(_layer)+"_"+ str(_state_per_layer) + '_' + str(_edge_per_state)+ ".txt"
+                input_ = path + "DATA/instances_DAG/DAG_"+ str(_layer)+"_"+ str(_state_per_layer) + '_' + str(_edge_per_state)+ ".txt"
 
-                _mdp = DAG_mdp(_gamma=0.9, _reward_lb=-10.0, _reward_up=1.00, probability=0.4999, input_text= input_)
+                _mdp = DAG_mdp(_gamma=0.9, _reward_lb=-10.0, _reward_up=10.0, probability=0.4999, input_text= input_)
                 #_mdp = trident_mdp(n_states=10, _gamma= 0.9, _reward_lb= -10, _reward_up= 10, probability = 0.4999, next_states = 3)
                 minmax = minmax_regret(_mdp)
 
@@ -110,17 +112,17 @@ def main_for_DAG(min_layers, max_layers, min_state_layer, max_state_layer, min_e
 
 if __name__ == '__main__':
 
-    # a = int(sys.argv[1])
-    # b = int(sys.argv[2])
-    # c = int(sys.argv[3])
-    # d = int(sys.argv[4])
-    # e = int(sys.argv[5])
-    # f = int(sys.argv[6])
+    a = int(sys.argv[1])
+    b = int(sys.argv[2])
+    c = int(sys.argv[3])
+    d = int(sys.argv[4])
+    e = int(sys.argv[5])
+    f = int(sys.argv[6])
     #
-    # main(a,b,c,d,e,f)
+    main_for_DAG(min_layers=a, max_layers=b, min_state_layer=c, max_state_layer=d, min_edge_per_state=e, max_edge_per_state=f)
     #main(5, 5, 1, 3, 3, 1)
 
-    main_for_DAG(min_layers=3, max_layers=8, min_state_layer=3, max_state_layer=10, min_edge_per_state=3, max_edge_per_state=10)
+    #main_for_DAG(min_layers=3, max_layers=8, min_state_layer=3, max_state_layer=10, min_edge_per_state=3, max_edge_per_state=10)
 
 
 
