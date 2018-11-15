@@ -185,7 +185,7 @@ In this manuscript we deal with
 MDPs with \textit{imprecise reward values} (IRMDP). An IRMDP \citep{Regan2009} is a tuple $M(S, A, P, r, \gamma, \beta)$ where $S, A, P, \gamma$ and $\beta$ are defined as in the previous section, while $r$ is a set of possible reward functions on $S \times A$. $r$ models the uncertainty on real reward values. 
 %To stay coherent, we use the notation presented by \shortcite{benavent2018}, i.e. $M, M, r, r$ signify the standard MDP, IRMDP, real valued reward function and uncertain reward function model respectively.  
 
-Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that the set of possible rewards is modelled as a polytope $\mathcal{R} = \{r: Cr \leq d \}$. \ET{The only assumption we make in this paper concerning the uncertainty set is that we want it to be convex. Any convex set can be approximated with a polytope. For simplicity in our experiments we assume the uncertainty set to be a box. But our method can be trivially extended to any polytope. }
+Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that the set of possible rewards is modelled as a polytope $\mathcal{R} = \{r: Cr \leq d \}$. \ET{The only real restriction we make concerning the uncertainty set is that we want it to be convex bacause it is well known that any convex set can be approximated with a polytope. For simplicity, in our experiments we work with a box as uncertainty set. However, our method can be extended to any generic polytope. }
 % More precisely, we suppose that, each $r(s,a) \in r$ is restricted in an interval. 
 %Thus $r$ is modelled as polytope $C \cdot \overrightarrow{r} \leq \overrightarrow{d}$ where $C$ is $k \times |S||A|$ dimension matrix, $\overrightarrow{d}$ is a $k$ dimensional column vector and $\overrightarrow{r} = (r(s_0,a_0), r(s_0,a_1), \cdots, r(s_0,a_{|A|}), \cdots, r( s_{|S|},a_0), r(s_{|S|},a_1), \cdots, r(s_{|S|},a_{|A|}) )$
  
@@ -283,7 +283,9 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 \section{An exact enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
 
 From now on, we focus on developing an algorithm able to provide an optimal deterministic policy for an IRMDP.
-The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section $11$ for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. \ET{We use branch-and-bound approach because it is the most widely and effective algorithm in combinatorial optimisation since decades.} %Any equivalent algorithm can be used to illustrate our contribution. 
+The algorithm used to achieve this goal is a branch-and-bound framework  that uses the Benders decomposition procedure described in the previous section as bounding procedure.
+\ET{The branch-and-bound algorithm one of the is the most widely and effective algorithms used to solve combinatorial problems since decates (see \cite{bertsimas2005optimization}, Section $11$ for an exhaustive explanation of a generic version of the branch-and-bound algorithm).}
+ %Any equivalent algorithm can be used to illustrate our contribution. 
 
 \begin{figure}
 	\begin{center}
