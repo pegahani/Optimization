@@ -2,7 +2,10 @@
 
 In this section, we provide an experimental evaluation of our algorithms based on \ET{three} classes of test instances: %More precisely, we test our approach on the following sets of IRMDPs: 
 random MDPs with unlimited connections among states, random MDPs with limited connections among states and diamond MPDs.  
-The aim of this section is twofold: we first investigate how in practice the optimal deterministic policy is different from the determinized policy obtained from the optimal stochastic policy. Secondly, we show how the new cut-and-branch version of the algorithm helps to solve faster the instances considered.
+The aim of this section is twofold: we first investigate how in practice the optimal deterministic policy is different from the determinised policy obtained from the optimal stochastic policy. Secondly, we show how the new cut-and-branch version of the algorithm helps to solve faster the instances considered.
+
+\ET{We compare our results against the determinised policies because it reflects what a normal system user would do when forced to obtain a deterministic policy from a stochastic one. }
+
 
 % (1) Random MDPs (\texttt{Random}), (2)  Random MDPs with limited connections (\texttt{Random-lim}) and (3) Diamond MDPs (\texttt{Diamond}) .
 %\item Grid MDPs (\texttt{Grid}).
@@ -67,7 +70,7 @@ The relative small value of VR for the \texttt{Random-unlim} MDPs is probably du
 
 As second observation, we see that the maximum values are quite high for almost all the combinations of parameters considered. Furthermore, for a \texttt{Random-lim} instance with $7$ states and $6$ actions we find a VR of $2.76$, showing that the theoretical worse case showed in Section~\ref{sec:comparison} can be increased. 
 %
-Therefore, choosing to determinise may turn out to be an unsafe choice, specially considering that it is not possible to check how far a determinisied policy is from the optimal.  
+Therefore, choosing to determinise may turn out to be an unsafe choice, specially considering that it is not possible to check how far a determinised policy is from the optimal.  
 % $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
 
 %Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. On the other hand, the cut-and-branch version of the algorithm is almost two times faster than the basic version.  

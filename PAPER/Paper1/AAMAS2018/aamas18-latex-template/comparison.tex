@@ -10,10 +10,10 @@
 %\end{wrapfigure}
 
 The goal of this section is to give a theoretical motivations of the importance of studying specific algorithms for finding an optimal deterministic policy. \\
-We introduce the intuitive concept of \emph{determinising procedure}, a way to obtain a feasible deterministic policy starting from a stochastic policy. This procedure is based on the assumption that, if only one action is possible for each state, it is reasonable to assume that the most probable action should be chosen. This procedure is fast and it can be applied to any feasible stochastic policy. However, there exists no guarantee on the quality of the policy obtained, regardless of the quality of the stochastic policy used. In this section we theoretically show that using this ``common sense'' idea of adapting a stochastic policy can lead to solution significantly sub-optimal. In Section~\ref{sec:experiments} we show how the computational results obtained are consistent with the findings of this section.
+We introduce the intuitive concept of \emph{determinised policy}, a way to obtain a feasible deterministic policy starting from a stochastic policy. This procedure is based on the assumption that, if only one action is possible for each state, it is reasonable to assume that the most probable action should be chosen. This procedure is fast and it can be applied to any feasible stochastic policy. However, there exists no guarantee on the quality of the policy obtained, regardless of the quality of the stochastic policy used. In this section we theoretically show that using this ``common sense'' idea of adapting a stochastic policy can lead to solution significantly sub-optimal. In Section~\ref{sec:experiments} we show how the computational results obtained are consistent with the findings of this section.
 %In the following two paragraphs we fist formally define the mentioned determinising procedure and subsequently we give a small example where such procedure provides a maximum regret far from the one given by the optimal deterministic policy.
 
-\paragraph{\textbf{The determinising procedure.}}%\label{sec:rounding}
+\paragraph{\textbf{The determinised policy.}}%\label{sec:rounding}
 
 Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounding'' deterministic policy $\hat{\pi}$ can be computed as follows:
 
@@ -26,7 +26,7 @@ Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic
 \item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing $\hat{f}$.
 \end{itemize} 
  
-The approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behavior of a user that want to derive a deterministic policy starting from a stochastic one. 
+The approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behavior of a user that want to derive a deterministic policy starting from a stochastic one. \ET{From now on, we name this rounding deterministic policy as ``deteminised policy'' for the rest of the paper.}
 %
 %For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimises the max regrets).
 %
@@ -92,7 +92,7 @@ We can hence suppose that there exists an optimal stochastic policy with $\pi_2 
 
 As second part of the proof, we compute the value of the optimal policy considering $\tilde{\pi} = (\pi_0, \pi_1, 0)$ where $\pi_0, \pi_1 \geq 0$ similarly its equivalent visitation frequency is $\tilde{f} = (f_0, f_1, 0)$. 
 %Let $\pi_0,\pi_1$ be a generic policy. 
-\PA{We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see Section~\ref{sec:Preliminaries}). }For this reason, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (With arguments analogous to the ones used in the first part of the proof, we can rule out the case where $g_2 \geq 0$.)
+We notice that the adversary policy by its equivalent visitation frequency $g$ giving a maximum regret is always deterministic (see Section~\ref{sec:Preliminaries}). For this reason, we have only two adversary policies: we can have either $g = (g_0, g_1, g_2)$ where $g_0 = g_2=0$ and $g_1 > 0$ or the opposite, $g' = (g_0, g_1, g_2)$ where $g_0>0$ and $g_1 = g_2 = 0$. (With arguments analogous to the ones used in the first part of the proof, we can rule out the case where $g_2 \geq 0$.)
 
 Knowing that the maximum regret is the maximum among two choices for the adversary policies, the maximum regret associated to the policy $g =(0, g_1, 0)$ (obtained by fixing $r_0 = -A$ and $r_1 = A+B$) is the following:
 %(Is $g_1 = 1$ ?)
@@ -118,7 +118,7 @@ That has as optimal solution the values $\pi_{0}=\dfrac{2A - B}{4A}$ and $\pi_{1
 
 Proposition~\ref{theorem:opt_stoc} implies the following Lemma:
 \begin{lemma}\label{lemma:heur_policy}
-The \PA{determinised (rounding) policy} for the Trident MDP is $\hat{\pi} = (0, 1, 0)$ %$ $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$ 
+The determinised policy (rounding policy) for the Trident MDP is $\hat{\pi} = (0, 1, 0)$ %$ $\pi_0 =\pi_2 = 0$ and $\pi_1 = 1$ 
 and its maximum regret is $MR(\hat{f}, \mathcal{R}) = 2A-B$.
 \end{lemma}
 \begin{proof}
@@ -184,10 +184,10 @@ A- A T_0 +(A-B) T_1 \leq 2A - B \\
  \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
   \Leftrightarrow (2A-B)T_1 \leq 2A-B  \Leftrightarrow T1 \leq 1\;.
 \end{align*}
- Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is $\piç* = \pi''= (0, 0,1)$ and its maximum regret is equal to $MR(f^{\pi''} =  \mathcal{R})A- A T_0 +(A-B) T_1$. 
+ Since we have by construction that $T_1 \leq1$ we can conclude that for any $T_1> T_0$ the optimal deterministic policy is $\piç* = \pi''= (0, 0,1)$ and its maximum regret is equal to $MR(f^{\pi''}, \mathcal{R}) = A- A T_0 +(A-B) T_1$. 
 \end{proof}
 
-\PA{Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} show that for any Trident MDP we have that the optimal deterministic policy and the rounding deterministic policy are always different. }
+Proposition~\ref{theorem:opt_det} and Lemma~\ref{lemma:heur_policy} show that for any Trident MDP we have that the optimal deterministic policy and the determinised policy (rounding policy) are always different.
 
 
 The following Lemma shows that the rounding policy could be significantly worse than the optimal deterministic policy:
@@ -204,4 +204,4 @@ The statement follows from the definition of the limit.
 
 %Lemma~\ref{lemma:gap2} shows that even small MDP can present
 
-From a theoretical point of view, it is still unknown what is the highest possible value we can have greater than $2$ (or even a ratio that goes to infinity). From a practical point of view, such small example shows how the use of the determinising policy can lead to a maximum regret  $100\%$ far from the optimal. 
+From a theoretical point of view, it is still unknown what is the highest possible value we can have greater than $2$ (or even a ratio that goes to infinity). From a practical point of view, such small example shows how the use of the determinised policy can lead to a maximum regret  $100\%$ far from the optimal. 

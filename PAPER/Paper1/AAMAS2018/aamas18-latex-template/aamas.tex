@@ -148,7 +148,7 @@ A \textit{Markov Decision Process (MDP)} \citep{Puterman1994} is defined by a tu
 
 A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$. A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$. A policy $\pi$ induces a \textit{visitation frequency function} $f^{\tilde{\pi}}$ where $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$ (see Section $6.9$ in \cite{Puterman1994}):
 \begin{align*}
-f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}(S_t = s', A_t = a | S_1 = s)
+f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)
 \end{align*}
 where the sum is taken over trajectories defined by $S_0 \sim \beta, A_t \sim \tilde{\pi}(S_t)$ and $S_{t+1} \sim P(.|S_t,A_t)$. The policy is computable from $f^{\tilde{\pi}}$, via 
 \begin{align}\label{pi_f}
@@ -185,7 +185,8 @@ In this manuscript we deal with
 MDPs with \textit{imprecise reward values} (IRMDP). An IRMDP \citep{Regan2009} is a tuple $M(S, A, P, r, \gamma, \beta)$ where $S, A, P, \gamma$ and $\beta$ are defined as in the previous section, while $r$ is a set of possible reward functions on $S \times A$. $r$ models the uncertainty on real reward values. 
 %To stay coherent, we use the notation presented by \shortcite{benavent2018}, i.e. $M, M, r, r$ signify the standard MDP, IRMDP, real valued reward function and uncertain reward function model respectively.  
 
-Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that the set of possible rewards is modelled as a polytope $\mathcal{R} = \{r: Cr \leq d \}$. % More precisely, we suppose that, each $r(s,a) \in r$ is restricted in an interval. 
+Similar to several previous works in the literature \cite{Ahmed2017,alizadeh2015,benavent2018,Regan2009,Weng2013}, we assume that the set of possible rewards is modelled as a polytope $\mathcal{R} = \{r: Cr \leq d \}$. \ET{The only assumption we make in this paper concerning the uncertainty set is that we want it to be convex. Any convex set can be approximated with a polytope. For simplicity in our experiments we assume the uncertainty set to be a box. But our method can be trivially extended to any polytope. }
+% More precisely, we suppose that, each $r(s,a) \in r$ is restricted in an interval. 
 %Thus $r$ is modelled as polytope $C \cdot \overrightarrow{r} \leq \overrightarrow{d}$ where $C$ is $k \times |S||A|$ dimension matrix, $\overrightarrow{d}$ is a $k$ dimensional column vector and $\overrightarrow{r} = (r(s_0,a_0), r(s_0,a_1), \cdots, r(s_0,a_{|A|}), \cdots, r( s_{|S|},a_0), r(s_{|S|},a_1), \cdots, r(s_{|S|},a_{|A|}) )$
  
 
@@ -282,7 +283,7 @@ Constraints~\eqref{eq:sum_I} and~\eqref{eq:bin_I} impose to  have a deterministi
 \section{An exact enumerative scheme to find the optimal deterministic solution}\label{sec:bb} 
 
 From now on, we focus on developing an algorithm able to provide an optimal deterministic policy for an IRMDP.
-The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section $11$ for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. 
+The algorithm used to achieve this goal is a branch-and-bound framework (see \cite{bertsimas2005optimization}, Section $11$ for an exhaustive explanation of the branch-and-bound algorithm) that uses the Benders decomposition procedure described in the previous section as bounding procedure. \ET{We use branch-and-bound approach because it is the most widely and effective algorithm in combinatorial optimisation since decades.} %Any equivalent algorithm can be used to illustrate our contribution. 
 
 \begin{figure}
 	\begin{center}
