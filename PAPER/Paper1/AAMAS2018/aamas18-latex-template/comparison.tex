@@ -26,7 +26,7 @@ Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic
 \item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing $\hat{f}$.
 \end{itemize} 
  
-The approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behavior of a user that want to derive a deterministic policy starting from a stochastic one. \ET{From now on, we will name this rounding deterministic policy as ``deteminised policy''.}
+The approach computes the deterministic policy by selecting the action with the highest probability for each state. Despite being pretty simple, this approach represents a plausible behavior of a user that want to derive a deterministic policy starting from a stochastic one. From now on, we will name this rounding deterministic policy as ``deteminised policy''.
 %
 %For the \textit{Tiny MDP} presented in Bruno's manuscript, it is easy to check that the rounding heuristic always gives the optimal deterministic policy (i.e., the one that minimises the max regrets).
 %
@@ -178,7 +178,7 @@ The maximum between~\eqref{eq:regret2_1} and~\eqref{eq:regret2_2} depends on the
 By imposing  $A- A T_0 +(A-B) T_1 \geq A+B+A T_0 -(A+B) T_1$ we obtain:
 $$ 2A T_1 \geq 2 A T_0 + B\;. $$
 We recall that by construction we have $A \gg B$, this implies that if $T_1> T_0$ (resp. $T_1\leq T_0$)  we have that the maximum regret is equal to~\eqref{eq:regret2_1} (resp.~\eqref{eq:regret2_2}).
-\PA{The minimum maximum regret found so far is the one obtained for $\pi = \pi' = (0, 1, 0)$, and it is equal to $MR(f^{\pi'}, \mathcal{R}) = 2A-B$. }Therefore, it remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
+The minimum maximum regret found so far is the one obtained for $\pi = \pi' = (0, 1, 0)$, and it is equal to $MR(f^{\pi'}, \mathcal{R}) = 2A-B$. Therefore, it remains to check for which values of $T_0 > T_1$ we have that $2A-B \geq~\eqref{eq:regret2_1}$:
 \begin{align*}
 A- A T_0 +(A-B) T_1 \leq 2A - B \\
  \Leftrightarrow A- A (1-T_1) +(A-B) T_1 \leq 2A - B\\
