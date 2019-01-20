@@ -221,7 +221,7 @@ cross/.default={1pt}}
 \input{#1.pdf_tex}%
 }
 
-\title[Maximum Regrets 4 MDP]{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
+\title[Maximum Regrets 4 IRMDP]{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
 %\subtitle{\emph{S\'eminaire CNAM 2017}}
 \author[P. Alizadeh]{Gugulino}
 \institute[LIPN]{\emph{LIPN - CNRS - Univ. Paris 13 - USPC}}
@@ -308,14 +308,14 @@ for a given state, the \textit{action} to be taken is chosen with a given \texti
 \begin{frame}
 \frametitle{Stochastic vs deterministic policies}
 \begin{itemize}
-\item \textbf{Advantages} of stochastic policies:
+\item \textbf{Advantages} of \textbf{stochastic policies}:
 \begin{itemize}
 \item Finding an optimal stochastic policy is usually \imp{easier (faster) }than finding the optimal
 deterministic policy.
 \item Allowing stochastic policy = usually policies with a \imp{better value}.
 \end{itemize}
 \pause
-\item \textbf{Disadvantages} of stochastic policies:
+\item \textbf{Advantages} of \textbf{deterministic policies}:
 \begin{itemize}
 \item A deterministic policy is \imp{easier to understand }from a user’s point of view.
 \item A stochastic policy \imp{optimal only in expectation }on random
@@ -326,13 +326,123 @@ $\Rightarrow$ It offers \textit{no guarantee of optimality if it is used only on
 \end{frame}
 
 
+\section[Solution method]{Solution method}
+
+
 \begin{frame}
-\frametitle{Solution method}
+
+\frametitle{Solution method: \textit{Benders Decomposition}}
+\textbf{Variables}:
+\begin{itemize}
+\item $\imp{\delta }\in \R$: value of the maximum regret.
+\item $\imp{f} \in \R^{|S|\times|A|}$: frequency function. 
+\end{itemize}
+\pause
+\textbf{Constraints}:
+\begin{overlayarea}{\textwidth}{3cm}
+    \only<2,3,4>{
+\begin{itemize}
+\item<2,3,4> $f$ must be a \textit{valid visitation frequency function}:\\
+$f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)$\\
+\item[]<3,4>
+$\beta(s)=$ initial state distribution function.~~~~ $\gamma =$ discount factor.\\
+$E_{sa,s'} =     \begin{cases}
+       P(s'|s, a) &\quad \text{if } s' \neq s\\
+       P(s'|s, a) - \frac{1}{\gamma} &\quad \text{if } s' = s
+     \end{cases}\;.$\\
+\item[]<4>
+$\Rightarrow$ \imp{$\gamma E^{\top} f + \beta = 0 $}
+\end{itemize}
+    }
+        \only<5,6,7>{
+\begin{itemize}
+\item<5,6,7> $GEN=$ set of all combinations of \textit{rewards $r$} and corresponding \textit{optimal adversary policies $g_r$}.\\
+\item[]<6,7>
+for a given policy $f'$, its regret with respect to a given reward r is :\\
+$r\cdot g_r - r \cdot f'$\\
+\item[]<7>
+$\Rightarrow$ \imp{$r\cdot g_r - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}$}
+\end{itemize}
+    }
+\end{overlayarea}
+
+
+
+
 \end{frame}
 
+\begin{frame}
+\frametitle{Solution method: \textit{Benders Decomposition}}
+
+\begin{center}
+\texttt{Master Program}
+\begin{alignat*}{3}
+&\text{minimise}_{\delta, f} && \delta & \\
+&\text{subject to:}&\quad& r\cdot g - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}\\
+&& \quad& \gamma E^{\top} f + \beta = 0 
+\end{alignat*}
+\end{center}
+\begin{itemize}
+\item The Benders cuts are \imp{generated iteratively}.
+\item The slave program receives a \textit{feasible policy $f^*$} and searches
+for a \textit{reward value $r$} and a \textit{policy $g_r$} that \imp{maximize the regret} of the
+given policy $f^*$.
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{Solution method}
+\frametitle{Solution method: \textit{Benders Decomposition}}
+
+
+\begin{center}\label{minimax}
+%%%%%
+\texttt{Slave Program}
+\begin{alignat*}{3}
+&\text{maximize}_{Q, V, I, r} && \beta \cdot V - r \cdot f \\
+&\text{subject to:} &\quad& Q_a = r_a + \gamma P_aV &\quad \forall a \in A\\
+&& \quad& V \geq Q_a  &\quad \forall a \in A\\
+&& \quad& V \leq (1-I_a)M_a + Q_a  &\quad \forall a \in A\\
+&& \quad& Cr \leq d \\
+&& \quad& \sum_{a \in A} I_a = 1\\
+&& \quad& I_a(s) \in \{0, 1 \} &\quad \forall s \in S, \; a \in A\\
+&& \quad& M_a = M^{\top} - M_a^{\perp} &\quad \forall a \in A
+\end{alignat*}
+%%%%%%
+\end{center}
+\begin{itemize}
+\item The adversary policy proposes an extreme policy w.r.t the given $f$ \\
+$\Rightarrow$ \imp{the Slave Program always returns a deterministic policy}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{\textit{Benders Decomposition} + \textit{Branch-and-Bound}}
+\textbf{Goal}: developing an algorithm able to \imp{provide an optimal deterministic policy} for an IRMDP.
+
+\begin{columns}
+\begin{column}{0.4\textwidth}
+A branch is obtained by selecting a couple $(s,a)$ 
+and imposing the disjunction on the two child nodes:
+\begin{itemize}
+\item $f_{s,a'}=0, \forall a'\neq a$\\
+for the ``left'' child node.
+\item $f_{s,a}=0$\\
+ for the ``right'' child node. 
+\end{itemize} 
+
+\end{column}
+\begin{column}{0.59\textwidth}
+\begin{figure}
+	\begin{center}
+    \includegraphics[scale=0.24]{images/bb.png}
+	\end{center}
+\caption{Example $3$ actions per state}
+\end{figure}
+
+\end{column}
+\end{columns}
+
+
 \end{frame}
 
 \end{document}
