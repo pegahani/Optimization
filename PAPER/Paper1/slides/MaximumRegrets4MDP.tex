@@ -288,7 +288,7 @@ other possible policies} and reward instantiations.
 
 
 \begin{frame}
-\frametitle{Min max regret- basic definitions}
+\frametitle{Minmax regret - basic definitions}
 
 TODO
 
@@ -421,12 +421,12 @@ $\Rightarrow$ \imp{the Slave Program always returns a deterministic policy}.
 
 \begin{columns}
 \begin{column}{0.4\textwidth}
-A branch is obtained by selecting a couple $(s,a)$ 
+A branch is obtained by selecting a couple \imp{$(s,a)$} 
 and imposing the disjunction on the two child nodes:
 \begin{itemize}
-\item $f_{s,a'}=0, \forall a'\neq a$\\
+\item \imp{$f_{s,a'}=0, \forall a'\neq a$}\\
 for the ``left'' child node.
-\item $f_{s,a}=0$\\
+\item \imp{$f_{s,a}=0$}\\
  for the ``right'' child node. 
 \end{itemize} 
 
@@ -436,13 +436,142 @@ for the ``left'' child node.
 	\begin{center}
     \includegraphics[scale=0.24]{images/bb.png}
 	\end{center}
-\caption{Example $3$ actions per state}
+	\vspace{-0.5cm}
+\caption{Example with  $3$ actions per state}
 \end{figure}
 
 \end{column}
 \end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{\textit{Benders Decomposition} + \textit{Branch-and-Bound}}
+We propose \textbf{Cut-and-branch}, an improved version of the algorithm.
+
+\begin{itemize}
+\item The \imp{root node} of the branch-and-bound tree is \imp{solved as usual}.
+\item In \imp{other nodes} of the branch-and-bound tree: \imp{additional Benders cuts} are added \imp{only
+if the policy found by the master problem is deterministic}. \\
+%%(in this way we are sure to compute correctly the value of the maximum regret of a deterministic solution).
+\pause
+\item \textbf{PRO}: the time needed to process a node is lower.
+\pause
+\item  \textbf{CON}: the lower bound obtained is weaker (usually more nodes are explored).
+\pause
+\item[] $\Rightarrow$ we explore more nodes but faster.
+\end{itemize}
+\end{frame}
+
+
+
+\section[Theoretical analysis]{Theoretical analysis}
+
+\begin{frame}
+\frametitle{\textit{Determinised} policy}
+\begin{itemize}
+\item We want to obtain a deterministic policy from a stochastic policy.
+\item \textbf{Basic idea}: if only one action is possible for each state, we assume that the most probable action should be chosen. 
+\end{itemize}
+
+\begin{block}{Determinised policy}
+Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounding'' determinised policy $\hat{\pi}$ can be computed as follows:
+\begin{itemize}
+\item for each $s'\in S$:
+\begin{itemize}
+\item find the action \imp{$a' = \text{argmax}_{a \in A}f_{s',a}$}.
+\item fix the rest of the action to zero: $\hat{f}_{s',a} =0, \forall a \neq a'$
+\end{itemize}
+\item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing $\hat{f}$.
+\end{itemize} 
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{\textit{Determinised} policy}
+
+\begin{theorem}
+The ratio between the maximum regret of the determinised policy and the optimal deterministic policy can be at least equal to $2$
+\end{theorem}
+
+\begin{itemize}
+\item The theorem confirms that using this “common sense” idea of adapting
+a stochastic policy can lead to \imp{solution significantly sub-optimal}.
+\end{itemize}	
+\end{frame}
+
+\section[Experimental results]{Experimental results}
+
+\begin{frame}
+\frametitle{Instance description}
+\begin{itemize}
+\item Random MDPs, unlimited connections (\texttt{Random-unlim}).\\
+ From the literature.
+\item Random MDPs, limited connections (\texttt{Random-lim}).\\
+ New set of instances.
+\item Diamond MDPs (\texttt{Diamond}).\\
+ From the literature and new.
+\end{itemize}
+\begin{block}{Value Ratio ($VR$)}
+Let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the determinised policy and $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy.\\
+
+We define the \textit{Value Ratio} of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;$.
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Experimental results - VR}
+\begin{overlayarea}{\textwidth}{6cm}
+    \only<1>{
+    
+\input{tab_random_slim.tex}  
+\input{tab_random_trident_slim.tex}  
+    }
+        \only<2>{
+\input{tab_random_diamond_slim.tex}  
+    }
+\end{overlayarea}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Experimental results - cut-and-branch}
+
+
+\begin{overlayarea}{\textwidth}{6cm}
+    \only<1>{
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.45]{GNUPLOT/output_random.png}
+	\end{center}
+	\caption{Impact of cut-and-branch, \texttt{Random-unlim} MDPs (states-actions vs computing time, in seconds).}
+	\label{fig:impact_random} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
+    }
+        \only<2>{
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.45]{GNUPLOT/output_trident.png}
+	\end{center}
+	\caption{Impact of cut-and-branch, \texttt{Random-lim} MDPs (states-actions vs computing time, in seconds).}
+	\label{fig:impact_trident} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
+    }
+\end{overlayarea}
+
 
 
 \end{frame}
 
+
+
+\section[Conclusions]{Conclusions}
+
+\begin{frame}
+\frametitle{Conclusions}
+\end{frame}
 \end{document}
