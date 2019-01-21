@@ -223,8 +223,9 @@ cross/.default={1pt}}
 
 \title[Maximum Regrets 4 IRMDP]{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
 %\subtitle{\emph{S\'eminaire CNAM 2017}}
-\author[P. Alizadeh]{Gugulino}
-\institute[LIPN]{\emph{LIPN - CNRS - Univ. Paris 13 - USPC}}
+\author[P. Alizadeh]{Pegah Alizadeh}
+%%\institute[LIPN]{\emph{LIPN - CNRS - Univ. Paris 13 - USPC}}
+\institute[U LdV]{\emph{Pôle Universitaire Léonard de Vinci - Paris}}
 
 \date[02/03/2018]{\normalsize{EGC 2019}\\Metz 21-25 Janvier 2019}
 
@@ -239,10 +240,56 @@ cross/.default={1pt}}
 
 \begin{frame}
 \frametitle{MDP - basic definitions}
+\begin{block}{Markov Decision Process (MDP)}
+A \textit{Markov Decision Process (MDP)} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where:
+\begin{itemize}
+\item
+ $S$ is a finite set of states.
+ \item $A$ is finite set of actions.
+ \item $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where:
+$P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$ and choosing action $a$.
+\item $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$.
+\item  $\gamma \in [0, 1[$ is the discount factor.
+\item $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function}.
+\end{itemize}
+\end{block}
 
-TODO
 
 \end{frame}
+
+
+\begin{frame}
+\frametitle{MDPs - basic definitions}
+\begin{block}{Deterministic policy}
+A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$.
+\end{block}
+
+\begin{block}{Stochastic policy}
+ A (stationary) \textit{stochastic policy} is a function $\tilde{\pi}: S \times A \longrightarrow [0,1]$ which indicates with probability $\tilde{\pi} (s,a)$, action $a$ is chosen in state $s$ according to policy $\tilde{\pi}$.
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{MDPs - basic definitions}
+\begin{block}{Visitation frequency function $f^{\tilde{\pi}}$}
+$f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$:
+\vspace{-0.5cm}
+$$
+f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)
+$$
+\end{block}
+\pause
+\begin{itemize}
+\item The policy $\tilde{\pi}(s,a)$ is computable from $f^{\tilde{\pi}}$ as follows
+\begin{align*}
+\tilde{\pi}(s,a) = \frac{f^{\tilde{\pi}}(s, a)}{\sum_{a'} f^{\tilde{\pi}} (s,a')}\;.
+\end{align*}
+\pause
+\item For a deterministic policies we have that $f^{\pi}(s,a)= 0$, $\forall a \neq \pi(s)$.\\
+\end{itemize}
+\end{frame}
+
 
 
 \begin{frame}
@@ -287,10 +334,60 @@ other possible policies} and reward instantiations.
 \end{frame}
 
 
+
+\begin{frame}
+\frametitle{IRMDPs - basic definitions}	
+\begin{block}{MDPs with \textit{imprecise reward values} (IRMDP)}
+An IRMDP is a tuple $M(S, A, P, r, \gamma, \beta)$ where
+\begin{itemize}
+\item $S, A, P, \gamma$ and $\beta$ : as standard MDPs.
+\item $r \in \mathcal{R}$ is a set of possible reward functions on $S \times A$.
+\end{itemize}
+\end{block}
+\begin{itemize}
+\item  $r$ models the uncertainty on real reward values. 
+\item We assume $\mathcal{R} = \{r: Cr \leq d \}$. 
+\item For simplicity, in our experiments we work with a box as uncertainty set.
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Minmax regret - basic definitions}
 
-TODO
+\begin{block}{regret $R(f^{\pi}, r)$}
+$$R(f^{\pi}, r) = \text{max}_{g} \; r \cdot g - r \cdot f\;.$$
+$R(f^{\pi}, r)$ is the loss or difference in value between f and the optimal policy under $r$.
+\end{block}
+\pause
+\begin{block}{maximum regret $MR(f^{\pi}, \mathcal{R})$}
+ $$MR(f^{\pi}, \mathcal{R}) = \text{max}_{r \in \mathcal{R}}\;R(f^{\pi},r)\;.$$ 
+$MR(f^{\pi}, \mathcal{R})$ is the maximum regret of this policy w.r.t the reward set $\mathcal{R}$.
+\end{block}
+\begin{overlayarea}{\textwidth}{4cm}
+    \only<3>{
+    
+\vspace{-0.25cm}
+\begin{itemize}
+\item In other words, what is the worst case loss over all possible rewards $\mathcal{R}$?
+\item Considering it as a game, the adversary tries to find a reward value $r$ in order to maximise our loss for the given $f^{\pi}$.  
+\end{itemize}
+    }
+        \only<4>{
+        
+\vspace{-0.5cm}
+\begin{block}{minimax regret}
+We define the \textit{minimax regret} of feasible reward set $\mathcal{R}$ as:
+$$MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)\;.$$
+\end{block}
+    }
+\end{overlayarea}
+
+
+
+
+
+
 
 \end{frame}
 
