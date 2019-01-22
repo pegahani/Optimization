@@ -223,11 +223,11 @@ cross/.default={1pt}}
 
 \title[Maximum Regrets 4 IRMDP]{Deterministic Solutions Based on Maximum Regrets in MDPs with Imprecise Rewards}
 %\subtitle{\emph{S\'eminaire CNAM 2017}}
-\author[P. Alizadeh]{Pegah Alizadeh}
+\author[Alizadeh, Osmani, Traversi]{\underline{Pegah Alizadeh}, Aomar Osmani, Emiliano Traversi}
 %%\institute[LIPN]{\emph{LIPN - CNRS - Univ. Paris 13 - USPC}}
-\institute[U LdV]{\emph{Pôle Universitaire Léonard de Vinci - Paris}}
+\institute[LdV, LIPN]{\emph{Pôle Universitaire Léonard de Vinci\\ LIPN, Université Paris13 - Paris}}
 
-\date[02/03/2018]{\normalsize{EGC 2019}\\Metz 21-25 Janvier 2019}
+\date[23/01/2019]{\normalsize{EGC 2019}\\Metz 21-25 Janvier 2019}
 
 \begin{document}
 
@@ -239,20 +239,41 @@ cross/.default={1pt}}
 \section[Basic definitions]{Basic definitions and motivation}
 
 \begin{frame}
-\frametitle{MDP - basic definitions}
+\frametitle{Why MDPs?}
+\imp{Markov Decision Processes (MDPs)} are effective models for representing and solving \imp{sequential decision problems} (autonomous vehicles, robotics or web service composition).
+
+\begin{itemize}
+\item Applications: autonomous vehicles, robotics, web service composition, $\dots$. 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Markov Decision Process (MDP) - basic definitions}
+
+   \begin{minipage}{0.4\linewidth}
+      %\centering
+       \includegraphics[scale=0.22]{./images/mdp.png}      
+   \end{minipage}\hfill
+\begin{minipage}{0.6\linewidth}  
+
 \begin{block}{Markov Decision Process (MDP)}
-A \textit{Markov Decision Process (MDP)} is defined by a tuple $M(S, A, P, r, \gamma, \beta)$, where:
+%A \textit{Markov Decision Process (MDP)} 
+a tuple $M(S, A, P, r, \gamma, \beta)$, where:
 \begin{itemize}
 \item
  $S$ is a finite set of states.
  \item $A$ is finite set of actions.
- \item $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} where:
-$P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$ and choosing action $a$.
-\item $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative) obtained by choosing action $a$ in state $s$.
+\item $P: S \times A \times S \longrightarrow [0,1]$ is a \textit{transition function} 
+%where:
+%$P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$ and choosing action $a$.
+\item $r: S \times A \longrightarrow \mathbb{R}$ is a \textit{reward function} (or penalty, if negative)% obtained by choosing action $a$ in state $s$.
 \item  $\gamma \in [0, 1[$ is the discount factor.
 \item $\beta: S \longrightarrow [0,1]$ is an \textit{initial state distribution function}.
 \end{itemize}
 \end{block}
+
+\end{minipage}
 
 
 \end{frame}
@@ -260,6 +281,9 @@ $P(s'|s,a)$ encodes the probability of going to state $s'$ by being in state $s$
 
 \begin{frame}
 \frametitle{MDPs - basic definitions}
+
+Goal: maximize the expected sum of rewards.
+
 \begin{block}{Deterministic policy}
 A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$.
 \end{block}
@@ -272,35 +296,29 @@ A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarr
 
 \begin{frame}
 \frametitle{MDPs - basic definitions}
-\begin{block}{Visitation frequency function $f^{\tilde{\pi}}$}
+
+\begin{block}{}
+{\color{blue}Value function:} $V^{\tilde{\pi}}(s) = \mathbb{E}(\sum_{t=0}^{\infty} \gamma^{t} r(s_t, \tilde{\pi}(s_t))$.\\
+\vspace{0.3cm}
+{\color{blue}Visitation frequency function:}\\ %$f^{\tilde{\pi}}$
 $f^{\tilde{\pi}}(s,a)$ is the total discounted joint probability of being in state $s$ and choosing action $a$:
 \vspace{-0.5cm}
 $$
 f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)
 $$
+\vspace{0.3cm}
+{\color{blue} Relation :} $\beta \cdot V^{\tilde{\pi}} = r \cdot f^{\tilde{\pi}}$
 \end{block}
 \pause
+
 \begin{itemize}
-\item The policy $\tilde{\pi}(s,a)$ is computable from $f^{\tilde{\pi}}$ as follows
+\item The policy $\tilde{\pi}(s,a)$ is computable from $f^{\tilde{\pi}}$:
 \begin{align*}
 \tilde{\pi}(s,a) = \frac{f^{\tilde{\pi}}(s, a)}{\sum_{a'} f^{\tilde{\pi}} (s,a')}\;.
 \end{align*}
-\pause
-\item For a deterministic policies we have that $f^{\pi}(s,a)= 0$, $\forall a \neq \pi(s)$.\\
+%\pause
+%\item For a deterministic policies we have that $f^{\pi}(s,a)= 0$, $\forall a \neq \pi(s)$.\\
 \end{itemize}
-\end{frame}
-
-
-
-\begin{frame}
-\frametitle{Why MDPs?}
-\imp{Markov Decision Processes (MDPs)} are effective models for representing and solving \imp{sequential decision problems}(autonomous vehicles, robotics or service composition).
-
-\begin{itemize}
-\item Applications: autonomous vehicles, robotics, service composition, $\dots$. 
-\item Goal: maximize the expected sum of rewards.
-\end{itemize}
-
 \end{frame}
 
 
@@ -325,12 +343,12 @@ It is \imp{often impossible to give an exact estimation of the data} describing 
 \end{figure}
 \end{column}
 \end{columns}
-\pause
-\begin{itemize}
-\item We propose to find the policy that \imp{minimizes the maximum regret}.\\
-\item Basic idea: to \imp{find the policy with the minimum lost} in \imp{comparison with
-other possible policies} and reward instantiations.
-\end{itemize}
+%\pause
+%\begin{itemize}
+%\item We propose to find the policy that \imp{minimizes the maximum regret}.\\
+%\item Basic idea: to \imp{find the policy with the minimum lost} in \imp{comparison with
+%other possible policies} and reward instantiations.
+%\end{itemize}
 \end{frame}
 
 
@@ -347,7 +365,7 @@ An IRMDP is a tuple $M(S, A, P, r, \gamma, \beta)$ where
 \begin{itemize}
 \item  $r$ models the uncertainty on real reward values. 
 \item We assume $\mathcal{R} = \{r: Cr \leq d \}$. 
-\item For simplicity, in our experiments we work with a box as uncertainty set.
+\item For \textbf{simplicity of our experiments} we work with a box as uncertainty set.
 \end{itemize}
 \end{frame}
 
@@ -370,23 +388,19 @@ $MR(f^{\pi}, \mathcal{R})$ is the maximum regret of this policy w.r.t the reward
 \vspace{-0.25cm}
 \begin{itemize}
 \item In other words, what is the worst case loss over all possible rewards $\mathcal{R}$?
-\item Considering it as a game, the adversary tries to find a reward value $r$ in order to maximise our loss for the given $f^{\pi}$.  
+\item As a game, the adversary tries to find a reward value $r$ in order to maximise our loss for the given $f^{\pi}$.  
 \end{itemize}
     }
         \only<4>{
       
 \vspace{-0.5cm}
 \begin{block}{minimax regret}
-We define the minimax regret of feasible reward set $\mathcal{R}$ as:
+The minimax regret of feasible reward set $\mathcal{R}$ is:
+\vspace{-0.2cm}
 $$MM(\mathcal{R}) = \text{min}_{f^{\pi}}\; MR(f^{\pi}, r)\;.$$
 \end{block}
     }
 \end{overlayarea}
-
-
-
-
-
 
 
 \end{frame}
@@ -426,47 +440,44 @@ $\Rightarrow$ It offers \textit{no guarantee of optimality if it is used only on
 \section[Solution method]{Solution method}
 
 
-\begin{frame}
-
-\frametitle{Solution method: \textit{Benders Decomposition}}
-\textbf{Variables}:
-\begin{itemize}
-\item $\imp{\delta }\in \R$: value of the maximum regret.
-\item $\imp{f} \in \R^{|S|\times|A|}$: frequency function. 
-\end{itemize}
-\pause
-\textbf{Constraints}:
-\begin{overlayarea}{\textwidth}{3cm}
-    \only<2,3,4>{
-\begin{itemize}
-\item<2,3,4> $f$ must be a \textit{valid visitation frequency function}:\\
-$f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)$\\
-\item[]<3,4>
-$\beta(s)=$ initial state distribution function.~~~~ $\gamma =$ discount factor.\\
-$E_{sa,s'} =     \begin{cases}
-       P(s'|s, a) &\quad \text{if } s' \neq s\\
-       P(s'|s, a) - \frac{1}{\gamma} &\quad \text{if } s' = s
-     \end{cases}\;.$\\
-\item[]<4>
-$\Rightarrow$ \imp{$\gamma E^{\top} f + \beta = 0 $}
-\end{itemize}
-    }
-        \only<5,6,7>{
-\begin{itemize}
-\item<5,6,7> $GEN=$ set of all combinations of \textit{rewards $r$} and corresponding \textit{optimal adversary policies $g_r$}.\\
-\item[]<6,7>
-for a given policy $f'$, its regret with respect to a given reward r is :\\
-$r\cdot g_r - r \cdot f'$\\
-\item[]<7>
-$\Rightarrow$ \imp{$r\cdot g_r - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}$}
-\end{itemize}
-    }
-\end{overlayarea}
-
-
-
-
-\end{frame}
+%\begin{frame}
+%
+%\frametitle{Solution method: \textit{Benders Decomposition}}
+%\textbf{Variables}:
+%\begin{itemize}
+%\item $\imp{\delta }\in \R$: value of the maximum regret.
+%\item $\imp{f} \in \R^{|S|\times|A|}$: frequency function. 
+%\end{itemize}
+%%\pause
+%\textbf{Constraints}:
+%%\begin{overlayarea}{\textwidth}{3cm}
+%%    \only<2,3,4>{
+%\begin{itemize}
+%\item $f$ must be a \textit{valid visitation frequency function}:\\
+%$f^{\tilde{\pi}}(s, a) = \sum_{s' \in S} \beta(s') \sum_{t=0}^{\infty} \gamma^{t-1}P(S_t = s', A_t = a | S_1 = s)$\\
+%\item[] 
+%$\beta(s)=$ initial state distribution function.~~~~ $\gamma =$ discount factor.\\
+%$E_{sa,s'} =     \begin{cases}
+%       P(s'|s, a) &\quad \text{if } s' \neq s\\
+%       P(s'|s, a) - \frac{1}{\gamma} &\quad \text{if } s' = s
+%     \end{cases}\;.$\\
+%\item[] 
+%$\Rightarrow$ \imp{$\gamma E^{\top} f + \beta = 0 $}
+%\end{itemize}
+%%    }
+%%        \only<5,6,7>{
+%\begin{itemize}
+%\item $GEN=$ all combinations of \textit{rewards $r$} and corresponding \textit{optimal adversary policies $g_r$}.\\
+%\item[] 
+%for a given policy $f'$, its regret with respect to a given reward r is :\\
+%$r\cdot g_r - r \cdot f'$\\
+%\item[] 
+%$\Rightarrow$ \imp{$r\cdot g_r - r \cdot f \leq \delta \quad \forall \langle g_r, r \rangle \in \text{GEN}$}
+%\end{itemize}
+%%    }
+%%\end{overlayarea}
+%
+%\end{frame}
 
 \begin{frame}
 \frametitle{Solution method: \textit{Benders Decomposition}}
@@ -506,25 +517,24 @@ given policy $f^*$.
 \end{alignat*}
 %%%%%%
 \end{center}
-\begin{itemize}
-\item The adversary policy proposes an extreme policy w.r.t the given $f$ \\
+%\begin{itemize}
+%\item The adversary policy proposes an extreme policy w.r.t the given $f$ \\
+%\end{itemize}
 $\Rightarrow$ \imp{the Slave Program always returns a deterministic policy}.
-\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{\textit{Benders Decomposition} + \textit{Branch-and-Bound}}
-\textbf{Goal}: developing an algorithm able to \imp{provide an optimal deterministic policy} for an IRMDP.
+\textbf{Goal}: \imp{provide an optimal deterministic policy} for an IRMDP.
 
 \begin{columns}
 \begin{column}{0.4\textwidth}
-A branch is obtained by selecting a couple \imp{$(s,a)$} 
-and imposing the disjunction on the two child nodes:
+A branch by selecting a couple \imp{$(s,a)$} and disjuncting on two nodes:
 \begin{itemize}
-\item \imp{$f_{s,a'}=0, \forall a'\neq a$}\\
-for the ``left'' child node.
-\item \imp{$f_{s,a}=0$}\\
- for the ``right'' child node. 
+\item[]``left'' child node
+\item \imp{$f_{s,a'}=0, \forall a'\neq a$}
+\item[]``right'' child node
+\item \imp{$f_{s,a}=0$}.
 \end{itemize} 
 
 \end{column}
@@ -543,7 +553,7 @@ for the ``left'' child node.
 
 \begin{frame}
 \frametitle{\textit{Benders Decomposition} + \textit{Branch-and-Bound}}
-We propose \textbf{Cut-and-branch}, an improved version of the algorithm.
+\textbf{Cut-and-branch}, an improved version.
 
 \begin{itemize}
 \item The \imp{root node} of the branch-and-bound tree is \imp{solved as usual}.
@@ -552,10 +562,10 @@ if the policy found by the master problem is deterministic}. \\
 %%(in this way we are sure to compute correctly the value of the maximum regret of a deterministic solution).
 \pause
 \item \textbf{PRO}: the time needed to process a node is lower.
-\pause
+%\pause
 \item  \textbf{CON}: the lower bound obtained is weaker (usually more nodes are explored).
-\pause
-\item[] $\Rightarrow$ we explore more nodes but faster.
+%\pause
+\item[] $\Rightarrow$ \textbf{we explore more nodes but faster.}
 \end{itemize}
 \end{frame}
 
@@ -564,21 +574,21 @@ if the policy found by the master problem is deterministic}. \\
 \section[Theoretical analysis]{Theoretical analysis}
 
 \begin{frame}
-\frametitle{\textit{Determinised} policy}
+\frametitle{\textit{Determinised} policy: an obvious approach}
 \begin{itemize}
-\item We want to obtain a deterministic policy from a stochastic policy.
+\item obtain a deterministic policy from a stochastic policy.
 \item \textbf{Basic idea}: if only one action is possible for each state, we assume that the most probable action should be chosen. 
 \end{itemize}
 
 \begin{block}{Determinised policy}
-Let $\tilde{f}$ be a given visitation frequency value for the optimal stochastic policy. The corresponding ``rounding'' determinised policy $\hat{\pi}$ can be computed as follows:
+for the optimal stochastic policy $\tilde{f}$, the ``rounding'' determinised policy $\hat{\pi}$:
 \begin{itemize}
 \item for each $s'\in S$:
 \begin{itemize}
 \item find the action \imp{$a' = \text{argmax}_{a \in A}f_{s',a}$}.
 \item fix the rest of the action to zero: $\hat{f}_{s',a} =0, \forall a \neq a'$
 \end{itemize}
-\item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing $\hat{f}$.
+%\item recover the deterministic policy $\hat{\pi}$ obtained from the above fixing $\hat{f}$.
 \end{itemize} 
 \end{block}
 \end{frame}
@@ -602,16 +612,16 @@ a stochastic policy can lead to \imp{solution significantly sub-optimal}.
 \frametitle{Instance description}
 \begin{itemize}
 \item Random MDPs, unlimited connections (\texttt{Random-unlim}).\\
- From the literature.
+ \textbf{From the literature}.
 \item Random MDPs, limited connections (\texttt{Random-lim}).\\
- New set of instances.
+\textbf{ New }set of instances.
 \item Diamond MDPs (\texttt{Diamond}).\\
- From the literature and new.
+ From the \textbf{literature} and \textbf{new}.
 \end{itemize}
 \begin{block}{Value Ratio ($VR$)}
-Let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the determinised policy and $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy.\\
+$MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of the determinised policy $MR(f^{\pi^*}, \mathcal{R})$  be the maximum regret of the optimal deterministic policy.\\
 
-We define the \textit{Value Ratio} of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;$.
+\textit{Value Ratio} of MDP: $VR = \dfrac{MR(f^{\hat{\pi}}, \mathcal{R})}{MR(f^{\pi^*}, \mathcal{R})}\;$.
 \end{block}
 \end{frame}
 
@@ -625,7 +635,8 @@ We define the \textit{Value Ratio} of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}
 \input{tab_random_trident_slim.tex}  
     }
         \only<2>{
-\input{tab_random_diamond_slim.tex}  
+\input{tab_random_diamond_slim.tex}
+	\centering \includegraphics[scale=0.2]{./images/diamond.png}  
     }
 \end{overlayarea}
 \end{frame}
@@ -670,5 +681,11 @@ We define the \textit{Value Ratio} of such MDPs as: $VR = \dfrac{MR(f^{\hat{\pi}
 
 \begin{frame}
 \frametitle{Conclusions}
+\begin{itemize}
+\item First time algorithm for finding an \textbf{optimal deterministic policy} using \textbf{minimax regret on IRMDPs}.
+\item Showed \textbf{theoretically} and \textbf{experimentally} why finding the deterministic policy is important.
+\item Proposed \textbf{faster methods} than our original branch and bound on minimax regret calculation.
+
+\end{itemize}
 \end{frame}
 \end{document}
