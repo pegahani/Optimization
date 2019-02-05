@@ -240,10 +240,12 @@ cross/.default={1pt}}
 
 \begin{frame}
 \frametitle{Why MDPs?}
-\imp{Markov Decision Processes (MDPs)} are effective models for representing and solving \imp{sequential decision problems} (autonomous vehicles, robotics or web service composition).
+\imp{Markov Decision Processes (MDPs)} are effective models for representing and solving \imp{sequential decision problems}. %(autonomous vehicles, robotics or web service composition).
+
+\centering \includegraphics[scale=0.2]{./images/car-race.pdf} {\tiny{source: internet}}
 
 \begin{itemize}
-\item Applications: autonomous vehicles, robotics, web service composition, $\dots$. 
+\item Applications: autonomous vehicles, robotics, web service composition. 
 \end{itemize}
 
 \end{frame}
@@ -253,7 +255,7 @@ cross/.default={1pt}}
 
    \begin{minipage}{0.4\linewidth}
       %\centering
-       \includegraphics[scale=0.22]{./images/mdp.png}      
+       \includegraphics[scale=0.22]{./images/mdp.png} {\tiny{source: wikipedia}}     
    \end{minipage}\hfill
 \begin{minipage}{0.6\linewidth}  
 
@@ -282,7 +284,9 @@ a tuple $M(S, A, P, r, \gamma, \beta)$, where:
 \begin{frame}
 \frametitle{MDPs - basic definitions}
 
-Goal: maximize the expected sum of rewards.
+\vspace*{-0.5cm}
+
+{\color{blue}{Goal:}} maximize the expected sum of rewards.  \includegraphics[scale=0.1]{./images/car-race.pdf}
 
 \begin{block}{Deterministic policy}
 A (stationary) \textit{deterministic policy} is a function $\pi: S \longrightarrow A$, which prescribes to take action $\pi(s)$ when in state $s$.
