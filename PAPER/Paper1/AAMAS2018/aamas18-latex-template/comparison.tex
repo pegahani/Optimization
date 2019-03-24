@@ -50,14 +50,25 @@ We define the \textit{Trident IRMDP} (see Figure~\ref{fig:trident}) as follows:
 \end{itemize} 
 
 %%%%%%%%%%%%%%%%%
-\begin{figure}[]
+%\begin{figure}[th]
+%	\begin{center}
+%    \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
+%	\end{center}
+%	\caption{Trident IRMDP with $3$ states and $3$ actions.}
+%	\label{fig:trident} 
+%\end{figure}
+%%%%%%%%%%%%%%%%%
+
+
+\begin{wrapfigure}{r}{0.2\textwidth}
 	\begin{center}
     \includegraphics[scale=0.4]{images/Trident_MDP.pdf}
 	\end{center}
-	\caption{Trident IRMDP with $3$ states and $3$ actions.}
+	\caption{Trident IRMDP.}
 	\label{fig:trident} 
-\end{figure}
-%%%%%%%%%%%%%%%%%
+\end{wrapfigure}
+
+
 
 The following propositions give a complete characterization of the optimal stochastic and deterministic policies for the Trident MDP. With a slight abuse of notation, we use the subscript $a$ instead of using $s_2,a$, i.e. instead of writing $\pi(s_2, a)$ we use $\pi_a$. 
 %According to Figure~\ref{fig:trident}, this is due to the fact that two states $s_0$ and $s_1$ are terminal states and the only relevant actions are the ones originating from the state $s_2$ (for example, we use $\pi_1$ instead of $\pi(s_2, a_1)$). 
@@ -66,7 +77,7 @@ We also use $r_{0}$ in place of $r(s_0)$ and $r_{1}$ in place of $r(s_1)$. Each 
 Similarly, the visitation frequency functions are presented as $f = (f_0, f_1, f_2)$.
 
 \begin{proposition}\label{theorem:opt_stoc}
-An optimal stochastic policy that minimises the maximum regret (see Section~\ref{sec:Preliminaries}) for the Trident MDP is the policy $\tilde{\pi} = (\pi_0, \pi_1, \pi_2)$ defined as:
+An optimal stochastic policy that minimizes the maximum regret (see Section~\ref{sec:Preliminaries}) for the Trident MDP is the policy $\tilde{\pi} = (\pi_0, \pi_1, \pi_2)$ defined as:
 $$\pi_{0}=\dfrac{2A - B}{4A},~~~\pi_{1}=\dfrac{2A + B}{4A}, ~~~\pi_2 = 0\;.$$
 %(regardless of the values of $T_1$ and $T_2$). \footnote{We recall that $\pi_0$ means $\pi(s_2, a_0)$ and so on.}
 \end{proposition}
@@ -103,11 +114,11 @@ and the maximum regret associated to the policy $g' = (g_0, 0, 0)$ where $g_0 > 
 \begin{align}
 r \cdot g - r \cdot \tilde{f}  = A - A \pi_0 -(B-A)\pi_1 \label{eq:best_stoc_2}\;.
 \end{align}   
-We are interested in minimising the max regret, this means that we want to find the values of $\pi_0$ and $\pi_1$ that minimise $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations: 
+We are interested in minimising the max regret, this means that we want to find the values of $\pi_0$ and $\pi_1$ that minimize $\max \{\eqref{eq:best_stoc_1}, \eqref{eq:best_stoc_2}\}$. The optimal stochastic policy can hence be obtained by solving the following system of two equations: 
 \begin{align*}
 \left\{
 \begin{array}{ll}
-A + B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
+A +B +A \pi_0 -(A+B)\pi_1 &= A - A \pi_0 -(B-A)\pi_1\\
 \pi_0+\pi_1 &= 1
 \end{array}
 \right.
@@ -132,32 +143,34 @@ If $T_1 > T_0$, the optimal deterministic policy is $\pi^* = (0, 0, 1)$ and its 
 We prove the statement by explicitly computing the maximum regret of the three possible deterministic policies: $\pi = (1, 0, 0), \pi' =(0, 1, 0)$ and $ \pi''= (0, 0, 1)$. 
 %$ and \; \pi_0=1$.
 
-\textit{Maximum regret of $\pi = (1, 0, 0)$}. We want to find the adversary policy that maximises the regret for the policy $\pi$. We do that by computing all possible combinations of adversary policies and rewards:
-\begin{itemize}
-\item If a visitation frequency for adversary policy is $g = (0, g_1, 0)$ where $g_1> 0$, the reward maximising the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
+\textit{Maximum regret of $\pi = (1, 0, 0)$}. We want to find the adversary policy that maximizes the regret for the policy $\pi$. We do that by computing all possible combinations of adversary policies and rewards:
 
+\begin{itemize}
+\item If a visitation frequency for adversary policy is $g = (0, g_1, 0)$ where $g_1> 0$, the reward maximizing the regret is $r_0 = -A$ and $r_1 = A+B$, leading to a maximum regret of 
 \begin{align}
 A+B-(-A)=2A+B \label{eq:regret0}
 \end{align}
-\item If the adversary policy is $g' = (0, 0, g_2)$ where $g_2>0$, we need to check all four combinations of extreme rewards:
-\begin{itemize}
-\item $r_0 = -A$ and $r_1= A+B$. Maximum regret of
-\begin{align}
+
+\item If the adversary policy is $g' = (0, 0, g_2)$ where $g_2>0$, we need to check all four combinations of extreme rewards: \\
+{\footnotesize 
+$\diamond~~~ r_0 = -A$ and $r_1= A+B$. Maximum regret of
+\begin{align} 
 -A T_0 + (A+B)T_1 + A = (1-T_0 + T_1)A + T_1 B \label{eq:regret1}
 \end{align}
-\item $r_0 = A$ and $r_1= A+B$. Maximum regret of
+$\diamond~~~ r_0 = A$ and $r_1= A+B$. Maximum regret of
 \begin{align}
 A T_0 + (A+B)T_1 - A = (-1+T_0 + T_1)A + T_1 B  \label{eq:regret2}
 \end{align}
-\item $r_0 = A$ and $r_1= -A+B$. Maximum regret of
+$\diamond~~~ r_0 = A$ and $r_1= -A+B$. Maximum regret of
 \begin{align} 
 A T_0 + (-A+B)T_1 - A =  (-1+T_0 - T_1)A + T_1 B \label{eq:regret3}
 \end{align}
-\item $r_0 = -A$ and $r_1= -A+B$. Maximum regret of
+$\diamond~~~ r_0 = -A$ and $r_1= -A+B$. Maximum regret of
 \begin{align}
 -A T_0 + (-A+B)T_1 + A =  (1 - T_0 - T_1)A - T_1 B \label{eq:regret4}
 \end{align}
-\end{itemize} 
+}
+%\end{itemize} 
 By hypothesis we have that $A\gg B$ and $T_0+T_1= 1$, this implies that $\eqref{eq:regret0} \geq \max\{\eqref{eq:regret1}, \eqref{eq:regret2}, \eqref{eq:regret3}, \eqref{eq:regret4} \}$. Therefore, the maximum regret if $g_2>0$ is $MR(f^{\pi}, \mathcal{R}) = 2A+B$.
 \end{itemize} 
 

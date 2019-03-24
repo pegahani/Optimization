@@ -24,22 +24,34 @@ This class of MDPs has been introduced for the first time in Benavent and Zanutt
 
 This class of MDPs has a diamond structure, with one top and one bottom state (playing the role of start and terminal states in the MDP), one intermediate layer of states, containing all the uncertainties on rewards, plus two intermediate layers between the extreme states and the intermediate layer. 
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=8cm]{images/diamond.png}
-\end{center}
-\caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right) (Figure taken from \cite{benavent2018}).}
-\label{fig:diamond}
-\end{figure}
+%The diamond MDP structure is given in Figure~\ref{fig:diamond}. 
+In diamond MDP, each action $a_0$ has probability $0.5$ to reach each child node.  
+On the other hand $a_1$ (resp. $a_2$) has a probability of $p$ (resp. $1-p$) to reach the left (resp. right) child node and to reach its parent otherwise. The imprecise values of the rewards for the middle layer are $[-600,600]$, while the one of the bottom node is $[600,1000]$ (see~\cite{benavent2018} for more details on the structures).
+We propose a generalization of this family of MDP by testing a range of parameters for the probability $p \in \{0.05,0.10,\dots,0.40,0.45\}$. 
 
 
-%From a point of viex of the parameters, the authors proposed to have that action $a_0$ would reach each child with a probability of $0.5$.
-The diamond MDP structure is given in Figure~\ref{fig:diamond}. Action $a_0$ has probability $0.5$ to reach each child node.  
-On the other hand $a_1$ (resp. $a_2$) has a probability of $p$ (resp. $1-p$) to reach the left (resp. right) child node and to reach its parent otherwise.
-The imprecise values of the rewards for the middle layer are $[-600,600]$, while the one of the bottom node is $[600,1000]$.
 
-We propose a generalization of this family of MDP by testing a range of parameters for the probability $p \in \{0.05,0.10,\dots,0.40,0.45\}$. %We also introduce an additional intermediate layer, between the extreme states and the middle layer. In this way we have, in addition to $10$-states MDPs (callend one-level diamond MDPs) also  22-states MDPs (called two-level diamond MDPs). 
+%\begin{figure}[ht]
+%\begin{center}
+%\includegraphics[width=8cm]{images/diamond.png}
+%\end{center}
+%\caption{Diamond MDP: actions $a_0$ (left) and $a_1, a_2$ (right) (Figure taken from \cite{benavent2018}).}
+%\label{fig:diamond}
+%\end{figure}
 
+
+%The diamond MDP structure is given in Figure~\ref{fig:diamond}. Action $a_0$ has probability $0.5$ to reach each child node.  
+%On the other hand $a_1$ (resp. $a_2$) has a probability of $p$ (resp. $1-p$) to reach the left (resp. right) child node and to reach its parent otherwise.
+%The imprecise values of the rewards for the middle layer are $[-600,600]$, while the one of the bottom node is $[600,1000]$.
+%
+%We propose a generalization of this family of MDP by testing a range of parameters for the probability $p \in \{0.05,0.10,\dots,0.40,0.45\}$. 
+
+%We also introduce an additional intermediate layer, between the extreme states and the middle layer. In this way we have, in addition to $10$-states MDPs (callend one-level diamond MDPs) also  22-states MDPs (called two-level diamond MDPs). 
+
+
+\input{tab_random_slim.tex} 
+\input{tab_random_trident_slim.tex}  
+\input{tab_random_diamond_slim.tex}  
 
 \subsection{Comparison with the determinised policy}
 
@@ -48,10 +60,6 @@ For a given MDP, let $MR(f^{\hat{\pi}}, \mathcal{R})$ be the maximum regret of t
 The VR gives an idea about how far is the determinised policy from the optimal policy\footnote{ It is a deterministic policy.}. 
 For example, a VR of $1.20$ means that the rounding deterministic policy gives a value that is $20\%$ worse in comparison with the optimal deterministic policy. 
 %\input{tab_random.tex}
-\input{tab_random_slim.tex}  
-\input{tab_random_trident_slim.tex}  
-\input{tab_random_diamond_slim.tex}  
-
 
 In Tables~\ref{tab:random_slim},~\ref{tab:random_trident_slim} and~\ref{tab:diamond_slim} we present the Value Ratios for the different classes of instances considered. In case of multiple instances for each combination of settings, we report the average and the maximum values.
 %
@@ -70,7 +78,7 @@ The relative small value of VR for the \texttt{Random-unlim} MDPs is probably du
 
 As second observation, we see that the maximum values are quite high for almost all the combinations of parameters considered. Furthermore, for a \texttt{Random-lim} instance with $7$ states and $6$ actions we find a VR of $2.76$, showing that the theoretical worse case showed in Section~\ref{sec:comparison} can be increased. 
 %
-Therefore, choosing to determinise may turn out to be an unsafe choice, specially considering that it is not possible to check how far a determinised policy is from the optimal.  
+Therefore, choosing to determinise may turn out to be an unsafe choice, specially considering that it is not possible to check how far a determinised policy is from the optimal. We finally notice that the computing time for obtaining the optimal deterministic policy is on average six time bigger than the time needed to obtain the optimal stochastic policy.  
 % $70\%$ of the times the optimal deterministic policy differs from the rounding deterministic policy, while the maximum regret of the rounding deterministic policy is $6\%$ worse than the optimal deterministic policy. This moderate gap is probably due to the fact that random MDPs do not present a special structure. For such instances it is more unlikely to have extreme configurations like the one showed in Section~\ref{sec:comparison}.
 
 %Calculating the optimal deterministic policy is one order of magnitude slower than computing the rounding deterministic policy. On the other hand, the cut-and-branch version of the algorithm is almost two times faster than the basic version.  
@@ -119,3 +127,17 @@ The use of the cut-and-branch option allows to decrease the computing times for 
 	\label{fig:impact_trident} 
 \end{figure}
 %%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%
+\begin{figure}[]
+	\begin{center}
+    \includegraphics[scale=0.55]{images/comparison.pdf}
+	\end{center}
+	\caption{Change in the value of the optimal policy for a given maximum amount of actions for an instance with $6$ actions per state ($1 =$ deterministic policy, $6 =$ stochastic policy)}
+	\label{fig:impact_mixed_policy} 
+\end{figure}
+%%%%%%%%%%%%%%%%%
+
+
+
+

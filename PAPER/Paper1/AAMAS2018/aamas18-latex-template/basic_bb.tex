@@ -1,4 +1,6 @@
+
 \begin{figure}[h!]
+{\small 
 \noindent
 \fbox{\hspace{\mylengthleft}\parbox[t]{\mylength}{\vspace*{0.5ex}
 %
@@ -17,13 +19,16 @@ $\mathcal{N} = \{\{\emptyset\}\}$ {\em {\footnotesize /* the collection of open 
 \hspace*{3ex} $(\delta^*,f^*) :=$ the optimal solution of the master problem\\
 \hspace*{3ex} {\bf if} $\delta^* < Best Val$ {\bf then}: {\em {\footnotesize /* comparing the stoc. pol. with the best det. pol. */}}\\
 \hspace*{3ex} \hspace*{3ex} {\bf if} $f^*$  is deterministic {\bf then}:\\
-\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $BestVal = \delta^*$ {\em {\footnotesize /* update the best det. policy */}}\\
-\hspace*{3ex} \hspace*{3ex} {\bf else}:\\
- \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} {\em {\footnotesize /* create the two child nodes */}}\\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $BestVal = \delta^*$ {\em {\footnotesize /* update best det. policy */}}\\
+\hspace*{3ex} \hspace*{3ex} {\bf else}: \hspace*{3ex} {\em {\footnotesize /* create the two child nodes */}}\\
  \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} find $f^*_{s,a}$ of highest value among the ones associated to a non det. state \\
- \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_L := N \cup_{s' \neq s} f_{s',a}$  \\
-\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_R := N \cup f_{s,a}$  \\
-\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $\mathcal{N} := \mathcal{N} \cup N_L \cup N_R$\\
+ \hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_L := N \cup_{s' \neq s} f_{s',a}$, $N_R := N \cup f_{s,a}$  \\
+%\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $N_R := N \cup f_{s,a}$  \\
+\hspace*{3ex} \hspace*{3ex} \hspace*{3ex} $\mathcal{N} := \mathcal{N} \cup N_L \cup N_R$
 }}
-\caption{Algorithm to find an optimal deterministic policy.} \label{fig:basic_bb}
+\caption{finding an optimal deterministic policy.}
+%Algorithm to find an optimal deterministic policy.} 
+\label{fig:basic_bb}
+
+}
 \end{figure}
